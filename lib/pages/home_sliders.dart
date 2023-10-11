@@ -17,29 +17,30 @@ class _MyCarouselState extends State<MyCarousel> {
 
     List<Widget> _pages = [
       Container(
-        color: Colors.white,
+        color: Color(0xFF7F50),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'Welcome to',
-              style: TextStyle(fontSize: 26, color: Colors.black),
-            ),
-            const Text(
-              'LichenCare',
-              style: TextStyle(fontSize: 48, color: Color(0xFF5CC9CD)),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            Image.asset(
-              'assets/imgs/GaBu_logo1.png', // Replace with your image asset path
-              width: w * 0.9,
+            SvgPicture.asset(
+              'assets/svgs/LichenCare main logo.svg',
+              width: w * 0.2,
               height: h * 0.3,
             ),
-            const SizedBox(
-              height: 20,
+            SvgPicture.asset(
+              'assets/svgs/LichenCare main branding.svg',
+              width: w * 0.15,
+              height: h * 0.08,
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Text(
+              "WELCOME, MY FRIEND!",
+              style: TextStyle(fontWeight: FontWeight.w900, fontSize: 25),
+            ),
+            SizedBox(
+              height: 15,
             ),
             Container(
               padding: const EdgeInsets.only(
@@ -47,23 +48,23 @@ class _MyCarouselState extends State<MyCarousel> {
                 right: 35,
               ),
               child: const Text(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco',
+                'I am LichenCare, your AI friend that will help you identify and analyze your Lichen Planus condition. By the way, I am still a work in progress, so, please be gentle to me. I am not made to replace dermatologists but rather just be a support system and I make no guarantees to the accuracy of my results. I would still recommend to check for your doctor for further and actual medical advice.',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 18,
                   color: Colors.black,
-                  fontFamily: 'Questrial',
+                  fontFamily: 'ABeeZee',
                 ),
                 textAlign: TextAlign.center,
               ),
             ),
             SizedBox(
-              height: h * 0.15,
+              height: 60,
             ),
           ],
         ),
       ),
       Container(
-        color: Colors.white,
+        color: Color(0xFF7F50),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -97,41 +98,36 @@ class _MyCarouselState extends State<MyCarousel> {
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
-                      const Color(0xFF5CC9CD)), // Background color
+                      const Color(0xFFFF7F50)), // Background color
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0),
                       side: const BorderSide(
-                          color: Colors.black,
+                          color: Colors.white,
                           width:
                               1.0), // Border color and width // Border radius
                     ),
                   ),
                   foregroundColor: MaterialStateProperty.all<Color>(
-                      Colors.black), // Text color
+                      Colors.white), // Text color
                   padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                    const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 10), // Adjust padding as needed
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   ),
                 ),
                 child: const Text(
-                  'Get Started',
-                  style: TextStyle(
-                    fontSize: 22, // Adjust the font size as needed
-                  ),
+                  'GET STARTED!',
+                  style: TextStyle(fontSize: 20, fontFamily: 'Questrial'),
                 ),
-                
               ),
               SizedBox(
-              height: h * 0.13,
-            ),
+                height: h * 0.13,
+              ),
             ],
           ),
         ),
       ),
       Container(
-        color: Colors.white,
+        color: Color(0xFF7F50),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -165,34 +161,30 @@ class _MyCarouselState extends State<MyCarousel> {
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
-                      const Color(0xFF5CC9CD)), // Background color
+                      const Color(0xFFFF7F50)), // Background color
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0),
                       side: const BorderSide(
-                          color: Colors.black,
+                          color: Colors.white,
                           width:
                               1.0), // Border color and width // Border radius
                     ),
                   ),
                   foregroundColor: MaterialStateProperty.all<Color>(
-                      Colors.black), // Text color
+                      Colors.white), // Text color
                   padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                    const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 10), // Adjust padding as needed
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   ),
                 ),
                 child: const Text(
-                  'Know More!',
-                  style: TextStyle(
-                    fontSize: 22, // Adjust the font size as needed
-                  ),
+                  'GET STARTED!',
+                  style: TextStyle(fontSize: 20, fontFamily: 'ABeeZee'),
                 ),
               ),
               SizedBox(
-              height: h * 0.11,
-            ),
+                height: h * 0.11,
+              ),
             ],
           ),
         ),
@@ -213,8 +205,9 @@ class _MyCarouselState extends State<MyCarousel> {
                 height: 15,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color:
-                      _currentIndex == entry.key ? Colors.black : Colors.white,
+                  color: _currentIndex == entry.key
+                      ? Color(0xFFFF7F50)
+                      : Colors.white,
                 ),
               ),
               Container(
@@ -252,7 +245,7 @@ class _MyCarouselState extends State<MyCarousel> {
           Positioned(
             left: 0,
             right: 0,
-            top: (3.5 / 4) * h,
+            top: (3.65 / 4) * h,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: _buildPageIndicator(),

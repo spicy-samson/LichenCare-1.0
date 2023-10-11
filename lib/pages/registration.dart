@@ -14,6 +14,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
+        leading: Container(
+          margin:
+              EdgeInsets.only(left: 30.0), // Set the left margin to 30 pixels
+          child: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            color: Colors.black,
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ),
         title: Text(
           'Sign Up',
           style: TextStyle(
@@ -40,28 +51,39 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 ),
               ),
               SizedBox(height: 20.0),
-              _buildTextField('First Name', false, null),
+              _buildTextField('First Name', false, Icons.person),
               SizedBox(height: 30.0),
-              _buildTextField('Last Name', false, null),
+              _buildTextField('Last Name', false, Icons.person),
               SizedBox(height: 30.0),
               _buildTextField('Email', false, Icons.email),
               SizedBox(height: 30.0),
               _buildTextField('Password', true, Icons.lock),
               SizedBox(height: 30.0),
               _buildTextField('Confirm Password', true, Icons.lock),
-              SizedBox(height: 45.0),
-              ElevatedButton(
-                onPressed: () {
-                  // Implement your registration logic here
-                },
-                child: Text('Sign Up',
-                    style: TextStyle(fontSize: 18.0, color: Colors.black)),
-                style: ElevatedButton.styleFrom(
-                  primary: const Color(0xFF5CC9CD),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 100, vertical: 15.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+              SizedBox(height: 70.0),
+              Container(
+                // Adjust the padding
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Implement your registration logic here
+                  },
+                  child: Text(
+                    'Sign Up',
+                    style: TextStyle(
+                      fontSize: 23.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all<EdgeInsets>(
+                        EdgeInsets.symmetric(horizontal: 40, vertical: 10)),
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        const Color(0xFFFF7F50)),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -70,17 +92,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text('Already have an account?',
-                      style: TextStyle(fontSize: 18.0)),
+                      style: TextStyle(fontSize: 16.0)),
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pushNamed('/login');
                     },
                     child: Text(
-                      'Login',
+                      'Sign in',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF5CC9CD),
-                          fontSize: 18.0),
+                          color: Color(0xFFFF7F50),
+                          fontSize: 16.0),
                     ),
                   ),
                 ],
@@ -109,7 +131,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
           borderRadius: BorderRadius.circular(10.0),
           borderSide: BorderSide(
               color: Color(
-                  0xFF5CC9CD)), // Set the border color to blue when focused
+                  0xFFFF7F50)), // Set the border color to blue when focused
         ),
         contentPadding:
             EdgeInsets.symmetric(horizontal: w * 0.05, vertical: 4.0),

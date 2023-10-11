@@ -17,12 +17,16 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'LichenCare',
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        fontFamily: 'ABeeZee',
+        textTheme: Theme.of(context).textTheme.apply(fontFamily: 'ABeeZee'),
+      ),
       home: MyCarousel(),
       routes: {
-      '/login': (context) => LoginPage(),
-      '/registration': (context) => RegistrationPage() // your login page
-    // ... other routes
-  },
+        '/login': (context) => LoginPage(),
+        '/registration': (context) => RegistrationPage() // your login page
+        // ... other routes
+      },
     );
   }
 }

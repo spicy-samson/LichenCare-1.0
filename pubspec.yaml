@@ -79,19 +79,24 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-      - family: Questrial
-        fonts:
-          - asset: fonts/Questrial-Regular.ttf
-      - family: Poppins
-        fonts:
-        - asset: fonts/Poppins-Bold.ttf
-          weight: 700
-        - asset: fonts/Poppins-Medium.ttf
-          weight: 500
-        - asset: fonts/Poppins-Regular.ttf
-          weight: 400
-        - asset: fonts/Poppins-SemiBold.ttf
-          weight: 600
+    - family: Questrial
+      fonts:
+        - asset: fonts/Questrial-Regular.ttf
+    - family: Poppins
+      fonts:
+      - asset: fonts/Poppins-Bold.ttf
+        weight: 700
+      - asset: fonts/Poppins-Medium.ttf
+        weight: 500
+      - asset: fonts/Poppins-Regular.ttf
+        weight: 400
+      - asset: fonts/Poppins-SemiBold.ttf
+        weight: 600
+    - family: ABeeZee
+      fonts:
+      - asset: fonts/ABeeZee-Regular.ttf
+      - asset: fonts/ABeeZee-Italic.ttf
+        style: italic
 
   #   - family: Schyler
   #     fonts:
