@@ -6,6 +6,13 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
+  // Create a FocusNode for the text field
+  final FocusNode _firstNameFocus = FocusNode();
+  final FocusNode _lastNameFocus = FocusNode();
+  final FocusNode _emailFocus = FocusNode();
+  final FocusNode _passwordFocus = FocusNode();
+  final FocusNode _confirmPasswordFocus = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -51,15 +58,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 ),
               ),
               SizedBox(height: 20.0),
-              _buildTextField('First Name', false, Icons.person),
+              _buildTextField(
+                  'First Name', false, Icons.person, _firstNameFocus),
               SizedBox(height: 30.0),
-              _buildTextField('Last Name', false, Icons.person),
+              _buildTextField('Last Name', false, Icons.person, _lastNameFocus),
               SizedBox(height: 30.0),
-              _buildTextField('Email', false, Icons.email),
+              _buildTextField('Email', false, Icons.email, _emailFocus),
               SizedBox(height: 30.0),
-              _buildTextField('Password', true, Icons.lock),
+              _buildTextField('Password', true, Icons.lock, _passwordFocus),
               SizedBox(height: 30.0),
-              _buildTextField('Confirm Password', true, Icons.lock),
+              _buildTextField(
+                  'Confirm Password', true, Icons.lock, _confirmPasswordFocus),
               SizedBox(height: 70.0),
               Container(
                 // Adjust the padding
@@ -114,27 +123,38 @@ class _RegistrationPageState extends State<RegistrationPage> {
     );
   }
 
-  Widget _buildTextField(String label, bool isPassword, IconData? icon) {
+  Widget _buildTextField(
+    String label, bool isPassword, IconData? icon, FocusNode focusNode) {
     double w = MediaQuery.of(context).size.width;
+
     return TextFormField(
+      focusNode: focusNode, // Assign the FocusNode to the TextFormField
       obscureText: isPassword,
       decoration: InputDecoration(
         labelText: label,
         labelStyle: TextStyle(
-          color: Colors.grey, // Set the label color to black
+          color: Colors.grey,
         ),
-        prefixIcon: icon != null ? Icon(icon) : null,
+        prefixIcon: Icon(
+          icon,
+          color: focusNode.hasFocus ? Color(0xFFFF7F50) : Colors.grey,
+        ),
+        prefixIconConstraints: BoxConstraints(
+          minWidth: 40,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
           borderSide: BorderSide(
-              color: Color(
-                  0xFFFF7F50)), // Set the border color to blue when focused
+            color: Color(0xFFFF7F50),
+          ),
         ),
-        contentPadding:
-            EdgeInsets.symmetric(horizontal: w * 0.05, vertical: 4.0),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: w * 0.05,
+          vertical: 4.0,
+        ),
       ),
     );
   }

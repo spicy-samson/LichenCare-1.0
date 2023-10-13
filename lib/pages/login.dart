@@ -7,17 +7,23 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final FocusNode _emailFocus = FocusNode();
+  final FocusNode _passwordFocus = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
-      body: Center(
+      body: SingleChildScrollView(
         child: Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              SizedBox(
+                height: h * 0.1,
+              ),
               SvgPicture.asset(
                 'assets/svgs/LichenCare main logo.svg',
                 width: w * 0.2,
@@ -37,10 +43,12 @@ class _LoginPageState extends State<LoginPage> {
                     vertical: 10), // Adjust the horizontal padding
                 child: Column(
                   children: [
-                    _buildTextField('Email', false, Icons.email),
-                    SizedBox(height: 20.0),
-                    _buildTextField('Password', true, Icons.lock),
-                    SizedBox(height: 50.0),
+                    SizedBox(height: 30.0),
+                    _buildTextField('Email', false, Icons.email, _emailFocus),
+                    SizedBox(height: 30.0),
+                    _buildTextField(
+                        'Password', true, Icons.lock, _passwordFocus),
+                    SizedBox(height: 30.0),
                     Container(
                       // Adjust the padding
                       child: ElevatedButton(
@@ -100,27 +108,38 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildTextField(String label, bool isPassword, IconData? icon) {
+  Widget _buildTextField(
+      String label, bool isPassword, IconData? icon, FocusNode focusNode) {
     double w = MediaQuery.of(context).size.width;
+
     return TextFormField(
+      focusNode: focusNode, // Assign the FocusNode to the TextFormField
       obscureText: isPassword,
       decoration: InputDecoration(
         labelText: label,
         labelStyle: TextStyle(
-          color: Colors.grey, // Set the label color to black
+          color: Colors.grey,
         ),
-        prefixIcon: icon != null ? Icon(icon) : null,
+        prefixIcon: Icon(
+          icon,
+          color: focusNode.hasFocus ? Color(0xFFFF7F50) : Colors.grey,
+        ),
+        prefixIconConstraints: BoxConstraints(
+          minWidth: 40,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
           borderSide: BorderSide(
-              color: Color(
-                  0xFF5CC9CD)), // Set the border color to blue when focused
+            color: Color(0xFFFF7F50),
+          ),
         ),
-        contentPadding:
-            EdgeInsets.symmetric(horizontal: w * 0.05, vertical: 4.0),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: w * 0.05,
+          vertical: 4.0,
+        ),
       ),
     );
   }
