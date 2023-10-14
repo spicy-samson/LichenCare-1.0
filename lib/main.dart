@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:lichen_care/pages/home_sliders.dart';
+import 'package:lichen_care/pages/guest/home_sliders.dart';
 import 'package:get/get.dart';
-import 'package:lichen_care/pages/login.dart';
-import 'package:lichen_care/pages/registration.dart';
+import 'package:lichen_care/pages/guest/login.dart';
+import 'package:lichen_care/pages/guest/registration.dart';
+import 'package:lichen_care/pages/user/home_page.dart';
+import 'package:lichen_care/pages/user/lichenCheck.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,7 +23,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'ABeeZee',
         textTheme: Theme.of(context).textTheme.apply(fontFamily: 'ABeeZee'),
       ),
-      home: MyCarousel(),
+      home: LichenCheckPage(),
       routes: {
         '/login': (context) => LoginPage(),
         '/registration': (context) => RegistrationPage() // your login page

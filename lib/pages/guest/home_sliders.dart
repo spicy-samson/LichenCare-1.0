@@ -17,7 +17,7 @@ class _MyCarouselState extends State<MyCarousel> {
 
     List<Widget> _pages = [
       Container(
-        color: Color(0xFF7F50),
+        color: Color(0xFFFFF4E9),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -64,7 +64,7 @@ class _MyCarouselState extends State<MyCarousel> {
         ),
       ),
       Container(
-        color: Color(0xFF7F50),
+        color: Color(0xFFFFF4E9),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -127,7 +127,7 @@ class _MyCarouselState extends State<MyCarousel> {
         ),
       ),
       Container(
-        color: Color(0xFF7F50),
+        color: Color(0xFFFFF4E9),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -147,7 +147,7 @@ class _MyCarouselState extends State<MyCarousel> {
                   right: 25,
                 ),
                 child: const Text(
-                  'Catalyzing Quality Clinical Outcomes Through Innovative Healthcare Technology.',
+                  'Catalyzing quality clinical outcomes through innovative healthcare technology.',
                   style: TextStyle(fontSize: 23, color: Colors.black),
                   textAlign: TextAlign.center,
                 ),

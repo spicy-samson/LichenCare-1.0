@@ -15,6 +15,7 @@ class _LoginPageState extends State<LoginPage> {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
+      backgroundColor: Color(0xFFFFF4E9),
       body: SingleChildScrollView(
         child: Container(
           child: Column(
@@ -64,14 +65,17 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         style: ButtonStyle(
                           padding: MaterialStateProperty.all<EdgeInsets>(
-                              EdgeInsets.symmetric(
-                                  horizontal: 40, vertical: 10)),
+                            EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                          ),
                           backgroundColor: MaterialStateProperty.all<Color>(
                               const Color(0xFFFF7F50)),
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
+                              side: BorderSide(
+                                  color: Colors.white,
+                                  width: 2.0), // Add the white border here
                             ),
                           ),
                         ),
@@ -111,11 +115,12 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildTextField(
       String label, bool isPassword, IconData? icon, FocusNode focusNode) {
     double w = MediaQuery.of(context).size.width;
-
     return TextFormField(
       focusNode: focusNode, // Assign the FocusNode to the TextFormField
       obscureText: isPassword,
       decoration: InputDecoration(
+        filled: true, // This makes the background color fill the field
+        fillColor: Colors.white, // This sets the background color to white
         labelText: label,
         labelStyle: TextStyle(
           color: Colors.grey,

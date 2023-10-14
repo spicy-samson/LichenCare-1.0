@@ -18,9 +18,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
     double w = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFFFFF4E9),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xFFFFF4E9),
         leading: Container(
           margin:
               EdgeInsets.only(left: 30.0), // Set the left margin to 30 pixels
@@ -69,7 +69,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               SizedBox(height: 30.0),
               _buildTextField(
                   'Confirm Password', true, Icons.lock, _confirmPasswordFocus),
-              SizedBox(height: 70.0),
+              SizedBox(height: 60.0),
               Container(
                 // Adjust the padding
                 child: ElevatedButton(
@@ -85,12 +85,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   ),
                   style: ButtonStyle(
                     padding: MaterialStateProperty.all<EdgeInsets>(
-                        EdgeInsets.symmetric(horizontal: 40, vertical: 10)),
+                      EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                    ),
                     backgroundColor: MaterialStateProperty.all<Color>(
                         const Color(0xFFFF7F50)),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
+                        side: BorderSide(
+                            color: Colors.white,
+                            width: 2.0), // Add the white border here
                       ),
                     ),
                   ),
@@ -124,13 +128,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 
   Widget _buildTextField(
-    String label, bool isPassword, IconData? icon, FocusNode focusNode) {
+      String label, bool isPassword, IconData? icon, FocusNode focusNode) {
     double w = MediaQuery.of(context).size.width;
 
     return TextFormField(
       focusNode: focusNode, // Assign the FocusNode to the TextFormField
       obscureText: isPassword,
       decoration: InputDecoration(
+        filled: true, // This makes the background color fill the field
+        fillColor: Colors.white, // This sets the background color to white
         labelText: label,
         labelStyle: TextStyle(
           color: Colors.grey,
