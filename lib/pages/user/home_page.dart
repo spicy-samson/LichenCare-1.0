@@ -40,9 +40,11 @@ class HomePage extends StatelessWidget {
               padding: EdgeInsets.all(w * 0.1),
               child: Column(
                 children: [
-                  SizedBox(height: h * 0.03),
-                  Image.asset(
-                      'assets/imgs/derma_1.jpg'), // Replace with your image path
+                  SvgPicture.asset(
+                    'assets/svgs/LichenCheck_image.svg',
+                    width: w * 0.3,
+                    height: h * 0.27,
+                  ), // Replace with your image path
                   SizedBox(height: h * 0.025),
                   Text(
                     'Dermatology powered by Machine Learning',
@@ -97,8 +99,11 @@ class HomePage extends StatelessWidget {
               padding: EdgeInsets.all(w * 0.1),
               child: Column(
                 children: [
-                  Image.asset(
-                      'assets/imgs/derma_1.jpg'), // Replace with your image path
+                  SvgPicture.asset(
+                    'assets/svgs/Lichenpedia_image.svg',
+                    width: w * 0.3,
+                    height: h * 0.33,
+                  ), // Replace with your image path
                   SizedBox(height: h * 0.025),
                   Text(
                     'Learn Lichen Planus in just a few taps',
@@ -153,8 +158,11 @@ class HomePage extends StatelessWidget {
               padding: EdgeInsets.all(w * 0.1),
               child: Column(
                 children: [
-                  Image.asset(
-                      'assets/imgs/derma_1.jpg'), // Replace with your image path
+                  SvgPicture.asset(
+                    'assets/svgs/Lichenhub_image.svg',
+                    width: w * 0.3,
+                    height: h * 0.33,
+                  ), // Replace with your image path
                   SizedBox(height: 16.0),
                   Text(
                     'Connecting Lichen Planus Warriors',
@@ -213,9 +221,9 @@ class HomePage extends StatelessWidget {
               child: Column(
                 children: [
                   SvgPicture.asset(
-                    'assets/svgs/ABOUT_IMAGE.svg',
+                    'assets/svgs/AboutUs_image.svg',
                     width: w * 0.3,
-                    height: h * 0.33,
+                    height: h * 0.35,
                   ),
                   SizedBox(height: h * 0.025),
                   Text(
@@ -318,10 +326,10 @@ class HomePage extends StatelessWidget {
       currentIndex: _currentIndex,
       items: [
         BottomNavigationBarItem(
-          icon: Icon(
-            Icons.home,
-            size: 30,
-            color: Color(0xFFFF7F50),
+          icon: SvgPicture.asset(
+            'assets/svgs/bottomNavBar/Home_icon.svg',
+            width: 32,
+            height: 32,
           ),
           label: 'Home',
         ),

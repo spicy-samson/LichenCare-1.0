@@ -26,7 +26,7 @@ class _LichenPediaState extends State<LichenPedia> {
             height: h * 0.047,
           ),
         ),
-
+        
         elevation: 0,
         toolbarHeight: 80.0,
       ),
