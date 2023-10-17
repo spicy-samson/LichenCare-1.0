@@ -104,7 +104,7 @@ class HomePage extends StatelessWidget {
                     width: w * 0.3,
                     height: h * 0.33,
                   ), // Replace with your image path
-                  SizedBox(height: h * 0.025),
+                  SizedBox(height: h * 0.017),
                   Text(
                     'Learn Lichen Planus in just a few taps',
                     style:
@@ -117,7 +117,7 @@ class HomePage extends StatelessWidget {
                     style: TextStyle(fontSize: 18.0),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 16.0),
+                  SizedBox(height: h * 0.03),
                   Container(
                     // Adjust the padding
                     child: ElevatedButton(
@@ -163,7 +163,7 @@ class HomePage extends StatelessWidget {
                     width: w * 0.3,
                     height: h * 0.33,
                   ), // Replace with your image path
-                  SizedBox(height: 16.0),
+                  SizedBox(height: h * 0.010),
                   Text(
                     'Connecting Lichen Planus Warriors',
                     style:
@@ -176,7 +176,7 @@ class HomePage extends StatelessWidget {
                     style: TextStyle(fontSize: 18.0),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: h * 0.020),
+                  SizedBox(height: h * 0.03),
                   Container(
                     // Adjust the padding
                     child: ElevatedButton(

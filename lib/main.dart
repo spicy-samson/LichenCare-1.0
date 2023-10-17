@@ -7,6 +7,7 @@ import 'package:lichen_care/pages/user/home_page.dart';
 import 'package:lichen_care/pages/user/lichenpedia.dart';
 import 'package:lichen_care/pages/user/lichenHub.dart';
 import 'package:lichen_care/pages/user/lichenCheck.dart';
+import 'package:lichen_care/pages/user/profile.dart';
 
 
 
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         '/lichenpedia' : (context) => LichenPedia(),
         '/lichenHub' : (context) => LichenHub(), 
         '/lichenCheck' : (context) => LichenCheck(),
+        '/profile': (context) => Profile(),
       },
     );
   }
