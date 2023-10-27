@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "851985219733",
+    "project_id": "lichencare-v1",
+    "storage_bucket": "lichencare-v1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:851985219733:android:26ce86f80f889e7646db9c",
+        "android_client_info": {
+          "package_name": "com.example.lichen_care"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzj5KtN3O4wMrAHEDp0TGp9fKatu3gCHk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

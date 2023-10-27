@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -7,6 +8,23 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  late final TextEditingController _email;
+  late final TextEditingController _password;
+
+  @override
+  void initState() {
+    _email = TextEditingController();
+    _password = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _email.dispose();
+    _password.dispose();
+    super.dispose();
+  }
+
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
 
@@ -45,16 +63,30 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   children: [
                     SizedBox(height: 30.0),
-                    _buildTextField('Email', false, Icons.email, _emailFocus),
-                    SizedBox(height: 30.0),
                     _buildTextField(
-                        'Password', true, Icons.lock, _passwordFocus),
+                        'Email', false, Icons.email, _email, _emailFocus),
+                    SizedBox(height: 30.0),
+                    _buildTextField('Password', true, Icons.lock, _password,
+                        _passwordFocus),
                     SizedBox(height: 30.0),
                     Container(
                       // Adjust the padding
                       child: ElevatedButton(
-                        onPressed: () {
-                          // Implement your registration logic here
+                        onPressed: () async {
+                          final email = _email.text;
+                          final password = _password.text;
+                          try {
+                            final userCredential = await FirebaseAuth.instance
+                                .signInWithEmailAndPassword(
+                                    email: email, password: password);
+                            print(userCredential);
+                          } on FirebaseAuthException catch (e) {
+                            if (e.code == 'user-not-found') {
+                              print('No user found for that email.');
+                            } else if (e.code == 'wrong-password') {
+                              print('Wrong password provided for that user.');
+                            }
+                          }
                         },
                         child: Text(
                           'Sign in',
@@ -112,10 +144,13 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildTextField(
-      String label, bool isPassword, IconData? icon, FocusNode focusNode) {
+  Widget _buildTextField(String label, bool isPassword, IconData? icon,
+      TextEditingController controller, FocusNode focusNode) {
     double w = MediaQuery.of(context).size.width;
     return TextFormField(
+      controller: controller,
+      enableSuggestions: false,
+      autocorrect: false,
       focusNode: focusNode, // Assign the FocusNode to the TextFormField
       obscureText: isPassword,
       decoration: InputDecoration(

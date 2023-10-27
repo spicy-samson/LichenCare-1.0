@@ -15,7 +15,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   late final TextEditingController _password;
   late final TextEditingController _confirmPassword;
 
-  bool isFirebaseInitialized = true;
+  bool isFirebaseInitialized = false;
   bool passwordError = false;
 
   @override
@@ -25,7 +25,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
     _email = TextEditingController();
     _password = TextEditingController();
     _confirmPassword = TextEditingController();
-
     super.initState();
   }
 
@@ -45,6 +44,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
   final FocusNode _confirmPasswordFocus = FocusNode();
+
 
   @override
   Widget build(BuildContext context) {
@@ -193,53 +193,55 @@ class _RegistrationPageState extends State<RegistrationPage> {
     );
   }
 
-  Widget _buildTextField(String label, bool isPassword, IconData? icon,
-      TextEditingController controller, FocusNode focusNode) {
-    double w = MediaQuery.of(context).size.width;
 
-    return Column(
-      children: [
-        if (controller == _confirmPassword && passwordError)
-          Text(
-            'Passwords do not match',
-            style: TextStyle(
-              color: Colors.red,
-            ),
-          ),
-        TextFormField(
-          controller: controller,
-          focusNode: focusNode,
-          obscureText: isPassword,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            labelText: label,
-            labelStyle: TextStyle(
-              color: Colors.grey,
-            ),
-            prefixIcon: Icon(
-              icon,
-              color: focusNode.hasFocus ? Color(0xFFFF7F50) : Colors.grey,
-            ),
-            prefixIconConstraints: BoxConstraints(
-              minWidth: 40,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(
-                color: Color(0xFFFF7F50),
-              ),
-            ),
-            contentPadding: EdgeInsets.symmetric(
-              horizontal: w * 0.05,
-              vertical: 4.0,
-            ),
+  Widget _buildTextField(String label, bool isPassword, IconData? icon,
+    TextEditingController controller, FocusNode focusNode) {
+  double w = MediaQuery.of(context).size.width;
+
+  return Column(
+    children: [
+      TextFormField(
+        controller: controller,
+        focusNode: focusNode,
+        obscureText: isPassword,
+        decoration: InputDecoration(
+          filled: true,
+        fillColor: Colors.white,
+        labelText: label,
+        labelStyle: TextStyle(
+          color: Colors.grey,
+        ),
+        prefixIcon: Icon(
+          icon,
+          color: focusNode.hasFocus ? Color(0xFFFF7F50) : Colors.grey,
+        ),
+        prefixIconConstraints: BoxConstraints(
+          minWidth: 40,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: BorderSide(
+            color: Color(0xFFFF7F50),
           ),
         ),
-      ],
-    );
-  }
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: w * 0.05,
+          vertical: 4.0,
+        ),
+        ),
+      ),
+      if (controller == _confirmPassword && passwordError)
+        Text(
+          'Passwords do not match',
+          style: TextStyle(
+            color: Colors.red,
+          ),
+        ),
+    ],
+  );
+}
+
 }

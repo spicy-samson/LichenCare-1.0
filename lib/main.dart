@@ -8,10 +8,14 @@ import 'package:lichen_care/pages/user/lichenpedia.dart';
 import 'package:lichen_care/pages/user/lichenHub.dart';
 import 'package:lichen_care/pages/user/lichenCheck.dart';
 import 'package:lichen_care/pages/user/profile.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-
-
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -28,14 +32,16 @@ class MyApp extends StatelessWidget {
         fontFamily: 'ABeeZee',
         textTheme: Theme.of(context).textTheme.apply(fontFamily: 'ABeeZee'),
       ),
-      home: HomePage(username: 'Tres',),
+      home: MyCarousel(),
       routes: {
         '/login': (context) => LoginPage(),
         '/registration': (context) => RegistrationPage(),
-        '/home': (context) => HomePage(username: 'Tres',),
-        '/lichenpedia' : (context) => LichenPedia(),
-        '/lichenHub' : (context) => LichenHub(), 
-        '/lichenCheck' : (context) => LichenCheck(),
+        '/home': (context) => HomePage(
+              username: 'Tres',
+            ),
+        '/lichenpedia': (context) => LichenPedia(),
+        '/lichenHub': (context) => LichenHub(),
+        '/lichenCheck': (context) => LichenCheck(),
         '/profile': (context) => Profile(),
       },
     );
