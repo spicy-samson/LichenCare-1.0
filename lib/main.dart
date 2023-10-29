@@ -22,7 +22,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  //Root of Application
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -31,12 +31,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'ABeeZee',
         textTheme: Theme.of(context).textTheme.apply(fontFamily: 'ABeeZee'),
+        snackBarTheme: SnackBarThemeData(
+          backgroundColor: const Color(0xFFFF7F50), // Orange color
+        ),
       ),
       home: MyCarousel(),
       routes: {
-        '/login': (context) => LoginPage(),
-        '/registration': (context) => RegistrationPage(),
-        '/home': (context) => HomePage(
+        '/login/': (context) => LoginPage(),
+        '/registration/': (context) => RegistrationPage(),
+        '/home/': (context) => HomePage(
               username: 'Tres',
             ),
         '/lichenpedia': (context) => LichenPedia(),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:lichen_care/pages/guest/home_sliders.dart';
 import '/firebase_options.dart';
 
 class RegistrationPage extends StatefulWidget {
@@ -17,6 +18,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   bool isFirebaseInitialized = true;
   bool passwordError = false;
+  String errorMessage = '';
+  String successMessage = '';
 
   @override
   void initState() {
@@ -39,6 +42,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
     super.dispose();
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   // Create a FocusNode for the text field
   final FocusNode _firstNameFocus = FocusNode();
   final FocusNode _lastNameFocus = FocusNode();
@@ -51,6 +56,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     double w = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      key: _scaffoldKey, // Add the key to your Scaffold
       backgroundColor: Color(0xFFFFF4E9),
       appBar: AppBar(
         backgroundColor: Color(0xFFFFF4E9),
@@ -60,7 +66,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
             icon: Icon(Icons.arrow_back_ios),
             color: Colors.black,
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => MyCarousel(),
+                ),
+              );
             },
           ),
         ),
@@ -109,35 +119,68 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     Container(
                       child: ElevatedButton(
                         onPressed: () async {
-                          final email = _email.text;
-                          final password = _password.text;
-                          final confirmPassword = _confirmPassword.text;
+                          if (_firstName.text.isEmpty ||
+                              _lastName.text.isEmpty ||
+                              _email.text.isEmpty ||
+                              _password.text.isEmpty ||
+                              _confirmPassword.text.isEmpty) {
+                            errorMessage = 'Please fill in all fields.';
+                            successMessage = '';
+                            _showSnackBar(errorMessage);
+                            return;
+                          }
 
-                          if (password == confirmPassword) {
-                            setState(() {
-                              passwordError = false; // Reset password error
-                            });
+                          try {
+                            final email = _email.text;
+                            final password = _password.text;
+                            final confirmPassword = _confirmPassword.text;
 
-                            try {
+                            if (password == confirmPassword) {
+                              setState(() {
+                                passwordError = false; // Reset password error
+                              });
+
                               final userCredential = await FirebaseAuth.instance
                                   .createUserWithEmailAndPassword(
                                 email: email,
                                 password: password,
                               );
-                              print(userCredential);
-                            } on FirebaseAuthException catch (e) {
-                              if (e.code == 'weak-password') {
-                                print('The password provided is too weak.');
-                              } else if (e.code == 'email-already-in-use') {
-                                print("Email is already in use.");
-                              } else if (e.code == 'invalid-email') {
-                                print("Invalid email.");
+
+                              if (userCredential.user != null) {
+                                // Send an email verification link to the user
+                                await userCredential.user!
+                                    .sendEmailVerification();
+
+                                // Show the verification email pop-up dialog
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return EmailVerificationDialog();
+                                  },
+                                );
+
+                                setState(() {
+                                  successMessage =
+                                      'Verification email sent. Check your inbox!';
+                                  errorMessage = '';
+                                });
+
+                                _showSnackBar(successMessage);
                               }
+                            } else {
+                              setState(() {
+                                passwordError = true; // Set password error
+                              });
+
+                              errorMessage = 'Passwords do not match.';
+                              successMessage = '';
+
+                              _showSnackBar(errorMessage);
                             }
-                          } else {
-                            setState(() {
-                              passwordError = true; // Set password error
-                            });
+                          } on FirebaseAuthException catch (e) {
+                            errorMessage = 'Error: ${e.message}';
+                            successMessage = '';
+                            _showSnackBar(errorMessage);
                           }
                         },
                         child: Text(
@@ -171,14 +214,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             style: TextStyle(fontSize: 16.0)),
                         TextButton(
                           onPressed: () {
-                            Navigator.of(context).pushNamed('/login');
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/login/', (Route<dynamic> route) => false);
                           },
                           child: Text(
                             'Sign in',
                             style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFFFF7F50),
-                                fontSize: 16.0),
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFFFF7F50),
+                              fontSize: 16.0,
+                            ),
                           ),
                         ),
                       ],
@@ -199,13 +244,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
     return Column(
       children: [
-        if (controller == _confirmPassword && passwordError)
-          Text(
-            'Passwords do not match',
-            style: TextStyle(
-              color: Colors.red,
-            ),
-          ),
         TextFormField(
           controller: controller,
           focusNode: focusNode,
@@ -238,6 +276,43 @@ class _RegistrationPageState extends State<RegistrationPage> {
               vertical: 4.0,
             ),
           ),
+        ),
+      ],
+    );
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Center(
+        child: Text(message, textAlign: TextAlign.center),
+      ),
+    ));
+  }
+}
+
+class EmailVerificationDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0), // Rounded borders
+      ),
+      title: Text(
+        'Successful registration! but first, we need to verify your email.',
+        style: TextStyle(
+          color: Color(0xFFFF7F50), // Orange color
+        ),
+      ),
+      content: Text(
+          'A verification email has been sent to your email address. Please check your email and click the verification link to activate your account.'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop(); // Close the dialog
+            Navigator.of(context).pushNamedAndRemoveUntil('/login/',
+                (Route<dynamic> route) => false); // Navigate to the login page
+          },
+          child: Text('OK'),
         ),
       ],
     );

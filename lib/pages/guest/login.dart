@@ -11,6 +11,9 @@ class _LoginPageState extends State<LoginPage> {
   late final TextEditingController _email;
   late final TextEditingController _password;
 
+  String errorMessage = '';
+  String successMessage = '';
+
   @override
   void initState() {
     _email = TextEditingController();
@@ -73,19 +76,44 @@ class _LoginPageState extends State<LoginPage> {
                       // Adjust the padding
                       child: ElevatedButton(
                         onPressed: () async {
+                          if (_email.text.isEmpty || _password.text.isEmpty) {
+                            errorMessage = 'Please fill in all fields.';
+                            successMessage = '';
+                            _showSnackBar(errorMessage);
+                            return;
+                          }
+
                           final email = _email.text;
                           final password = _password.text;
                           try {
                             final userCredential = await FirebaseAuth.instance
                                 .signInWithEmailAndPassword(
                                     email: email, password: password);
-                            print(userCredential);
-                          } on FirebaseAuthException catch (e) {
-                            if (e.code == 'user-not-found') {
-                              print('No user found for that email.');
-                            } else if (e.code == 'wrong-password') {
-                              print('Wrong password provided for that user.');
+
+                            if (userCredential.user != null &&
+                                userCredential.user!.emailVerified) {
+                              // User is logged in and email is verified
+                              successMessage =
+                                  'You have successfully logged in! Redirecting you to the home page...';
+                              _showSnackBar(successMessage);
+
+                              // If the login is successful and email is verified, navigate to the home page using the named route.
+                              Navigator.of(context)
+                                  .pushReplacementNamed('/home/');
+                            } else if (userCredential.user != null &&
+                                !userCredential.user!.emailVerified) {
+                              // User is logged in but email is not verified
+                              errorMessage = 'Please verify your email first.';
+                              _showSnackBar(errorMessage);
+                            } else {
+                              // User not found or other errors
+                              errorMessage =
+                                  'User not found or other error occurred.';
+                              _showSnackBar(errorMessage);
                             }
+                          } on FirebaseAuthException catch (e) {
+                            errorMessage = 'Error: ${e.message}';
+                            _showSnackBar(errorMessage);
                           }
                         },
                         child: Text(
@@ -121,7 +149,9 @@ class _LoginPageState extends State<LoginPage> {
                             style: TextStyle(fontSize: 16.0)),
                         TextButton(
                           onPressed: () {
-                            Navigator.of(context).pushNamed('/registration');
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/registration/',
+                                (Route<dynamic> route) => false);
                           },
                           child: Text(
                             'Sign Up',
@@ -182,5 +212,13 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Center(
+        child: Text(message, textAlign: TextAlign.center),
+      ),
+    ));
   }
 }
