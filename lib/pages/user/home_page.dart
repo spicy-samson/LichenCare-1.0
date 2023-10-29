@@ -3,11 +3,7 @@ import 'package:flutter_svg/svg.dart';
 
 // ignore: must_be_immutable
 class HomePage extends StatelessWidget {
-  final String
-      username; // Initialize _currentIndex with the desired initial tab index
   int _currentIndex = 0;
-
-  HomePage({required this.username});
 
   @override
   Widget build(BuildContext context) {

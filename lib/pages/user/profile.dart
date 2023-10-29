@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -19,12 +20,11 @@ class _ProfileState extends State<Profile> {
         automaticallyImplyLeading: false,
         backgroundColor: Color(0xFFFFF4E9),
         title: Padding(
-          padding:
-              EdgeInsets.only(top: h * 0.05, right: w * 0.45, left: w * 0.012),
+          padding: EdgeInsets.only(top: h * 0.05, right: w * 0.5),
           child: SvgPicture.asset(
-            'assets/svgs/account(copy).svg',
+            'assets/svgs/profileSection/profile(copy).svg',
             width: w * 0.1,
-            height: h * 0.055,
+            height: h * 0.8,
           ),
         ),
         elevation: 0,
@@ -37,7 +37,68 @@ class _ProfileState extends State<Profile> {
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
-              Text('Profile page'),
+              SizedBox(height: h * 0.05),
+              buildCustomDivider(2, Colors.grey),
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: buildRow(
+                    'Account', 'assets/svgs/profileSection/account_icon.svg',
+                    () {
+                  // Function to execute when the 'Account' row is clicked
+                }),
+              ),
+              buildCustomDivider(2, Colors.grey),
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: buildRow('Scan History',
+                    'assets/svgs/profileSection/scan history_icon.svg', () {
+                  // Function to execute when the 'Scan History' row is clicked
+                }),
+              ),
+              buildCustomDivider(2, Colors.grey),
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: buildRow(
+                    'Feedback', 'assets/svgs/profileSection/feedback_icon.svg',
+                    () {
+                  // Function to execute when the 'Feedback' row is clicked
+                }),
+              ),
+              buildCustomDivider(2, Colors.grey),
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: buildRow(
+                    'About us', 'assets/svgs/profileSection/about us_icon.svg',
+                    () {
+                  // Function to execute when the 'About us' row is clicked
+                }),
+              ),
+              buildCustomDivider(2, Colors.grey),
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: buildRow('Terms and conditions',
+                    'assets/svgs/profileSection/terms and conditions_icon.svg',
+                    () {
+                  // Function to execute when the 'Terms and conditions' row is clicked
+                }),
+              ),
+              buildCustomDivider(2, Colors.grey),
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: buildRow('Privacy policy',
+                    'assets/svgs/profileSection/privacy policy_icon.svg', () {
+                  // Function to execute when the 'Privacy policy' row is clicked
+                }),
+              ),
+              buildCustomDivider(2, Colors.grey),
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: buildRow(
+                    'Logout', 'assets/svgs/profileSection/logout_icon.svg', () {
+                  _signOut();
+                }),
+              ),
+              buildCustomDivider(2, Colors.grey),
             ],
           ),
         ),
@@ -151,5 +212,53 @@ class _ProfileState extends State<Profile> {
         }
       },
     );
+  }
+
+  Widget buildRow(String title, String svgPath, Function() onTap) {
+    double w = MediaQuery.of(context).size.width;
+    double h = MediaQuery.of(context).size.height;
+
+    return InkWell(
+      onTap: onTap, // Assign the function to execute when the row is clicked
+      child: Row(
+        children: [
+          // Left Part (SVG)
+          SvgPicture.asset(
+            svgPath,
+            width: w * 0.05,
+            height: h * 0.048,
+          ),
+          // Middle Part (Title)
+          SizedBox(width: 20),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          // Right Part (Arrow Button)
+          Spacer(), // Push the arrow button to the right
+          Icon(Icons.arrow_forward_ios, color: Color(0xFFFF7F50)),
+        ],
+      ),
+    );
+  }
+
+  Divider buildCustomDivider(double height, Color color) {
+    return Divider(
+      height: height,
+      color: color,
+    );
+  }
+
+  // Function to log out the user
+  Future<void> _signOut() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      Navigator.of(context).pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+    } catch (e) {
+      print("Error while signing out: $e");
+    }
   }
 }

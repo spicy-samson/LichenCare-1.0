@@ -215,7 +215,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pushNamedAndRemoveUntil(
-                                '/login/', (Route<dynamic> route) => false);
+                                '/login', (Route<dynamic> route) => false);
                           },
                           child: Text(
                             'Sign in',
@@ -309,7 +309,7 @@ class EmailVerificationDialog extends StatelessWidget {
         TextButton(
           onPressed: () {
             Navigator.of(context).pop(); // Close the dialog
-            Navigator.of(context).pushNamedAndRemoveUntil('/login/',
+            Navigator.of(context).pushNamedAndRemoveUntil('/login',
                 (Route<dynamic> route) => false); // Navigate to the login page
           },
           child: Text('OK'),

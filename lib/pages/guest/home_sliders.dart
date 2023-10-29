@@ -94,7 +94,7 @@ class _MyCarouselState extends State<MyCarousel> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed('/registration/');
+                  Navigator.of(context).pushNamed('/registration');
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
@@ -157,7 +157,7 @@ class _MyCarouselState extends State<MyCarousel> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed('/registration/');
+                  Navigator.of(context).pushNamed('/registration');
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(

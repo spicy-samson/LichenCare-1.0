@@ -99,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
 
                               // If the login is successful and email is verified, navigate to the home page using the named route.
                               Navigator.of(context)
-                                  .pushReplacementNamed('/home/');
+                                  .pushReplacementNamed('/home');
                             } else if (userCredential.user != null &&
                                 !userCredential.user!.emailVerified) {
                               // User is logged in but email is not verified
@@ -150,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pushNamedAndRemoveUntil(
-                                '/registration/',
+                                '/registration',
                                 (Route<dynamic> route) => false);
                           },
                           child: Text(

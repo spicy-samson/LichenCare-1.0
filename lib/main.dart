@@ -37,11 +37,9 @@ class MyApp extends StatelessWidget {
       ),
       home: MyCarousel(),
       routes: {
-        '/login/': (context) => LoginPage(),
-        '/registration/': (context) => RegistrationPage(),
-        '/home/': (context) => HomePage(
-              username: 'Tres',
-            ),
+        '/login': (context) => LoginPage(),
+        '/registration': (context) => RegistrationPage(),
+        '/home': (context) => HomePage(),
         '/lichenpedia': (context) => LichenPedia(),
         '/lichenHub': (context) => LichenHub(),
         '/lichenCheck': (context) => LichenCheck(),
