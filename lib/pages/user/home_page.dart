@@ -1,5 +1,10 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 // ignore: must_be_immutable
 class HomePage extends StatelessWidget {
@@ -31,6 +36,12 @@ class HomePage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            ElevatedButton(
+              onPressed: () {
+                getUserFirstName();
+              },
+              child: Text("Check Current User"),
+            ),
             // First set of content
             Container(
               padding: EdgeInsets.all(w * 0.1),
@@ -370,8 +381,9 @@ class HomePage extends StatelessWidget {
                 '/lichenpedia'); // Navigate to the 'lichenpedia' route
             break;
           case 2:
-            Navigator.of(context).pushNamed(
-                '/lichenCheck'); // Navigate to the 'lichencheck' route
+            Navigator.of(context).pushNamed('/lichenCheck');
+            print("lezgooooo"); 
+            // Navigate to the 'lichencheck' route
             break;
           case 3:
             Navigator.of(context)
@@ -384,5 +396,37 @@ class HomePage extends StatelessWidget {
         }
       },
     );
+  }
+
+  void checkCurrentUser() {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+
+    if (user != null) {
+      print(user);
+    } else {
+      print("User is not logged in.");
+    }
+  }
+
+  Future<String?> getUserFirstName() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        if (userSnapshot.exists) {
+          // Assuming 'first_name' is a field in your Firestore document
+          String firstName = userSnapshot.get('first_name');
+          print(firstName);
+        }
+      } catch (e) {
+        print("Error fetching user data: $e");
+      }
+    }
+    return null;
   }
 }

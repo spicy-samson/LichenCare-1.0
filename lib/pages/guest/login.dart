@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -10,6 +11,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   late final TextEditingController _email;
   late final TextEditingController _password;
+  bool _passwordVisible = false;
 
   String errorMessage = '';
   String successMessage = '';
@@ -93,10 +95,24 @@ class _LoginPageState extends State<LoginPage> {
                             if (userCredential.user != null &&
                                 userCredential.user!.emailVerified) {
                               // User is logged in and email is verified
-                              successMessage =
-                                  'You have successfully logged in! Redirecting you to the home page...';
-                              _showSnackBar(successMessage);
 
+                              successMessage =
+                                  'You have successfully logged in!';
+                              _showSnackBar(successMessage);
+                              // Update Firestore data to indicate that the email is verified
+                              try {
+                                final user = FirebaseAuth.instance.currentUser;
+                                if (user != null) {
+                                  await FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(user.uid)
+                                      .update({
+                                    'email_verified': true,
+                                  });
+                                }
+                              } catch (e) {
+                                print("Error updating Firestore data: $e");
+                              }
                               // If the login is successful and email is verified, navigate to the home page using the named route.
                               Navigator.of(context)
                                   .pushReplacementNamed('/home');
@@ -182,7 +198,7 @@ class _LoginPageState extends State<LoginPage> {
       enableSuggestions: false,
       autocorrect: false,
       focusNode: focusNode, // Assign the FocusNode to the TextFormField
-      obscureText: isPassword,
+       obscureText: isPassword ? !_passwordVisible : false,
       decoration: InputDecoration(
         filled: true, // This makes the background color fill the field
         fillColor: Colors.white, // This sets the background color to white
@@ -210,6 +226,20 @@ class _LoginPageState extends State<LoginPage> {
           horizontal: w * 0.05,
           vertical: 4.0,
         ),
+
+         suffixIcon: isPassword
+          ? IconButton(
+              icon: Icon(
+                _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                color: Colors.grey,
+              ),
+              onPressed: () {
+                setState(() {
+                  _passwordVisible = !_passwordVisible;
+                });
+              },
+            )
+          : null,
       ),
     );
   }

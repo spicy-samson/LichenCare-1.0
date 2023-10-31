@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lichen_care/pages/guest/home_sliders.dart';
 import '/firebase_options.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 class RegistrationPage extends StatefulWidget {
   @override
@@ -15,6 +17,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
   late final TextEditingController _email;
   late final TextEditingController _password;
   late final TextEditingController _confirmPassword;
+
+  bool _passwordVisible = false;
+  bool _confirmPasswordVisible = false;
 
   bool isFirebaseInitialized = true;
   bool passwordError = false;
@@ -43,6 +48,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   // Create a FocusNode for the text field
   final FocusNode _firstNameFocus = FocusNode();
@@ -134,6 +141,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             final email = _email.text;
                             final password = _password.text;
                             final confirmPassword = _confirmPassword.text;
+                            final firstName = _firstName.text;
+                            final lastName = _lastName.text;
 
                             if (password == confirmPassword) {
                               setState(() {
@@ -147,25 +156,42 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               );
 
                               if (userCredential.user != null) {
+                                // Add user data to Firestore
+                                await FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(userCredential.user!.uid)
+                                    .set({
+                                  'first_name': firstName,
+                                  'last_name': lastName,
+                                  'email': email,
+                                  'email_verified':
+                                      userCredential.user!.emailVerified,
+                                });
+
                                 // Send an email verification link to the user
                                 await userCredential.user!
                                     .sendEmailVerification();
 
-                                // Show the verification email pop-up dialog
-                                showDialog(
+                                // Show the verification email dialog
+                                AwesomeDialog(
                                   context: context,
-                                  builder: (BuildContext context) {
-                                    return EmailVerificationDialog();
+                                  dialogType: DialogType.success,
+                                  animType: AnimType.topSlide,
+                                  title: 'Successful registration!',
+                                  desc:
+                                      'A verification email has been sent to your email address. Please check your email and click the verification link to activate your account.',
+                                  descTextStyle: TextStyle(
+                                    fontSize: 16.0,
+                                  ),
+                                  padding: EdgeInsets.all(16.0),
+                                  btnOkOnPress: () {
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pushNamedAndRemoveUntil(
+                                        '/login',
+                                        (Route<dynamic> route) =>
+                                            false); // Navigate to the login page
                                   },
-                                );
-
-                                setState(() {
-                                  successMessage =
-                                      'Verification email sent. Check your inbox!';
-                                  errorMessage = '';
-                                });
-
-                                _showSnackBar(successMessage);
+                                ).show();
                               }
                             } else {
                               setState(() {
@@ -242,12 +268,21 @@ class _RegistrationPageState extends State<RegistrationPage> {
       TextEditingController controller, FocusNode focusNode) {
     double w = MediaQuery.of(context).size.width;
 
+    bool isPasswordField =
+        isPassword && label.toLowerCase().contains('password');
+    bool isConfirmPasswordField =
+        isPassword && label.toLowerCase().contains('confirm password');
+
     return Column(
       children: [
         TextFormField(
           controller: controller,
           focusNode: focusNode,
-          obscureText: isPassword,
+          obscureText: isPasswordField
+              ? !_passwordVisible
+              : isConfirmPasswordField
+                  ? !_confirmPasswordVisible
+                  : false,
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,
@@ -275,6 +310,35 @@ class _RegistrationPageState extends State<RegistrationPage> {
               horizontal: w * 0.05,
               vertical: 4.0,
             ),
+            suffixIcon: isPasswordField
+                ? IconButton(
+                    icon: Icon(
+                      _passwordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: Colors.grey,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _passwordVisible = !_passwordVisible;
+                      });
+                    },
+                  )
+                : isConfirmPasswordField
+                    ? IconButton(
+                        icon: Icon(
+                          _confirmPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _confirmPasswordVisible = !_confirmPasswordVisible;
+                          });
+                        },
+                      )
+                    : null,
           ),
         ),
       ],
@@ -300,7 +364,7 @@ class EmailVerificationDialog extends StatelessWidget {
       title: Text(
         'Successful registration! but first, we need to verify your email.',
         style: TextStyle(
-          color: Color(0xFFFF7F50), // Orange color
+          color: Color(0xFF66D7D1),
         ),
       ),
       content: Text(

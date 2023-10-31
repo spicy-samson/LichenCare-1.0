@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 class LichenCheck extends StatelessWidget {
   int _currentIndex =
@@ -23,7 +24,6 @@ class LichenCheck extends StatelessWidget {
             height: h * 0.045,
           ),
         ),
- 
         elevation: 0,
         toolbarHeight: 80.0,
       ),
@@ -148,6 +148,35 @@ class LichenCheck extends StatelessWidget {
             break;
         }
       },
+    );
+  }
+}
+
+class OneTimeDisclaimer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0), // Rounded borders
+      ),
+      title: Text(
+        'Successful registration! but first, we need to verify your email.',
+        style: TextStyle(
+          color: Color(0xFF66D7D1),
+        ),
+      ),
+      content: Text(
+          'A verification email has been sent to your email address. Please check your email and click the verification link to activate your account.'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop(); // Close the dialog
+            Navigator.of(context).pushNamedAndRemoveUntil('/login',
+                (Route<dynamic> route) => false); // Navigate to the login page
+          },
+          child: Text('OK'),
+        ),
+      ],
     );
   }
 }
