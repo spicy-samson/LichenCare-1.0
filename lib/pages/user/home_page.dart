@@ -382,7 +382,7 @@ class HomePage extends StatelessWidget {
             break;
           case 2:
             Navigator.of(context).pushNamed('/lichenCheck');
-            print("lezgooooo"); 
+            // print("lezgooooo"); 
             // Navigate to the 'lichencheck' route
             break;
           case 3:

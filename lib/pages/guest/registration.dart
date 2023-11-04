@@ -61,7 +61,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
-
     return Scaffold(
       key: _scaffoldKey, // Add the key to your Scaffold
       backgroundColor: Color(0xFFFFF4E9),
