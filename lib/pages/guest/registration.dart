@@ -371,12 +371,22 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 
   void _showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Center(
-        child: Text(message, textAlign: TextAlign.center),
+  final isErrorMessage = message == errorMessage;
+  final snackBarBackgroundColor = isErrorMessage ? const Color.fromARGB(255, 196, 41, 30) : Colors.green;
+  
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    backgroundColor: snackBarBackgroundColor, // Set the background color
+    content: Center(
+      child: Text(
+        message,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Colors.white, // Set the text color to white
+        ),
       ),
-    ));
-  }
+    ),
+  ));
+}
 }
 
 class EmailVerificationDialog extends StatelessWidget {

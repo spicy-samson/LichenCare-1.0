@@ -267,10 +267,20 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Center(
-        child: Text(message, textAlign: TextAlign.center),
+  final isErrorMessage = message == errorMessage;
+  final snackBarBackgroundColor = isErrorMessage ? Colors.red : Colors.green;
+  
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    backgroundColor: snackBarBackgroundColor, // Set the background color
+    content: Center(
+      child: Text(
+        message,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Colors.white, // Set the text color to white
+        ),
       ),
-    ));
-  }
+    ),
+  ));
+}
 }

@@ -31,9 +31,6 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'ABeeZee',
         textTheme: Theme.of(context).textTheme.apply(fontFamily: 'ABeeZee'),
-        snackBarTheme: SnackBarThemeData(
-          backgroundColor: const Color(0xFFFF7F50), // Orange color
-        ),
       ),
       home: MyCarousel(),
       routes: {

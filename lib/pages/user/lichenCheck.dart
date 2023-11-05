@@ -22,25 +22,12 @@ class _LichenCheckState extends State<LichenCheck> {
   final _currentIndex =
       2; // Initialize _currentIndex with the desired initial tab index
   List<String> ethnicities = [
-    "African",
-    "Asian (Central)",
-    "Asian (East)",
-    "Asian (South)",
-    "Asian (South East)",
-    "Asian (Others)",
-    "Caucasian (South Europe)",
-    "Caucasian (West Europe)",
-    "Caucasian (Others)",
-    "Hispanic",
-    "Indigenous People",
-    "Jewish (European)",
-    "Middle Eastern",
-    "Mixed Race",
-    "Native American",
-    "Pacific Islander",
-    "Others"
+    "African", "Asian (Central)", "Asian (East)", "Asian (South)" , "Asian (South East)",
+    "Asian (Others)", "Caucasian (South Europe)" , "Caucasian (West Europe)", "Caucasian (Others)",
+    "Hispanic", "Indigenous People", "Jewish (European)" , "Middle Eastern" , "Mixed Race", "Native American",
+    "Pacific Islander", "Others"
   ];
-
+      
   PatientInformation patientInformation = PatientInformation();
   bool disclaimerClosed = false;
   bool hasImage = false;
@@ -73,7 +60,7 @@ class _LichenCheckState extends State<LichenCheck> {
       children: [
         Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: Color(0xFFFFF4E9),
+          backgroundColor:  Color(0xFFFFF4E9),
           appBar: AppBar(
             automaticallyImplyLeading: false,
             backgroundColor: Color(0xFFFFF4E9),
@@ -203,15 +190,14 @@ class _LichenCheckState extends State<LichenCheck> {
               children: [
                const SpinKitThreeBounce(
                   color: Color(0XFFF0784C),
-                  size: 120.0,
+                  size: 60.0,
                 ),
                 const SizedBox(height: 20,),
                 Text((isPredicting)? "Detecting Lichen Planus..." : "Please Wait...")
               ],
             ),
           // Floating action button
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           floatingActionButton: _lichenCheckBtn(context),
           // Bottom navigation bar
           bottomNavigationBar: _bottomNavBar(context),
@@ -235,19 +221,19 @@ class _LichenCheckState extends State<LichenCheck> {
                     padding: const EdgeInsets.only(top: 20, right: 0, bottom: 25),
                     child: SvgPicture.asset(
                       'assets/svgs/#1 - lichencheck.svg',
-                      width: w * 0.05,
-                      height: h * 0.075,
+                      width: w * 0.03,
+                      height: h * 0.055,
                     ),
                   ),
                   RichText(
                         textAlign: TextAlign.center,
                         text: const TextSpan(
-                        style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w300),
+                        style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold),
                         children: <TextSpan>[
                           TextSpan(text: 'DISCLAIMER: Skin Rash Detection Limitation'),
                         ]
                       )),
-                  const SizedBox(height: 20,),
+                  const SizedBox(height: 25,),
                   SizedBox(width: double.infinity,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -264,7 +250,7 @@ class _LichenCheckState extends State<LichenCheck> {
                       RichText(
                         textAlign: TextAlign.center,
                         text: const TextSpan(
-                        style: TextStyle(color: Colors.black, fontSize: 16, height: 1.5),
+                        style: TextStyle(color: Colors.black, fontSize: 17, height: 1.5),
                         children: <TextSpan>[
                           TextSpan(text: "Machine Learning's trend is rising, and "),
                           TextSpan(text:"Lichen", style: TextStyle(fontWeight: FontWeight.bold, color: Color(0XFF15D6b4))),
@@ -319,7 +305,7 @@ class _LichenCheckState extends State<LichenCheck> {
     );
   }
 
-  @override
+   @override
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -327,7 +313,7 @@ class _LichenCheckState extends State<LichenCheck> {
   }
 
   @override
-  void dispose() {
+  void dispose(){
     super.dispose();
   }
 
@@ -390,189 +376,118 @@ class _LichenCheckState extends State<LichenCheck> {
         Text("Hypertropic Lichen Planus is the second most common cutaneous variant of lichen planus. It is characterized as extremely pruritic and thick hyperkeratotic plaques are seen primarily on the shins or dosal aspec of the foot and may be covered by a fine adherent scale.",
           style: TextStyle(fontSize: 16.0,
             height: 2.0
-          )
+          ),
         ),
-        ],
-      );
-    } else {
-      return Column(
-        children: [
-          Center(
-            child: Text(
-              "RESULTS",
-              style: TextStyle(
-                  color: Colors.red.shade900,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 24,
-                  letterSpacing: 10.0),
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: SvgPicture.asset(
-              'assets/svgs/nodetections_image.svg',
-              width: 200,
-              height: 200,
-            ),
-          ),
-          Center(
-            child: Text(
-              "LICHEN PLANUS NOT DETECTED",
-              style: TextStyle(fontSize: 22),
-            ),
-          )
-        ],
-      );
+      ],);
+    }else{
+      return Column(children: [
+        Center(child: Text("RESULTS", style: TextStyle(color: Colors.red.shade900,fontWeight: FontWeight.w500, fontSize: 24, letterSpacing: 10.0),),),
+        const SizedBox(height: 10,),
+        Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: SvgPicture.asset(
+                'assets/svgs/nodetections_image.svg',
+                width: 200,
+                height: 200,
+              ),
+        ),
+        Center(child: Text("LICHEN PLANUS NOT DETECTED", style: TextStyle(fontSize: 22),),)
+      ],);
     }
-  }
+   }
 
-  // widget selector (page)
-  Widget patientInformationForm(BuildContext context) {
-    List<String> onsets = [
-      "within a week",
-      "within a month",
-      "within a year",
-      "over a year/congenital"
-    ];
-    List<String> severity = ["none", "mild/moderate", "severe"];
-    switch (currentPIPage) {
-      case 0:
-        return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const Text(
-            "Please tell us a bit about yourself.",
-            style: TextStyle(fontSize: 14.0),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(top: 15.0, bottom: 10),
-            child: Text(
-              "Sex",
-              style: TextStyle(fontSize: 18.0),
-            ),
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
-            child: Row(
-              children: [
-                ElevatedButton(
-                  onPressed: () {
+   // widget selector (page)
+   Widget patientInformationForm(BuildContext context){
+      List<String> onsets = ["within a week", "within a month", "within a year", "over a year/congenital"];
+      List<String> severity = ["none", "mild/moderate", "severe"];
+      switch(currentPIPage){
+        case 0:
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text("Please tell us a bit about yourself.", style: TextStyle(fontSize: 14.0),),
+              const Padding(
+                padding: EdgeInsets.only(top: 15.0, bottom: 10),
+                child: Text("Sex", style: TextStyle(fontSize: 18.0),),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+                child: Row(children: [
+                  ElevatedButton(
+                    onPressed: (){
                     setState(() {
                       patientInformation.gender = 1;
                     });
                   },
-                  style: ElevatedButton.styleFrom(
-                      shape: const CircleBorder(
-                          side: BorderSide(width: 1.5, color: Colors.black54)),
-                      backgroundColor: (patientInformation.gender == 1)
-                          ? primaryforegroundColor
-                          : primaryBackgroundColor),
-                  child: Padding(
+                    style: ElevatedButton.styleFrom(
+                     shape: const CircleBorder(side: BorderSide(width: 1.5, color: Colors.black54)),
+                     backgroundColor: (patientInformation.gender==1)?  primaryforegroundColor : primaryBackgroundColor), child: Padding(
                     padding: const EdgeInsets.all(10.0),
-                    child: Icon(
-                      Icons.male,
-                      size: 80,
-                      color: (patientInformation.gender == 1)
-                          ? Colors.white
-                          : Colors.black87,
-                    ),
+                    child: Icon(Icons.male, size: 80, color: (patientInformation.gender == 1) ? Colors.white : Colors.black87,),
                   ),
-                ),
-                const Spacer(),
-                ElevatedButton(
-                  onPressed: () {
+                  ),
+                  const Spacer(),
+                  ElevatedButton(
+                    onPressed: (){
                     setState(() {
                       patientInformation.gender = 2;
                     });
                   },
-                  style: ElevatedButton.styleFrom(
-                      shape: const CircleBorder(
-                          side: BorderSide(width: 1.5, color: Colors.black54)),
-                      backgroundColor: (patientInformation.gender == 2)
-                          ? primaryforegroundColor
-                          : primaryBackgroundColor),
-                  child: Padding(
+                    style: ElevatedButton.styleFrom(
+                     shape: const CircleBorder(side: BorderSide(width: 1.5, color: Colors.black54)),
+                     backgroundColor: (patientInformation.gender==2)?  primaryforegroundColor : primaryBackgroundColor), child: Padding(
                     padding: const EdgeInsets.all(10.0),
-                    child: Icon(
-                      Icons.female,
-                      size: 80,
-                      color: (patientInformation.gender == 2)
-                          ? Colors.white
-                          : Colors.black87,
-                    ),
+                    child: Icon(Icons.female, size: 80, color: (patientInformation.gender == 2) ? Colors.white : Colors.black87,),
                   ),
-                ),
-              ],
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(top: 10.0, bottom: 0),
-            child: Text(
-              "Age",
-              style: TextStyle(fontSize: 18.0),
-            ),
-          ),
-          TextFormField(
-            onChanged: (value) => setState(() {
-              patientInformation.age = int.parse(value);
-            }),
-            inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.digitsOnly
-            ],
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-                hintText: "Enter your age", border: InputBorder.none),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(top: 10.0, bottom: 0),
-            child: Text(
-              "Country",
-              style: TextStyle(fontSize: 18.0),
-            ),
-          ),
-          SizedBox(
-              width: double.infinity,
-              child: TextButton(
+                  ),
+                ],),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(top: 10.0, bottom: 0),
+                child: Text("Age", style: TextStyle(fontSize: 18.0),),
+              ),
+              TextFormField(
+                onChanged: (value) => setState(() {
+                  patientInformation.age = int.parse(value);
+                }),
+                inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(hintText: "Enter your age",border: InputBorder.none),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(top: 10.0, bottom: 0),
+                child: Text( "Country", style: TextStyle(fontSize: 18.0),),
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: TextButton(
                   style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                  onPressed: () {
-                    showCountryPicker(
-                        context: context,
-                        countryListTheme: const CountryListThemeData(
-                            inputDecoration: InputDecoration(
-                                labelText: 'Search Country/Region',
-                                hintText: 'Enter a country/region name',
-                                prefixIcon: Icon(Icons.search),
-                                border: UnderlineInputBorder())),
-                        onSelect: (Country country) {
-                          setState(() {
-                            patientInformation.selectedCountry = country.name;
-                          });
-                        });
-                  },
-                  child: Row(
-                    children: [
-                      Text(
-                        (patientInformation.selectedCountry == null)
-                            ? "Select"
-                            : patientInformation.selectedCountry!,
-                        style: TextStyle(
-                            color: (patientInformation.selectedCountry == null)
-                                ? Colors.black54
-                                : Colors.black87,
-                            fontSize: 16.0),
-                      ),
-                    ],
-                  ))),
-          const Padding(
-            padding: EdgeInsets.only(top: 10.0, bottom: 0),
-            child: Text(
-              "Ethnicity",
-              style: TextStyle(fontSize: 18.0),
-            ),
-          ),
-          SizedBox(
+                  onPressed: (){
+                    showCountryPicker(context: context, 
+                    countryListTheme: const CountryListThemeData(
+                      inputDecoration: InputDecoration(
+                        labelText: 'Search Country/Region',
+                      hintText: 'Enter a country/region name',
+                      prefixIcon: Icon(Icons.search),
+                        border: UnderlineInputBorder())
+                    ),
+                    onSelect: (Country country){
+                      setState(() {
+                        patientInformation.selectedCountry = country.name;
+                      });
+                    });
+                  }, child:  Row(
+                  children: [
+                    Text((patientInformation.selectedCountry==null)? "Select" : patientInformation.selectedCountry!, style: TextStyle(color: (patientInformation.selectedCountry==null)? Colors.black54 : Colors.black87, fontSize: 16.0),),
+                  ],
+                ))),
+              const Padding(
+                padding: EdgeInsets.only(top: 10.0, bottom: 0),
+                child: Text("Ethnicity", style: TextStyle(fontSize: 18.0),),
+              ),
+              SizedBox(
               width: double.infinity,
               child: TextButton(
                 style: TextButton.styleFrom(padding: EdgeInsets.zero),
@@ -653,7 +568,7 @@ class _LichenCheckState extends State<LichenCheck> {
               )),
                const SizedBox(height: 45.0,),
           ]);
-         case 1:
+        case 1:
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -902,20 +817,19 @@ class _LichenCheckState extends State<LichenCheck> {
       }
    }
 
-  // Input and processing
+   // Input and processing
   Future classifyImage(File file) async {
     int threshold = 75;
     List<int> imageSize = [300, 400];
     var image = img.decodeImage(file.readAsBytesSync());
     // resize image
-    var reduced =
-        img.adjustColor(image!, saturation: 2.0, contrast: 5.0, amount: 1.0);
+    var reduced = img.adjustColor(image!, saturation: 2.0, contrast: 5.0, amount: 1.0);
     reduced = img.copyResize(reduced,
         width: imageSize[0],
         height: imageSize[1],
         interpolation: img.Interpolation.cubic); // resize
     // add adjustmment filter for better prediction
-
+    
     // exit function if classifier object is not initialized
     List<Recognition> recognitions = await classifier!.predict(reduced);
     if (recognitions.isNotEmpty) {
@@ -961,8 +875,8 @@ class _LichenCheckState extends State<LichenCheck> {
         this.image = labeled;
         if (value >= threshold) {
           patientInformation.detection = recognitions[0].label;
-          // _accuracy = value.toStringAsFixed(2).substring(0, 5);
-          // _predictedLabel = recognitions[0].label;
+        // _accuracy = value.toStringAsFixed(2).substring(0, 5);
+        // _predictedLabel = recognitions[0].label;
         }
       });
     } else {
@@ -977,7 +891,7 @@ class _LichenCheckState extends State<LichenCheck> {
     try {
       final take = await ImagePicker()
           .pickImage(source: source, maxHeight: 720, maxWidth: 480);
-      if (take == null) {
+      if (take == null){
         Navigator.of(context).pop();
         return;
       }
@@ -987,7 +901,7 @@ class _LichenCheckState extends State<LichenCheck> {
         Navigator.of(context).pop();
         return;
       }
-      setState(() {
+      setState((){
         isPredicting = true;
       });
       await Future.delayed(const Duration(seconds: 1));
@@ -1107,12 +1021,12 @@ class _LichenCheckState extends State<LichenCheck> {
             //     '/lichenCheck'); // Navigate to the 'lichencheck' route
             break;
           case 3:
-            Navigator.of(context).pushReplacementNamed(
-                '/lichenHub'); // Navigate to the 'lichenhub' route
+            Navigator.of(context)
+                .pushReplacementNamed('/lichenHub'); // Navigate to the 'lichenhub' route
             break;
           case 4:
-            Navigator.of(context).pushReplacementNamed(
-                '/profile'); // Navigate to the 'profile' route
+            Navigator.of(context)
+                .pushReplacementNamed('/profile'); // Navigate to the 'profile' route
             break;
         }
       },
@@ -1132,7 +1046,7 @@ class PatientInformation {
 
   PatientInformation();
 
-  void reset() {
+  void reset(){
     age = 0;
     gender = 0;
     onset = 0;
@@ -1142,34 +1056,19 @@ class PatientInformation {
     selectedCountry = null;
     selectedEthnicity = null;
   }
-}
 
-
-class OneTimeDisclaimer extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0), // Rounded borders
-      ),
-      title: Text(
-        'Successful registration! but first, we need to verify your email.',
-        style: TextStyle(
-          color: Color(0xFF66D7D1),
-        ),
-      ),
-      content: Text(
-          'A verification email has been sent to your email address. Please check your email and click the verification link to activate your account.'),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop(); // Close the dialog
-            Navigator.of(context).pushNamedAndRemoveUntil('/login',
-                (Route<dynamic> route) => false); // Navigate to the login page
-          },
-          child: Text('OK'),
-        ),
-      ],
-    );
+  bool checkPageisComplete(page){
+    switch(page){
+      case 0: 
+       return (age!=0&&gender!=0&&selectedCountry!=null&&selectedEthnicity!=null);
+      case 1:
+       return (onset!=0);
+      case 2:
+       return (itching!=0);
+      case 3:
+       return (pain!=0);
+      default:
+        return false;
+    }
   }
 }
