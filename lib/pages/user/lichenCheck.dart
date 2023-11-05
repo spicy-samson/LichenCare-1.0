@@ -22,12 +22,25 @@ class _LichenCheckState extends State<LichenCheck> {
   final _currentIndex =
       2; // Initialize _currentIndex with the desired initial tab index
   List<String> ethnicities = [
-    "African", "Asian (Central)", "Asian (East)", "Asian (South)" , "Asian (South East)",
-    "Asian (Others)", "Caucasian (South Europe)" , "Caucasian (West Europe)", "Caucasian (Others)",
-    "Hispanic", "Indigenous People", "Jewish (European)" , "Middle Eastern" , "Mixed Race", "Native American",
-    "Pacific Islander", "Others"
+    "African",
+    "Asian (Central)",
+    "Asian (East)",
+    "Asian (South)",
+    "Asian (South East)",
+    "Asian (Others)",
+    "Caucasian (South Europe)",
+    "Caucasian (West Europe)",
+    "Caucasian (Others)",
+    "Hispanic",
+    "Indigenous People",
+    "Jewish (European)",
+    "Middle Eastern",
+    "Mixed Race",
+    "Native American",
+    "Pacific Islander",
+    "Others"
   ];
-      
+
   PatientInformation patientInformation = PatientInformation();
   bool disclaimerClosed = false;
   bool hasImage = false;
@@ -43,7 +56,7 @@ class _LichenCheckState extends State<LichenCheck> {
   Color primaryforegroundColor = const Color(0XFFF0784C);
   Color secondaryForegroundColor = const Color(0XFF15D6b4);
 
-  void reset(){
+  void reset() {
     sourceSelected = false;
     hasImage = false;
     formCompleted = false;
@@ -60,7 +73,7 @@ class _LichenCheckState extends State<LichenCheck> {
       children: [
         Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor:  Color(0xFFFFF4E9),
+          backgroundColor: Color(0xFFFFF4E9),
           appBar: AppBar(
             automaticallyImplyLeading: false,
             backgroundColor: Color(0xFFFFF4E9),
@@ -77,235 +90,358 @@ class _LichenCheckState extends State<LichenCheck> {
           ),
 
           // Body
-          body: (!sourceSelected) ?  Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(height: 20,),
-              const Center(
-                child: Text("Select Image Source", style: TextStyle(fontSize: 16.0)),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shadowColor: Colors.transparent,
-                      foregroundColor: primaryforegroundColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                        side: BorderSide(width: 2.0, color: primaryforegroundColor)
-                      ),
-                      backgroundColor: primaryBackgroundColor,
+          body: (!sourceSelected)
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 20,
                     ),
-                    onPressed: (){
-                      setState(() {
-                        sourceSelected = true;
-                      });
-                      pickImage(ImageSource.camera);
-                    }, child: Text("Use Camera", style: TextStyle(fontSize: 18, color: primaryforegroundColor, fontWeight: FontWeight.bold, letterSpacing: 1.5),))),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 0.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shadowColor: Colors.transparent,
-                      foregroundColor: primaryforegroundColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                        side: BorderSide(width: 2.0, color: primaryforegroundColor)
-                      ),
-                      backgroundColor: primaryBackgroundColor,
+                    const Center(
+                      child: Text("Select Image Source",
+                          style: TextStyle(fontSize: 16.0)),
                     ),
-                    onPressed: (){
-                      setState(() {
-                        sourceSelected = true;
-                      });
-                      pickImage(ImageSource.gallery);
-                    }, child: Text("Browse Gallery", style: TextStyle(fontSize: 18, color: primaryforegroundColor, fontWeight: FontWeight.bold, letterSpacing: 1.5),))),
-              ),
-            ],
-          )  : (hasImage) ? (formCompleted) ? Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30.0),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  const SizedBox(height: 20.0,),
-                  result(context),
-                  const SizedBox(height: 30.0,),
-                  Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ElevatedButton(onPressed: (){
-                            Navigator.of(context)
-                                .pushReplacementNamed('/home'); // 
-                          },
-                            style: ElevatedButton.styleFrom(
-                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                              backgroundColor: primaryforegroundColor),
-                            child: const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 10.0),
-                              child:  Text("Back to Home", style: TextStyle(fontSize: 16.0),),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30.0, vertical: 15.0),
+                      child: SizedBox(
+                          width: double.infinity,
+                          height: 50,
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shadowColor: Colors.transparent,
+                                foregroundColor: primaryforegroundColor,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(30.0)),
+                                    side: BorderSide(
+                                        width: 2.0,
+                                        color: primaryforegroundColor)),
+                                backgroundColor: primaryBackgroundColor,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  sourceSelected = true;
+                                });
+                                pickImage(ImageSource.camera);
+                              },
+                              child: Text(
+                                "Use Camera",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: primaryforegroundColor,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1.5),
+                              ))),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30.0, vertical: 0.0),
+                      child: SizedBox(
+                          width: double.infinity,
+                          height: 50,
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shadowColor: Colors.transparent,
+                                foregroundColor: primaryforegroundColor,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(30.0)),
+                                    side: BorderSide(
+                                        width: 2.0,
+                                        color: primaryforegroundColor)),
+                                backgroundColor: primaryBackgroundColor,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  sourceSelected = true;
+                                });
+                                pickImage(ImageSource.gallery);
+                              },
+                              child: Text(
+                                "Browse Gallery",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: primaryforegroundColor,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1.5),
+                              ))),
+                    ),
+                  ],
+                )
+              : (hasImage)
+                  ? (formCompleted)
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 20.0,
+                                ),
+                                result(context),
+                                const SizedBox(
+                                  height: 30.0,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 0.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pushReplacementNamed('/home'); //
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(15.0))),
+                                            backgroundColor:
+                                                primaryforegroundColor),
+                                        child: const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 0.0, vertical: 10.0),
+                                          child: Text(
+                                            "Back to Home",
+                                            style: TextStyle(fontSize: 16.0),
+                                          ),
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            reset();
+                                          });
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(15.0))),
+                                            backgroundColor:
+                                                primaryforegroundColor),
+                                        child: const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 10.0, vertical: 10.0),
+                                          child: Text(
+                                            "Scan Again",
+                                            style: TextStyle(fontSize: 16.0),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 45.0,
+                                )
+                              ],
                             ),
                           ),
-                          ElevatedButton(onPressed: (){
-                            setState(() {
-                              reset();
-                            }); 
-                          },
-                            style: ElevatedButton.styleFrom(
-                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                              backgroundColor: primaryforegroundColor),
-                            child: const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                              child:  Text("Scan Again", style: TextStyle(fontSize: 16.0),),
+                        )
+                      : Column(
+                          children: [
+                            const SizedBox(
+                              height: 20.0,
                             ),
-                          ),
-                        ],
-                      ),
+                            const Center(
+                              child: Text(
+                                "Patient Information",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 24,
+                                    letterSpacing: 1.2),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20.0,
+                            ),
+                            Expanded(
+                                child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30.0),
+                              child: patientInformationForm(context),
+                            )),
+                          ],
+                        )
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SpinKitThreeBounce(
+                          color: Color(0XFFF0784C),
+                          size: 60.0,
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Text((isPredicting)
+                            ? "Detecting Lichen Planus..."
+                            : "Please Wait...")
+                      ],
                     ),
-                  const SizedBox(height: 45.0,)
-                ],
-              ),
-            ),
-          ) :  Column(
-            children: [
-              const SizedBox(height: 20.0,),
-              const Center(child: Text("Patient Information", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24, letterSpacing: 1.2),),),
-              const SizedBox(height: 20.0,),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                  child: patientInformationForm(context),
-                )),
-            ],
-          ) : Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-               const SpinKitThreeBounce(
-                  color: Color(0XFFF0784C),
-                  size: 60.0,
-                ),
-                const SizedBox(height: 20,),
-                Text((isPredicting)? "Detecting Lichen Planus..." : "Please Wait...")
-              ],
-            ),
           // Floating action button
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
           floatingActionButton: _lichenCheckBtn(context),
           // Bottom navigation bar
           bottomNavigationBar: _bottomNavBar(context),
         ),
-        (disclaimerClosed)? const SizedBox():Container(color: Colors.black54,),
-        (disclaimerClosed)? const SizedBox(): Padding(
-          padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 140.0, bottom: 100.0),
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            clipBehavior: Clip.antiAlias,
-            decoration: const BoxDecoration(
-              color: Color(0xFFFFF4E9),
-              borderRadius: BorderRadius.all(Radius.circular(15.0))),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20, right: 0, bottom: 25),
-                    child: SvgPicture.asset(
-                      'assets/svgs/#1 - lichencheck.svg',
-                      width: w * 0.03,
-                      height: h * 0.055,
-                    ),
-                  ),
-                  RichText(
-                        textAlign: TextAlign.center,
-                        text: const TextSpan(
-                        style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold),
-                        children: <TextSpan>[
-                          TextSpan(text: 'DISCLAIMER: Skin Rash Detection Limitation'),
-                        ]
-                      )),
-                  const SizedBox(height: 25,),
-                  SizedBox(width: double.infinity,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      RichText(
-                        textAlign: TextAlign.center,
-                        text: const TextSpan(
-                        style: TextStyle(color: Colors.black, fontSize: 18),
-                        children: <TextSpan>[
-                          TextSpan(text: "Dear Users,"),
-                        ]
-                      )),
-                      const SizedBox(height: 15,),
-                      RichText(
-                        textAlign: TextAlign.center,
-                        text: const TextSpan(
-                        style: TextStyle(color: Colors.black, fontSize: 17, height: 1.5),
-                        children: <TextSpan>[
-                          TextSpan(text: "Machine Learning's trend is rising, and "),
-                          TextSpan(text:"Lichen", style: TextStyle(fontWeight: FontWeight.bold, color: Color(0XFF15D6b4))),
-                          TextSpan(text:"Care", style: TextStyle(fontWeight: FontWeight.bold, color: Color(0XFFF0784C))),
-                          TextSpan(text: " saw this technology as the cornerstone in achieving improved heathcare quality outcomes."),
-                          TextSpan(text: "Have yourself a Lichen Planus detector that can give an additional layer of screening.")
-                        ]
-                      ))
-                    ],
-                    )
-                  ),
-                  const Spacer(),
-                  SizedBox(width: double.infinity,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ElevatedButton(onPressed: (){
-                            Navigator.pop(context);
-                          }, 
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(15.0))
-                              ),
-                              backgroundColor: const Color.fromARGB(255, 255, 127, 80),
-                              ), child: const Text("Cancel", style: TextStyle(fontSize: 16.0),),
-                            ),
-                          ElevatedButton(onPressed: (){
-                            setState(() {
-                              disclaimerClosed = true;
-                            });
-                          },
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                                shape:const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(15.0))
-                                ),
-                                backgroundColor: const Color.fromARGB(255, 255, 127, 80),
-                                ), child: const Text("Continue", style: TextStyle(fontSize: 16.0),),
-                          ),
-                      ],),
-                    ),
-                  )
-                ],
+        (disclaimerClosed)
+            ? const SizedBox()
+            : Container(
+                color: Colors.black54,
               ),
-            ),
-          ),
-      ),
+        (disclaimerClosed)
+            ? const SizedBox()
+            : Padding(
+                padding: const EdgeInsets.only(
+                    left: 15.0, right: 15.0, top: 140.0, bottom: 100.0),
+                child: Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: const BoxDecoration(
+                      color: Color(0xFFFFF4E9),
+                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 25.0, vertical: 20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 20, right: 0, bottom: 25),
+                          child: SvgPicture.asset(
+                            'assets/svgs/#1 - lichencheck.svg',
+                            width: w * 0.03,
+                            height: h * 0.055,
+                          ),
+                        ),
+                        RichText(
+                            textAlign: TextAlign.center,
+                            text: const TextSpan(
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text:
+                                          'DISCLAIMER: Skin Rash Detection Limitation'),
+                                ])),
+                        const SizedBox(
+                          height: 25,
+                        ),
+                        SizedBox(
+                            width: double.infinity,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                RichText(
+                                    textAlign: TextAlign.center,
+                                    text: const TextSpan(
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 18),
+                                        children: <TextSpan>[
+                                          TextSpan(text: "Dear Users,"),
+                                        ])),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                RichText(
+                                    textAlign: TextAlign.center,
+                                    text: const TextSpan(
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 17,
+                                            height: 1.5),
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                              text:
+                                                  "Machine Learning's trend is rising, and "),
+                                          TextSpan(
+                                              text: "Lichen",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color(0XFF15D6b4))),
+                                          TextSpan(
+                                              text: "Care",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color(0XFFF0784C))),
+                                          TextSpan(
+                                              text:
+                                                  " saw this technology as the cornerstone in achieving improved heathcare quality outcomes."),
+                                          TextSpan(
+                                              text:
+                                                  "Have yourself a Lichen Planus detector that can give an additional layer of screening.")
+                                        ]))
+                              ],
+                            )),
+                        const Spacer(),
+                        SizedBox(
+                          width: double.infinity,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10.0, vertical: 20.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 30.0, vertical: 10.0),
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15.0))),
+                                    backgroundColor:
+                                        const Color.fromARGB(255, 255, 127, 80),
+                                  ),
+                                  child: const Text(
+                                    "Cancel",
+                                    style: TextStyle(fontSize: 16.0),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      disclaimerClosed = true;
+                                    });
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20.0, vertical: 10.0),
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15.0))),
+                                    backgroundColor:
+                                        const Color.fromARGB(255, 255, 127, 80),
+                                  ),
+                                  child: const Text(
+                                    "Continue",
+                                    style: TextStyle(fontSize: 16.0),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
       ],
     );
   }
 
-   @override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -313,530 +449,797 @@ class _LichenCheckState extends State<LichenCheck> {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
   }
 
-   // result widget
-   Widget result(BuildContext context){
-    if(patientInformation.detection!=null){
-      return Column(children: [
-        Center(child: Text("DETECTIONS", style: TextStyle(color: const Color.fromARGB(255, 82, 19, 19),fontWeight: FontWeight.w600, fontSize: 24, letterSpacing: 5.0),),),
-        const SizedBox(height: 20.0,),
-        Container(
-          width: 220,
-          height: 220,
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  alignment: Alignment.center,
-                  image: FileImage(image!),
-                  fit: BoxFit.fill)),
-        ),
-        
-        Center(child: Padding(
-          padding: const EdgeInsets.only(top: 15.0,bottom:5.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text("Confidence Score:", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600,),),
-              const SizedBox(width: 5.0,),
-              Text("${patientInformation.detectionScore!}%", style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color:Colors.black87) ,),
-            ],
+  // result widget
+  Widget result(BuildContext context) {
+    if (patientInformation.detection != null) {
+      return Column(
+        children: [
+          Center(
+            child: Text(
+              "DETECTIONS",
+              style: TextStyle(
+                  color: const Color.fromARGB(255, 82, 19, 19),
+                  fontWeight: FontWeight.w600,
+                  fontSize: 24,
+                  letterSpacing: 5.0),
+            ),
           ),
-        )),
-            
-        Center(child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 5.0),
-          child: Text(patientInformation.detection!, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, letterSpacing: 1.5, color: Color.fromARGB(255, 126, 64, 7)) ,),
-        )),
-        Align(
-          alignment:Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom:10.0),
-            child: Text("Description", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
+          const SizedBox(
+            height: 20.0,
           ),
-        ),
-        Text("Hypertropic Lichen Planus is the second most common cutaneous variant of lichen planus. It is characterized as extremely pruritic and thick hyperkeratotic plaques are seen primarily on the shins or dosal aspec of the foot and may be covered by a fine adherent scale.",
-          style: TextStyle(fontSize: 16.0,
-            height: 2.0
+          Container(
+            width: 220,
+            height: 220,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    alignment: Alignment.center,
+                    image: FileImage(image!),
+                    fit: BoxFit.fill)),
           ),
-        ),
-        Align(
-          alignment:Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 40.0, bottom:10.0),
-            child: Text("Symptoms", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
-          ),
-        ),
-        Text("Hypertropic Lichen Planus is the second most common cutaneous variant of lichen planus. It is characterized as extremely pruritic and thick hyperkeratotic plaques are seen primarily on the shins or dosal aspec of the foot and may be covered by a fine adherent scale.",
-          style: TextStyle(fontSize: 16.0,
-            height: 2.0
-          ),
-        ),
-        Align(
-          alignment:Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 40.0, bottom:10.0),
-            child: Text("Treatments", style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600),),
-          ),
-        ),
-        Text("Hypertropic Lichen Planus is the second most common cutaneous variant of lichen planus. It is characterized as extremely pruritic and thick hyperkeratotic plaques are seen primarily on the shins or dosal aspec of the foot and may be covered by a fine adherent scale.",
-          style: TextStyle(fontSize: 16.0,
-            height: 2.0
-          ),
-        ),
-      ],);
-    }else{
-      return Column(children: [
-        Center(child: Text("RESULTS", style: TextStyle(color: Colors.red.shade900,fontWeight: FontWeight.w500, fontSize: 24, letterSpacing: 10.0),),),
-        const SizedBox(height: 10,),
-        Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: SvgPicture.asset(
-                'assets/svgs/nodetections_image.svg',
-                width: 200,
-                height: 200,
+          Center(
+              child: Padding(
+            padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Confidence Score:",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(
+                  width: 5.0,
+                ),
+                Text(
+                  "${patientInformation.detectionScore!}%",
+                  style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87),
+                ),
+              ],
+            ),
+          )),
+          Center(
+              child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 5.0),
+            child: Text(
+              patientInformation.detection!,
+              style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.5,
+                  color: Color.fromARGB(255, 126, 64, 7)),
+            ),
+          )),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+              child: Text(
+                "Description",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
-        ),
-        Center(child: Text("LICHEN PLANUS NOT DETECTED", style: TextStyle(fontSize: 22),),)
-      ],);
+            ),
+          ),
+          Text(
+            "Hypertrophic Lichen Planus is the second most common cutaneous variant of lichen planus. It is characterized as extremely pruritic and thick hyperkeratotic plaques are seen primarily on the shins or dosal aspec of the foot and may be covered by a fine adherent scale.",
+            style: TextStyle(fontSize: 16.0, height: 2.0),
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 40.0, bottom: 10.0),
+              child: Text(
+                "Symptoms",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              ),
+            ),
+          ),
+          Text(
+            "Hypertrophic Lichen Planus is the second most common cutaneous variant of lichen planus. It is characterized as extremely pruritic and thick hyperkeratotic plaques are seen primarily on the shins or dosal aspec of the foot and may be covered by a fine adherent scale.",
+            style: TextStyle(fontSize: 16.0, height: 2.0),
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 40.0, bottom: 10.0),
+              child: Text(
+                "Treatments",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              ),
+            ),
+          ),
+          Text(
+            "Hypertrophic Lichen Planus is the second most common cutaneous variant of lichen planus. It is characterized as extremely pruritic and thick hyperkeratotic plaques are seen primarily on the shins or dosal aspec of the foot and may be covered by a fine adherent scale.",
+            style: TextStyle(fontSize: 16.0, height: 2.0),
+          ),
+        ],
+      );
+    } else {
+      return Column(
+        children: [
+          Center(
+            child: Text(
+              "RESULTS",
+              style: TextStyle(
+                  color: Colors.red.shade900,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 24,
+                  letterSpacing: 10.0),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: SvgPicture.asset(
+              'assets/svgs/nodetections_image.svg',
+              width: 200,
+              height: 200,
+            ),
+          ),
+          Center(
+            child: Text(
+              "LICHEN PLANUS NOT DETECTED",
+              style: TextStyle(fontSize: 22),
+            ),
+          )
+        ],
+      );
     }
-   }
+  }
 
-   // widget selector (page)
-   Widget patientInformationForm(BuildContext context){
-      List<String> onsets = ["within a week", "within a month", "within a year", "over a year/congenital"];
-      List<String> severity = ["none", "mild/moderate", "severe"];
-      switch(currentPIPage){
-        case 0:
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text("Please tell us a bit about yourself.", style: TextStyle(fontSize: 14.0),),
-              const Padding(
-                padding: EdgeInsets.only(top: 15.0, bottom: 10),
-                child: Text("Sex", style: TextStyle(fontSize: 18.0),),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
-                child: Row(children: [
-                  ElevatedButton(
-                    onPressed: (){
+  // widget selector (page)
+  Widget patientInformationForm(BuildContext context) {
+    List<String> onsets = [
+      "within a week",
+      "within a month",
+      "within a year",
+      "over a year/congenital"
+    ];
+    List<String> severity = ["none", "mild/moderate", "severe"];
+    switch (currentPIPage) {
+      case 0:
+        return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const Text(
+            "Please tell us a bit about yourself.",
+            style: TextStyle(fontSize: 14.0),
+          ),
+          const Padding(
+            padding: EdgeInsets.only(top: 15.0, bottom: 10),
+            child: Text(
+              "Sex",
+              style: TextStyle(fontSize: 18.0),
+            ),
+          ),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+            child: Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
                     setState(() {
                       patientInformation.gender = 1;
                     });
                   },
-                    style: ElevatedButton.styleFrom(
-                     shape: const CircleBorder(side: BorderSide(width: 1.5, color: Colors.black54)),
-                     backgroundColor: (patientInformation.gender==1)?  primaryforegroundColor : primaryBackgroundColor), child: Padding(
+                  style: ElevatedButton.styleFrom(
+                      shape: const CircleBorder(
+                          side: BorderSide(width: 1.5, color: Colors.black54)),
+                      backgroundColor: (patientInformation.gender == 1)
+                          ? primaryforegroundColor
+                          : primaryBackgroundColor),
+                  child: Padding(
                     padding: const EdgeInsets.all(10.0),
-                    child: Icon(Icons.male, size: 80, color: (patientInformation.gender == 1) ? Colors.white : Colors.black87,),
+                    child: Icon(
+                      Icons.male,
+                      size: 80,
+                      color: (patientInformation.gender == 1)
+                          ? Colors.white
+                          : Colors.black87,
+                    ),
                   ),
-                  ),
-                  const Spacer(),
-                  ElevatedButton(
-                    onPressed: (){
+                ),
+                const Spacer(),
+                ElevatedButton(
+                  onPressed: () {
                     setState(() {
                       patientInformation.gender = 2;
                     });
                   },
-                    style: ElevatedButton.styleFrom(
-                     shape: const CircleBorder(side: BorderSide(width: 1.5, color: Colors.black54)),
-                     backgroundColor: (patientInformation.gender==2)?  primaryforegroundColor : primaryBackgroundColor), child: Padding(
+                  style: ElevatedButton.styleFrom(
+                      shape: const CircleBorder(
+                          side: BorderSide(width: 1.5, color: Colors.black54)),
+                      backgroundColor: (patientInformation.gender == 2)
+                          ? primaryforegroundColor
+                          : primaryBackgroundColor),
+                  child: Padding(
                     padding: const EdgeInsets.all(10.0),
-                    child: Icon(Icons.female, size: 80, color: (patientInformation.gender == 2) ? Colors.white : Colors.black87,),
-                  ),
-                  ),
-                ],),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 10.0, bottom: 0),
-                child: Text("Age", style: TextStyle(fontSize: 18.0),),
-              ),
-              TextFormField(
-                onChanged: (value) => setState(() {
-                  patientInformation.age = int.parse(value);
-                }),
-                inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(hintText: "Enter your age",border: InputBorder.none),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 10.0, bottom: 0),
-                child: Text( "Country", style: TextStyle(fontSize: 18.0),),
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: TextButton(
-                  style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                  onPressed: (){
-                    showCountryPicker(context: context, 
-                    countryListTheme: const CountryListThemeData(
-                      inputDecoration: InputDecoration(
-                        labelText: 'Search Country/Region',
-                      hintText: 'Enter a country/region name',
-                      prefixIcon: Icon(Icons.search),
-                        border: UnderlineInputBorder())
+                    child: Icon(
+                      Icons.female,
+                      size: 80,
+                      color: (patientInformation.gender == 2)
+                          ? Colors.white
+                          : Colors.black87,
                     ),
-                    onSelect: (Country country){
-                      setState(() {
-                        patientInformation.selectedCountry = country.name;
-                      });
-                    });
-                  }, child:  Row(
-                  children: [
-                    Text((patientInformation.selectedCountry==null)? "Select" : patientInformation.selectedCountry!, style: TextStyle(color: (patientInformation.selectedCountry==null)? Colors.black54 : Colors.black87, fontSize: 16.0),),
-                  ],
-                ))),
-              const Padding(
-                padding: EdgeInsets.only(top: 10.0, bottom: 0),
-                child: Text("Ethnicity", style: TextStyle(fontSize: 18.0),),
-              ),
-              SizedBox(
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.only(top: 10.0, bottom: 0),
+            child: Text(
+              "Age",
+              style: TextStyle(fontSize: 18.0),
+            ),
+          ),
+          TextFormField(
+            onChanged: (value) => setState(() {
+              patientInformation.age = int.parse(value);
+            }),
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.digitsOnly
+            ],
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(
+                hintText: "Enter your age", border: InputBorder.none),
+          ),
+          const Padding(
+            padding: EdgeInsets.only(top: 10.0, bottom: 0),
+            child: Text(
+              "Country",
+              style: TextStyle(fontSize: 18.0),
+            ),
+          ),
+          SizedBox(
               width: double.infinity,
               child: TextButton(
-                style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                onPressed: (){
-                  showModalBottomSheet(context: context, 
-                  isScrollControlled: true,
-                  clipBehavior: Clip.antiAlias,
-                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0),topRight: Radius.circular(30.0))),
-                  builder: (BuildContext context) {
-                    return Container(
-                      height: MediaQuery.of(context).size.height * 0.95,
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            width: double.infinity,
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(color: secondaryForegroundColor),
-                              child: Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Center(child: Text("Select your Ethnicity", style: TextStyle(fontSize: 18.0))),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: ListView.builder(
-                              itemCount: ethnicities.length,
-                              itemBuilder: (context, index){
-                                return SizedBox(
-                                  width: double.infinity,
-                                  child: TextButton(onPressed: (){
-                                    setState(() {
-                                      patientInformation.selectedEthnicity = ethnicities[index];
-                                      Navigator.of(context).pop();
-                                    });
-                                  }, 
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                                    child: Row(
-                                      children: [
-                                        Text(ethnicities[index], style: const TextStyle(color: Colors.black87, fontSize: 16.0)),
-                                      ],
-                                    ),
-                                  )),
-                                );
-                            })
-                          )
-                        ],
+                  style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                  onPressed: () {
+                    showCountryPicker(
+                        context: context,
+                        countryListTheme: const CountryListThemeData(
+                            inputDecoration: InputDecoration(
+                                labelText: 'Search Country/Region',
+                                hintText: 'Enter a country/region name',
+                                prefixIcon: Icon(Icons.search),
+                                border: UnderlineInputBorder())),
+                        onSelect: (Country country) {
+                          setState(() {
+                            patientInformation.selectedCountry = country.name;
+                          });
+                        });
+                  },
+                  child: Row(
+                    children: [
+                      Text(
+                        (patientInformation.selectedCountry == null)
+                            ? "Select"
+                            : patientInformation.selectedCountry!,
+                        style: TextStyle(
+                            color: (patientInformation.selectedCountry == null)
+                                ? Colors.black54
+                                : Colors.black87,
+                            fontSize: 16.0),
                       ),
-                    );
-                  });
-                }, child: Row(
-                children: [
-                  Text((patientInformation.selectedEthnicity==null)?"Select":patientInformation.selectedEthnicity!, style: TextStyle(color: (patientInformation.selectedEthnicity==null)? Colors.black54 : Colors.black87, fontSize: 16.0),),
-                ],
-              ))),
-              const Spacer(),
-              Center(child: ElevatedButton(onPressed: (){
-                if(patientInformation.checkPageisComplete(currentPIPage)){
-                  setState(() {
-                    currentPIPage+=1;
-                  });
-                }else{
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      duration: Duration(milliseconds:1000),
+                    ],
+                  ))),
+          const Padding(
+            padding: EdgeInsets.only(top: 10.0, bottom: 0),
+            child: Text(
+              "Ethnicity",
+              style: TextStyle(fontSize: 18.0),
+            ),
+          ),
+          SizedBox(
+              width: double.infinity,
+              child: TextButton(
+                  style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                  onPressed: () {
+                    showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        clipBehavior: Clip.antiAlias,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30.0),
+                                topRight: Radius.circular(30.0))),
+                        builder: (BuildContext context) {
+                          return Container(
+                            height: MediaQuery.of(context).size.height * 0.95,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                        color: secondaryForegroundColor),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: Center(
+                                          child: Text("Select your Ethnicity",
+                                              style:
+                                                  TextStyle(fontSize: 18.0))),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                    child: ListView.builder(
+                                        itemCount: ethnicities.length,
+                                        itemBuilder: (context, index) {
+                                          return SizedBox(
+                                            width: double.infinity,
+                                            child: TextButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    patientInformation
+                                                            .selectedEthnicity =
+                                                        ethnicities[index];
+                                                    Navigator.of(context).pop();
+                                                  });
+                                                },
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 15.0),
+                                                  child: Row(
+                                                    children: [
+                                                      Text(ethnicities[index],
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: Colors
+                                                                      .black87,
+                                                                  fontSize:
+                                                                      16.0)),
+                                                    ],
+                                                  ),
+                                                )),
+                                          );
+                                        }))
+                              ],
+                            ),
+                          );
+                        });
+                  },
+                  child: Row(
+                    children: [
+                      Text(
+                        (patientInformation.selectedEthnicity == null)
+                            ? "Select"
+                            : patientInformation.selectedEthnicity!,
+                        style: TextStyle(
+                            color:
+                                (patientInformation.selectedEthnicity == null)
+                                    ? Colors.black54
+                                    : Colors.black87,
+                            fontSize: 16.0),
+                      ),
+                    ],
+                  ))),
+          const Spacer(),
+          Center(
+              child: ElevatedButton(
+            onPressed: () {
+              if (patientInformation.checkPageisComplete(currentPIPage)) {
+                setState(() {
+                  currentPIPage += 1;
+                });
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      duration: Duration(milliseconds: 1000),
                       backgroundColor: primaryforegroundColor,
                       content: Text('Please fill up all fields.')),
-                  );
-                }
-              },
-                style: ElevatedButton.styleFrom(
-                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                  backgroundColor: (patientInformation.checkPageisComplete(currentPIPage)) ? primaryforegroundColor : Colors.grey),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                  child:  Text("Next", style: TextStyle(fontSize: 18.0),),
-                ),
-              )),
-               const SizedBox(height: 45.0,),
-          ]);
-        case 1:
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text("When did the onset began?", style: TextStyle(fontSize: 18.0),),
-              Expanded(
-                child: ListView.builder(
-                  padding: const EdgeInsets.only(top:20.0),
-                  itemCount: onsets.length,
-                  itemBuilder: (context, int index){
-                  return SizedBox(
-                    width: double.infinity,
-                    height: 60.0,
-                    child: Padding(padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shadowColor: Colors.transparent,
-                          backgroundColor: (patientInformation.onset==index+1)? primaryforegroundColor : primaryBackgroundColor,
-                          shape: RoundedRectangleBorder(
-                          side: BorderSide(width: 1.2, color: primaryforegroundColor),
-                          borderRadius: const BorderRadius.all(Radius.circular(20.0))
-                        )),
-                        onPressed: (){
-                          setState(() {
-                            patientInformation.onset = index+1;
-                          });
-                        }, 
-                        child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(children: [
-                          Text(onsets[index], style: TextStyle(color: (patientInformation.onset==index+1) ?  Colors.white : Colors.black, fontSize: 18.0),)
-                        ],),
-                      ),),
-                    ));
-              }),),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ElevatedButton(onPressed: (){
-                      setState(() {
-                        currentPIPage-=1;
-                      });
-                    },
-                      style: ElevatedButton.styleFrom(
-                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                        backgroundColor: primaryforegroundColor),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                        child:  Text("Previous", style: TextStyle(fontSize: 18.0),),
-                      ),
-                    ),
-                    ElevatedButton(onPressed: (){
-                      if(patientInformation.checkPageisComplete(currentPIPage)){
-                        setState(() {
-                          currentPIPage+=1;
-                        });
-                      }else{
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              duration: Duration(milliseconds:1000),
-                              backgroundColor: primaryforegroundColor,
-                              content: Text('Please fill up all fields.')),
-                          );
-                      }
-                    },
-                      style: ElevatedButton.styleFrom(
-                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                        backgroundColor:(patientInformation.checkPageisComplete(currentPIPage)) ? primaryforegroundColor : Colors.grey),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-                        child:  Text("Next", style: TextStyle(fontSize: 18.0),),
-                      ),
-                    ),
-                  ],
-                ),
+                );
+              }
+            },
+            style: ElevatedButton.styleFrom(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                backgroundColor:
+                    (patientInformation.checkPageisComplete(currentPIPage))
+                        ? primaryforegroundColor
+                        : Colors.grey),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+              child: Text(
+                "Next",
+                style: TextStyle(fontSize: 18.0),
               ),
-              const SizedBox(height: 45.0,),
-          ]);
-        case 2:
-        return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text("Severity of Itching", style: TextStyle(fontSize: 18.0),),
-              Expanded(
-                child: ListView.builder(
-                  padding: const EdgeInsets.only(top:20.0),
-                  itemCount: severity.length,
-                  itemBuilder: (context, int index){
+            ),
+          )),
+          const SizedBox(
+            height: 45.0,
+          ),
+        ]);
+      case 1:
+        return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const Text(
+            "When did the onset began?",
+            style: TextStyle(fontSize: 18.0),
+          ),
+          Expanded(
+            child: ListView.builder(
+                padding: const EdgeInsets.only(top: 20.0),
+                itemCount: onsets.length,
+                itemBuilder: (context, int index) {
                   return SizedBox(
-                    width: double.infinity,
-                    height: 60.0,
-                    child: Padding(padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shadowColor: Colors.transparent,
-                          backgroundColor: (patientInformation.itching==index+1)? primaryforegroundColor : primaryBackgroundColor,
-                          shape: RoundedRectangleBorder(
-                          side: BorderSide(width: 1.2, color: primaryforegroundColor),
-                          borderRadius: const BorderRadius.all(Radius.circular(20.0))
-                        )),
-                        onPressed: (){
-                          setState(() {
-                            patientInformation.itching = index+1;
-                          });
-                        }, 
-                        child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(children: [
-                          Text(severity[index], style: TextStyle(color: (patientInformation.itching==index+1) ?  Colors.white : Colors.black, fontSize: 18.0),)
-                        ],),
-                      ),),
-                    ));
-              }),),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ElevatedButton(onPressed: (){
-                      setState(() {
-                        currentPIPage-=1;
-                      });
-                    },
-                      style: ElevatedButton.styleFrom(
-                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                        backgroundColor: primaryforegroundColor),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                        child:  Text("Previous", style: TextStyle(fontSize: 18.0),),
-                      ),
+                      width: double.infinity,
+                      height: 60.0,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 10.0, vertical: 5.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shadowColor: Colors.transparent,
+                              backgroundColor:
+                                  (patientInformation.onset == index + 1)
+                                      ? primaryforegroundColor
+                                      : primaryBackgroundColor,
+                              shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      width: 1.2,
+                                      color: primaryforegroundColor),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(20.0)))),
+                          onPressed: () {
+                            setState(() {
+                              patientInformation.onset = index + 1;
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Text(
+                                  onsets[index],
+                                  style: TextStyle(
+                                      color: (patientInformation.onset ==
+                                              index + 1)
+                                          ? Colors.white
+                                          : Colors.black,
+                                      fontSize: 18.0),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ));
+                }),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 0.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      currentPIPage -= 1;
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                      shape: const RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(15.0))),
+                      backgroundColor: primaryforegroundColor),
+                  child: const Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                    child: Text(
+                      "Previous",
+                      style: TextStyle(fontSize: 18.0),
                     ),
-                    ElevatedButton(onPressed: (){
-                      if(patientInformation.checkPageisComplete(currentPIPage)){
-                        setState(() {
-                          currentPIPage+=1;
-                        });
-                      }else{
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            duration: Duration(milliseconds:1000),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (patientInformation.checkPageisComplete(currentPIPage)) {
+                      setState(() {
+                        currentPIPage += 1;
+                      });
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            duration: Duration(milliseconds: 1000),
                             backgroundColor: primaryforegroundColor,
                             content: Text('Please fill up all fields.')),
-                        );
-                      }
-                    },
-                      style: ElevatedButton.styleFrom(
-                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                        backgroundColor:(patientInformation.checkPageisComplete(currentPIPage)) ? primaryforegroundColor : Colors.grey),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-                        child:  Text("Next", style: TextStyle(fontSize: 18.0),),
-                      ),
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      shape: const RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(15.0))),
+                      backgroundColor: (patientInformation
+                              .checkPageisComplete(currentPIPage))
+                          ? primaryforegroundColor
+                          : Colors.grey),
+                  child: const Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+                    child: Text(
+                      "Next",
+                      style: TextStyle(fontSize: 18.0),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 45.0,),
-          ]);
-        case 3:
-        return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text("Severity of Pain", style: TextStyle(fontSize: 18.0),),
-              Expanded(
-                child: ListView.builder(
-                  padding: const EdgeInsets.only(top:20.0),
-                  itemCount: severity.length,
-                  itemBuilder: (context, int index){
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 45.0,
+          ),
+        ]);
+      case 2:
+        return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const Text(
+            "Severity of Itching",
+            style: TextStyle(fontSize: 18.0),
+          ),
+          Expanded(
+            child: ListView.builder(
+                padding: const EdgeInsets.only(top: 20.0),
+                itemCount: severity.length,
+                itemBuilder: (context, int index) {
                   return SizedBox(
-                    width: double.infinity,
-                    height: 60.0,
-                    child: Padding(padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shadowColor: Colors.transparent,
-                          backgroundColor: (patientInformation.pain==index+1)? primaryforegroundColor : primaryBackgroundColor,
-                          shape: RoundedRectangleBorder(
-                          side: BorderSide(width: 1.2, color: primaryforegroundColor),
-                          borderRadius: const BorderRadius.all(Radius.circular(20.0))
-                        )),
-                        onPressed: (){
-                          setState(() {
-                            patientInformation.pain = index+1;
-                          });
-                        }, 
-                        child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(children: [
-                          Text(severity[index], style: TextStyle(color: (patientInformation.pain==index+1) ?  Colors.white : Colors.black, fontSize: 18.0),)
-                        ],),
-                      ),),
-                    ));
-              }),),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ElevatedButton(onPressed: (){
-                      setState(() {
-                        currentPIPage-=1;
-                      });
-                    },
-                      style: ElevatedButton.styleFrom(
-                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                        backgroundColor: primaryforegroundColor),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                        child:  Text("Previous", style: TextStyle(fontSize: 18.0),),
-                      ),
+                      width: double.infinity,
+                      height: 60.0,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 10.0, vertical: 5.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shadowColor: Colors.transparent,
+                              backgroundColor:
+                                  (patientInformation.itching == index + 1)
+                                      ? primaryforegroundColor
+                                      : primaryBackgroundColor,
+                              shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      width: 1.2,
+                                      color: primaryforegroundColor),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(20.0)))),
+                          onPressed: () {
+                            setState(() {
+                              patientInformation.itching = index + 1;
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Text(
+                                  severity[index],
+                                  style: TextStyle(
+                                      color: (patientInformation.itching ==
+                                              index + 1)
+                                          ? Colors.white
+                                          : Colors.black,
+                                      fontSize: 18.0),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ));
+                }),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 0.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      currentPIPage -= 1;
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                      shape: const RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(15.0))),
+                      backgroundColor: primaryforegroundColor),
+                  child: const Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                    child: Text(
+                      "Previous",
+                      style: TextStyle(fontSize: 18.0),
                     ),
-                    ElevatedButton(onPressed: (){
-                      if(patientInformation.checkPageisComplete(currentPIPage)){
-                        setState(() {
-                          formCompleted = true;
-                        });
-                      }else{
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            duration: Duration(milliseconds:1000),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (patientInformation.checkPageisComplete(currentPIPage)) {
+                      setState(() {
+                        currentPIPage += 1;
+                      });
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            duration: Duration(milliseconds: 1000),
                             backgroundColor: primaryforegroundColor,
                             content: Text('Please fill up all fields.')),
-                        );
-                      }
-                      
-                    },
-                      style: ElevatedButton.styleFrom(
-                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                        backgroundColor:(patientInformation.checkPageisComplete(currentPIPage)) ? primaryforegroundColor : Colors.grey),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-                        child:  Text("Done", style: TextStyle(fontSize: 18.0),),
-                      ),
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      shape: const RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(15.0))),
+                      backgroundColor: (patientInformation
+                              .checkPageisComplete(currentPIPage))
+                          ? primaryforegroundColor
+                          : Colors.grey),
+                  child: const Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+                    child: Text(
+                      "Next",
+                      style: TextStyle(fontSize: 18.0),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 45.0,),
-          ]);
-        default:
-          setState((){
-            currentPIPage-=1;
-          });
-          return patientInformationForm(context);
-      }
-   }
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 45.0,
+          ),
+        ]);
+      case 3:
+        return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const Text(
+            "Severity of Pain",
+            style: TextStyle(fontSize: 18.0),
+          ),
+          Expanded(
+            child: ListView.builder(
+                padding: const EdgeInsets.only(top: 20.0),
+                itemCount: severity.length,
+                itemBuilder: (context, int index) {
+                  return SizedBox(
+                      width: double.infinity,
+                      height: 60.0,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 10.0, vertical: 5.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shadowColor: Colors.transparent,
+                              backgroundColor:
+                                  (patientInformation.pain == index + 1)
+                                      ? primaryforegroundColor
+                                      : primaryBackgroundColor,
+                              shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      width: 1.2,
+                                      color: primaryforegroundColor),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(20.0)))),
+                          onPressed: () {
+                            setState(() {
+                              patientInformation.pain = index + 1;
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Text(
+                                  severity[index],
+                                  style: TextStyle(
+                                      color:
+                                          (patientInformation.pain == index + 1)
+                                              ? Colors.white
+                                              : Colors.black,
+                                      fontSize: 18.0),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ));
+                }),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 0.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      currentPIPage -= 1;
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                      shape: const RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(15.0))),
+                      backgroundColor: primaryforegroundColor),
+                  child: const Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                    child: Text(
+                      "Previous",
+                      style: TextStyle(fontSize: 18.0),
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (patientInformation.checkPageisComplete(currentPIPage)) {
+                      setState(() {
+                        formCompleted = true;
+                      });
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            duration: Duration(milliseconds: 1000),
+                            backgroundColor: primaryforegroundColor,
+                            content: Text('Please fill up all fields.')),
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      shape: const RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(15.0))),
+                      backgroundColor: (patientInformation
+                              .checkPageisComplete(currentPIPage))
+                          ? primaryforegroundColor
+                          : Colors.grey),
+                  child: const Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+                    child: Text(
+                      "Done",
+                      style: TextStyle(fontSize: 18.0),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 45.0,
+          ),
+        ]);
+      default:
+        setState(() {
+          currentPIPage -= 1;
+        });
+        return patientInformationForm(context);
+    }
+  }
 
-   // Input and processing
+  // Input and processing
   Future classifyImage(File file) async {
     int threshold = 75;
     List<int> imageSize = [300, 400];
     var image = img.decodeImage(file.readAsBytesSync());
     // resize image
-    var reduced = img.adjustColor(image!, saturation: 2.0, contrast: 5.0, amount: 1.0);
+    var reduced =
+        img.adjustColor(image!, saturation: 2.0, contrast: 5.0, amount: 1.0);
     reduced = img.copyResize(reduced,
         width: imageSize[0],
         height: imageSize[1],
         interpolation: img.Interpolation.cubic); // resize
     // add adjustmment filter for better prediction
-    
+
     // exit function if classifier object is not initialized
     List<Recognition> recognitions = await classifier!.predict(reduced);
     if (recognitions.isNotEmpty) {
@@ -882,8 +1285,9 @@ class _LichenCheckState extends State<LichenCheck> {
         this.image = labeled;
         if (value >= threshold) {
           patientInformation.detection = recognitions[0].label;
-          patientInformation.detectionScore= value.toStringAsFixed(2).substring(0, 5);
-        // _predictedLabel = recognitions[0].label;
+          patientInformation.detectionScore =
+              value.toStringAsFixed(2).substring(0, 5);
+          // _predictedLabel = recognitions[0].label;
         }
       });
     } else {
@@ -898,7 +1302,7 @@ class _LichenCheckState extends State<LichenCheck> {
     try {
       final take = await ImagePicker()
           .pickImage(source: source, maxHeight: 720, maxWidth: 480);
-      if (take == null){
+      if (take == null) {
         Navigator.of(context).pop();
         return;
       }
@@ -908,7 +1312,7 @@ class _LichenCheckState extends State<LichenCheck> {
         Navigator.of(context).pop();
         return;
       }
-      setState((){
+      setState(() {
         isPredicting = true;
       });
       await Future.delayed(const Duration(seconds: 1));
@@ -1028,12 +1432,12 @@ class _LichenCheckState extends State<LichenCheck> {
             //     '/lichenCheck'); // Navigate to the 'lichencheck' route
             break;
           case 3:
-            Navigator.of(context)
-                .pushReplacementNamed('/lichenHub'); // Navigate to the 'lichenhub' route
+            Navigator.of(context).pushReplacementNamed(
+                '/lichenHub'); // Navigate to the 'lichenhub' route
             break;
           case 4:
-            Navigator.of(context)
-                .pushReplacementNamed('/profile'); // Navigate to the 'profile' route
+            Navigator.of(context).pushReplacementNamed(
+                '/profile'); // Navigate to the 'profile' route
             break;
         }
       },
@@ -1054,7 +1458,7 @@ class PatientInformation {
 
   PatientInformation();
 
-  void reset(){
+  void reset() {
     age = 0;
     gender = 0;
     onset = 0;
@@ -1066,16 +1470,19 @@ class PatientInformation {
     selectedEthnicity = null;
   }
 
-  bool checkPageisComplete(page){
-    switch(page){
-      case 0: 
-       return (age!=0&&gender!=0&&selectedCountry!=null&&selectedEthnicity!=null);
+  bool checkPageisComplete(page) {
+    switch (page) {
+      case 0:
+        return (age != 0 &&
+            gender != 0 &&
+            selectedCountry != null &&
+            selectedEthnicity != null);
       case 1:
-       return (onset!=0);
+        return (onset != 0);
       case 2:
-       return (itching!=0);
+        return (itching != 0);
       case 3:
-       return (pain!=0);
+        return (pain != 0);
       default:
         return false;
     }
