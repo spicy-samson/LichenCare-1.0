@@ -549,6 +549,13 @@ class _LichenCheckState extends State<LichenCheck> {
                   setState(() {
                     currentPIPage+=1;
                   });
+                }else{
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      duration: Duration(milliseconds:1000),
+                      backgroundColor: primaryforegroundColor,
+                      content: Text('Please fill up all fields.')),
+                  );
                 }
               },
                 style: ElevatedButton.styleFrom(
@@ -619,6 +626,13 @@ class _LichenCheckState extends State<LichenCheck> {
                         setState(() {
                           currentPIPage+=1;
                         });
+                      }else{
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              duration: Duration(milliseconds:1000),
+                              backgroundColor: primaryforegroundColor,
+                              content: Text('Please fill up all fields.')),
+                          );
                       }
                     },
                       style: ElevatedButton.styleFrom(
@@ -692,6 +706,13 @@ class _LichenCheckState extends State<LichenCheck> {
                         setState(() {
                           currentPIPage+=1;
                         });
+                      }else{
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            duration: Duration(milliseconds:1000),
+                            backgroundColor: primaryforegroundColor,
+                            content: Text('Please fill up all fields.')),
+                        );
                       }
                     },
                       style: ElevatedButton.styleFrom(
@@ -765,6 +786,13 @@ class _LichenCheckState extends State<LichenCheck> {
                         setState(() {
                           formCompleted = true;
                         });
+                      }else{
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            duration: Duration(milliseconds:1000),
+                            backgroundColor: primaryforegroundColor,
+                            content: Text('Please fill up all fields.')),
+                        );
                       }
                       
                     },
