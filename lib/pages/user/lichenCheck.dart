@@ -330,22 +330,29 @@ class _LichenCheckState extends State<LichenCheck> {
               image: DecorationImage(
                   alignment: Alignment.center,
                   image: FileImage(image!),
-                  fit: BoxFit.contain)),
+                  fit: BoxFit.fill)),
         ),
         
-        const Center(child: Padding(
-          padding: EdgeInsets.only(top: 15.0,bottom:5.0),
-          child: Text("Confidence Score:", style: TextStyle(fontSize: 14),),
+        Center(child: Padding(
+          padding: const EdgeInsets.only(top: 15.0,bottom:5.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("Confidence Score:", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600,),),
+              const SizedBox(width: 5.0,),
+              Text("${patientInformation.detectionScore!}%", style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color:Colors.black87) ,),
+            ],
+          ),
         )),
             
         Center(child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 0.0),
-          child: Text((patientInformation.detection!=null) ? patientInformation.detection! :  "Hypertrophic Lichen Planus", style: TextStyle(fontSize: 22),),
+          padding: EdgeInsets.symmetric(vertical: 5.0),
+          child: Text(patientInformation.detection!, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, letterSpacing: 1.5, color: Color.fromARGB(255, 126, 64, 7)) ,),
         )),
         Align(
           alignment:Alignment.centerLeft,
           child: Padding(
-            padding: const EdgeInsets.only(top: 20.0, bottom:10.0),
+            padding: const EdgeInsets.only(top: 10.0, bottom:10.0),
             child: Text("Description", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
           ),
         ),
@@ -876,7 +883,7 @@ class _LichenCheckState extends State<LichenCheck> {
         this.image = labeled;
         if (value >= threshold) {
           patientInformation.detection = recognitions[0].label;
-        // _accuracy = value.toStringAsFixed(2).substring(0, 5);
+          patientInformation.detectionScore= value.toStringAsFixed(2).substring(0, 5);
         // _predictedLabel = recognitions[0].label;
         }
       });
@@ -1040,6 +1047,7 @@ class PatientInformation {
   int onset = 0;
   int itching = 0;
   int pain = 0;
+  String? detectionScore;
   String? selectedCountry;
   String? selectedEthnicity;
   String? detection;
@@ -1053,6 +1061,7 @@ class PatientInformation {
     itching = 0;
     pain = 0;
     detection = null;
+    detectionScore = null;
     selectedCountry = null;
     selectedEthnicity = null;
   }
