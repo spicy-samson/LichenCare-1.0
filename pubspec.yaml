@@ -42,7 +42,16 @@ dependencies:
   firebase_core: ^2.18.0
   firebase_auth: ^4.11.0
   cloud_firestore: ^4.12.1
-  awesome_dialog: ^3.1.0
+  awesome_dialog: ^3.0.2
+  image: ^3.2.2
+  image_picker: ^0.8.5+3
+  image_cropper: ^2.0.3
+  flutter_spinkit: ^5.2.0
+  country_picker: ^2.0.22
+  tflite_flutter_helper:
+    git:
+      url: https://github.com/filofan1/tflite_flutter_helper.git
+      ref: 783f15e5a87126159147d8ea30b98eea9207ac70
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +81,9 @@ flutter:
     - assets/svgs/
     - assets/svgs/bottomNavBar/
     - assets/svgs/profileSection/
+    - assets/model/model_rpn.tflite
+    - assets/model/labels.txt
+    - assets/model/model_classifier.tflite
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

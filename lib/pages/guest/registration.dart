@@ -63,7 +63,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
-
     return Scaffold(
       key: _scaffoldKey, // Add the key to your Scaffold
       backgroundColor: Color(0xFFFFF4E9),
@@ -256,26 +255,29 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       ),
                     ),
                     SizedBox(height: 20.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Already have an account?',
-                            style: TextStyle(fontSize: 16.0)),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                '/login', (Route<dynamic> route) => false);
-                          },
-                          child: Text(
-                            'Sign in',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFFFF7F50),
-                              fontSize: 16.0,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 13.0, right: 13.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Already have an account?',
+                              style: TextStyle(fontSize: 16.0)),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  '/login', (Route<dynamic> route) => false);
+                            },
+                            child: Text(
+                              'Sign in',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFFFF7F50),
+                                fontSize: 16.0,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),
