@@ -31,6 +31,7 @@ class _LichenCheckState extends State<LichenCheck> {
   PatientInformation patientInformation = PatientInformation();
   bool disclaimerClosed = false;
   bool hasImage = false;
+  bool sourceSelected = false;
   bool formCompleted = false;
   bool isPredicting = false;
   double predictionProgress = 0.25;
@@ -43,6 +44,7 @@ class _LichenCheckState extends State<LichenCheck> {
   Color secondaryForegroundColor = const Color(0XFF15D6b4);
 
   void reset(){
+    sourceSelected = false;
     hasImage = false;
     formCompleted = false;
     currentPIPage = 0;
@@ -75,7 +77,59 @@ class _LichenCheckState extends State<LichenCheck> {
           ),
 
           // Body
-          body: (hasImage) ? (formCompleted) ? Padding(
+          body: (!sourceSelected) ?  Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(height: 20,),
+              const Center(
+                child: Text("Select Image Source", style: TextStyle(fontSize: 16.0)),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shadowColor: Colors.transparent,
+                      foregroundColor: primaryforegroundColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                        side: BorderSide(width: 2.0, color: primaryforegroundColor)
+                      ),
+                      backgroundColor: primaryBackgroundColor,
+                    ),
+                    onPressed: (){
+                      setState(() {
+                        sourceSelected = true;
+                      });
+                      pickImage(ImageSource.camera);
+                    }, child: Text("Use Camera", style: TextStyle(fontSize: 18, color: primaryforegroundColor, fontWeight: FontWeight.bold, letterSpacing: 1.5),))),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 0.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shadowColor: Colors.transparent,
+                      foregroundColor: primaryforegroundColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                        side: BorderSide(width: 2.0, color: primaryforegroundColor)
+                      ),
+                      backgroundColor: primaryBackgroundColor,
+                    ),
+                    onPressed: (){
+                      setState(() {
+                        sourceSelected = true;
+                      });
+                      pickImage(ImageSource.gallery);
+                    }, child: Text("Browse Gallery", style: TextStyle(fontSize: 18, color: primaryforegroundColor, fontWeight: FontWeight.bold, letterSpacing: 1.5),))),
+              ),
+            ],
+          )  : (hasImage) ? (formCompleted) ? Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30.0),
             child: SingleChildScrollView(
               child: Column(
@@ -103,7 +157,6 @@ class _LichenCheckState extends State<LichenCheck> {
                           ElevatedButton(onPressed: (){
                             setState(() {
                               reset();
-                              pickImage(ImageSource.camera);
                             }); 
                           },
                             style: ElevatedButton.styleFrom(
@@ -143,12 +196,9 @@ class _LichenCheckState extends State<LichenCheck> {
                 Text((isPredicting)? "Detecting Lichen Planus..." : "Please Wait...")
               ],
             ),
-          
-
           // Floating action button
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           floatingActionButton: _lichenCheckBtn(context),
-
           // Bottom navigation bar
           bottomNavigationBar: _bottomNavBar(context),
         ),
@@ -234,10 +284,9 @@ class _LichenCheckState extends State<LichenCheck> {
                             setState(() {
                               disclaimerClosed = true;
                             });
-                            pickImage(ImageSource.camera);
                           },
                             style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                                 shape:const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.all(Radius.circular(15.0))
                                 ),
@@ -267,6 +316,7 @@ class _LichenCheckState extends State<LichenCheck> {
   void dispose(){
     super.dispose();
   }
+
    // result widget
    Widget result(BuildContext context){
     if(patientInformation.detection!=null){
@@ -495,13 +545,15 @@ class _LichenCheckState extends State<LichenCheck> {
               ))),
               const Spacer(),
               Center(child: ElevatedButton(onPressed: (){
-                setState(() {
-                  currentPIPage+=1;
-                });
+                if(patientInformation.checkPageisComplete(currentPIPage)){
+                  setState(() {
+                    currentPIPage+=1;
+                  });
+                }
               },
                 style: ElevatedButton.styleFrom(
                   shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                  backgroundColor: primaryforegroundColor),
+                  backgroundColor: (patientInformation.checkPageisComplete(currentPIPage)) ? primaryforegroundColor : Colors.grey),
                 child: const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                   child:  Text("Next", style: TextStyle(fontSize: 18.0),),
@@ -563,13 +615,15 @@ class _LichenCheckState extends State<LichenCheck> {
                       ),
                     ),
                     ElevatedButton(onPressed: (){
-                      setState(() {
-                        currentPIPage+=1;
-                      });
+                      if(patientInformation.checkPageisComplete(currentPIPage)){
+                        setState(() {
+                          currentPIPage+=1;
+                        });
+                      }
                     },
                       style: ElevatedButton.styleFrom(
                         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                        backgroundColor: primaryforegroundColor),
+                        backgroundColor:(patientInformation.checkPageisComplete(currentPIPage)) ? primaryforegroundColor : Colors.grey),
                       child: const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
                         child:  Text("Next", style: TextStyle(fontSize: 18.0),),
@@ -634,13 +688,15 @@ class _LichenCheckState extends State<LichenCheck> {
                       ),
                     ),
                     ElevatedButton(onPressed: (){
-                      setState(() {
-                        currentPIPage+=1;
-                      });
+                      if(patientInformation.checkPageisComplete(currentPIPage)){
+                        setState(() {
+                          currentPIPage+=1;
+                        });
+                      }
                     },
                       style: ElevatedButton.styleFrom(
                         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                        backgroundColor: primaryforegroundColor),
+                        backgroundColor:(patientInformation.checkPageisComplete(currentPIPage)) ? primaryforegroundColor : Colors.grey),
                       child: const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
                         child:  Text("Next", style: TextStyle(fontSize: 18.0),),
@@ -705,13 +761,16 @@ class _LichenCheckState extends State<LichenCheck> {
                       ),
                     ),
                     ElevatedButton(onPressed: (){
-                      setState(() {
-                        formCompleted = true;
-                      });
+                      if(patientInformation.checkPageisComplete(currentPIPage)){
+                        setState(() {
+                          formCompleted = true;
+                        });
+                      }
+                      
                     },
                       style: ElevatedButton.styleFrom(
                         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                        backgroundColor: primaryforegroundColor),
+                        backgroundColor:(patientInformation.checkPageisComplete(currentPIPage)) ? primaryforegroundColor : Colors.grey),
                       child: const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
                         child:  Text("Done", style: TextStyle(fontSize: 18.0),),
@@ -956,6 +1015,7 @@ class PatientInformation {
   String? selectedCountry;
   String? selectedEthnicity;
   String? detection;
+
   PatientInformation();
 
   void reset(){
@@ -968,34 +1028,20 @@ class PatientInformation {
     selectedCountry = null;
     selectedEthnicity = null;
   }
-}
 
-
-class OneTimeDisclaimer extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0), // Rounded borders
-      ),
-      title: Text(
-        'Successful registration! but first, we need to verify your email.',
-        style: TextStyle(
-          color: Color(0xFF66D7D1),
-        ),
-      ),
-      content: Text(
-          'A verification email has been sent to your email address. Please check your email and click the verification link to activate your account.'),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop(); // Close the dialog
-            Navigator.of(context).pushNamedAndRemoveUntil('/login',
-                (Route<dynamic> route) => false); // Navigate to the login page
-          },
-          child: Text('OK'),
-        ),
-      ],
-    );
+  bool checkPageisComplete(page){
+    switch(page){
+      case 0: 
+       return (age!=0&&gender!=0&&selectedCountry!=null&&selectedEthnicity!=null);
+      case 1:
+       return (onset!=0);
+      case 2:
+       return (itching!=0);
+      case 3:
+       return (pain!=0);
+      default:
+        return false;
+    }
   }
 }
+

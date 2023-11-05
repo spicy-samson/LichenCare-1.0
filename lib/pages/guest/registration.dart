@@ -21,6 +21,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
   bool _passwordVisible = false;
   bool _confirmPasswordVisible = false;
 
+  bool _isLoading = false; // Track loading state
+
   bool isFirebaseInitialized = true;
   bool passwordError = false;
   String errorMessage = '';
@@ -124,97 +126,118 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     SizedBox(height: 60.0),
                     Container(
                       child: ElevatedButton(
-                        onPressed: () async {
-                          if (_firstName.text.isEmpty ||
-                              _lastName.text.isEmpty ||
-                              _email.text.isEmpty ||
-                              _password.text.isEmpty ||
-                              _confirmPassword.text.isEmpty) {
-                            errorMessage = 'Please fill in all fields.';
-                            successMessage = '';
-                            _showSnackBar(errorMessage);
-                            return;
-                          }
+                        onPressed: _isLoading
+                            ? null
+                            : () async {
+                                if (_firstName.text.isEmpty ||
+                                    _lastName.text.isEmpty ||
+                                    _email.text.isEmpty ||
+                                    _password.text.isEmpty ||
+                                    _confirmPassword.text.isEmpty) {
+                                  errorMessage = 'Please fill in all fields.';
+                                  successMessage = '';
+                                  _showSnackBar(errorMessage);
+                                  return;
+                                }
 
-                          try {
-                            final email = _email.text;
-                            final password = _password.text;
-                            final confirmPassword = _confirmPassword.text;
-                            final firstName = _firstName.text;
-                            final lastName = _lastName.text;
-
-                            if (password == confirmPassword) {
-                              setState(() {
-                                passwordError = false; // Reset password error
-                              });
-
-                              final userCredential = await FirebaseAuth.instance
-                                  .createUserWithEmailAndPassword(
-                                email: email,
-                                password: password,
-                              );
-
-                              if (userCredential.user != null) {
-                                // Add user data to Firestore
-                                await FirebaseFirestore.instance
-                                    .collection('users')
-                                    .doc(userCredential.user!.uid)
-                                    .set({
-                                  'first_name': firstName,
-                                  'last_name': lastName,
-                                  'email': email,
-                                  'email_verified':
-                                      userCredential.user!.emailVerified,
+                                setState(() {
+                                  _isLoading = true; // Set loading state
                                 });
 
-                                // Send an email verification link to the user
-                                await userCredential.user!
-                                    .sendEmailVerification();
+                                try {
+                                  final email = _email.text;
+                                  final password = _password.text;
+                                  final confirmPassword = _confirmPassword.text;
+                                  final firstName = _firstName.text;
+                                  final lastName = _lastName.text;
 
-                                // Show the verification email dialog
-                                AwesomeDialog(
-                                  context: context,
-                                  dialogType: DialogType.success,
-                                  animType: AnimType.topSlide,
-                                  title: 'Successful registration!',
-                                  desc:
-                                      'A verification email has been sent to your email address. Please check your email and click the verification link to activate your account.',
-                                  descTextStyle: TextStyle(
-                                    fontSize: 16.0,
-                                  ),
-                                  padding: EdgeInsets.all(16.0),
-                                  btnOkOnPress: () {
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pushNamedAndRemoveUntil(
-                                        '/login',
-                                        (Route<dynamic> route) =>
-                                            false); // Navigate to the login page
-                                  },
-                                ).show();
-                              }
-                            } else {
-                              setState(() {
-                                passwordError = true; // Set password error
-                              });
+                                  if (password == confirmPassword) {
+                                    setState(() {
+                                      passwordError =
+                                          false; // Reset password error
+                                    });
 
-                              errorMessage = 'Passwords do not match.';
-                              successMessage = '';
+                                    final userCredential = await FirebaseAuth
+                                        .instance
+                                        .createUserWithEmailAndPassword(
+                                      email: email,
+                                      password: password,
+                                    );
 
-                              _showSnackBar(errorMessage);
-                            }
-                          } on FirebaseAuthException catch (e) {
-                            errorMessage = 'Error: ${e.message}';
-                            successMessage = '';
-                            _showSnackBar(errorMessage);
-                          }
-                        },
-                        child: Text(
-                          'Sign Up',
-                          style: TextStyle(
-                            fontSize: 23.0,
-                            color: Colors.white,
-                          ),
-                        ),
+                                    if (userCredential.user != null) {
+                                      // Add user data to Firestore
+                                      await FirebaseFirestore.instance
+                                          .collection('users')
+                                          .doc(userCredential.user!.uid)
+                                          .set({
+                                        'first_name': firstName,
+                                        'last_name': lastName,
+                                        'email': email,
+                                        'email_verified':
+                                            userCredential.user!.emailVerified,
+                                      });
+
+                                      // Send an email verification link to the user
+                                      await userCredential.user!
+                                          .sendEmailVerification();
+
+                                      // Show the verification email dialog
+                                      AwesomeDialog(
+                                        context: context,
+                                        dialogType: DialogType.success,
+                                        animType: AnimType.topSlide,
+                                        title: 'Successful registration!',
+                                        desc:
+                                            'A verification email has been sent to your email address. Please check your email and click the verification link to activate your account.',
+                                        descTextStyle: TextStyle(
+                                          fontSize: 16.0,
+                                        ),
+                                        padding: EdgeInsets.all(16.0),
+                                        btnOkOnPress: () {
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context)
+                                              .pushNamedAndRemoveUntil(
+                                                  '/login',
+                                                  (Route<dynamic> route) =>
+                                                      false); // Navigate to the login page
+                                        },
+                                      ).show();
+                                    }
+                                  } else {
+                                    setState(() {
+                                      passwordError =
+                                          true; // Set password error
+                                    });
+
+                                    errorMessage = 'Passwords do not match.';
+                                    successMessage = '';
+
+                                    _showSnackBar(errorMessage);
+                                  }
+                                } on FirebaseAuthException catch (e) {
+                                  errorMessage = 'Error: ${e.message}';
+                                  successMessage = '';
+                                  _showSnackBar(errorMessage);
+                                } finally {
+                                  setState(() {
+                                    _isLoading = false; // Reset loading state
+                                  });
+                                }
+                              },
+                        child: _isLoading
+                            ? CircularProgressIndicator(
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                                strokeWidth:
+                                    4.0,
+                              ) // Show a loading indicator
+                            : Text(
+                                'Sign Up',
+                                style: TextStyle(
+                                  fontSize: 23.0,
+                                  color: Colors.white,
+                                ),
+                              ),
                         style: ButtonStyle(
                           padding: MaterialStateProperty.all<EdgeInsets>(
                             EdgeInsets.symmetric(horizontal: 40, vertical: 10),

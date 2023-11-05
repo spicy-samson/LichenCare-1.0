@@ -36,12 +36,7 @@ class HomePage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ElevatedButton(
-              onPressed: () {
-                getUserFirstName();
-              },
-              child: Text("Check Current User"),
-            ),
+
             // First set of content
             Container(
               padding: EdgeInsets.all(w * 0.1),
