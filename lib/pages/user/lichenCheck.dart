@@ -321,7 +321,7 @@ class _LichenCheckState extends State<LichenCheck> {
    Widget result(BuildContext context){
     if(patientInformation.detection!=null){
       return Column(children: [
-        Center(child: Text("DETECTIONS", style: TextStyle(color: Colors.red.shade900,fontWeight: FontWeight.w600, fontSize: 24, letterSpacing: 5.0),),),
+        Center(child: Text("DETECTIONS", style: TextStyle(color: const Color.fromARGB(255, 82, 19, 19),fontWeight: FontWeight.w600, fontSize: 24, letterSpacing: 5.0),),),
         const SizedBox(height: 20.0,),
         Container(
           width: 220,
