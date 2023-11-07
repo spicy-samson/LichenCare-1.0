@@ -325,7 +325,7 @@ class _LichenCheckState extends State<LichenCheck> {
                             text: const TextSpan(
                                 style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 22,
+                                    fontSize: 20,
                                     fontWeight: FontWeight.bold),
                                 children: <TextSpan>[
                                   TextSpan(

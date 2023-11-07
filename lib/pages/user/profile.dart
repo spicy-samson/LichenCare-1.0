@@ -37,7 +37,6 @@ class _ProfileState extends State<Profile> {
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
-              SizedBox(height: h * 0.05),
               buildCustomDivider(2, Colors.grey),
               Padding(
                 padding: const EdgeInsets.all(12),
@@ -256,7 +255,8 @@ class _ProfileState extends State<Profile> {
   Future<void> _signOut() async {
     try {
       await FirebaseAuth.instance.signOut();
-      Navigator.of(context).pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
     } catch (e) {
       print("Error while signing out: $e");
     }
