@@ -36,10 +36,10 @@ class HomePage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-
             // First set of content
             Container(
-              padding: EdgeInsets.all(w * 0.1),
+              padding: EdgeInsets.only(
+                  left: w * 0.1, right: w * 0.1, bottom: (w * 0.1)),
               child: Column(
                 children: [
                   SvgPicture.asset(
@@ -57,7 +57,7 @@ class HomePage extends StatelessWidget {
                   SizedBox(height: h * 0.02),
                   Text(
                     "Machine Learning's trend is rising, and LichenCare saw this technology as the cornerstone in achieving improved healthcare quality outcomes. Have yourself a Lichen Planus detector that can give an additional layer of screening.",
-                    style: TextStyle(fontSize: 18.0),
+                    style: TextStyle(fontSize: 17.0),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: h * 0.03),
@@ -98,7 +98,8 @@ class HomePage extends StatelessWidget {
 
             // Second set of content
             Container(
-              padding: EdgeInsets.all(w * 0.1),
+              padding: EdgeInsets.only(
+                  left: w * 0.1, right: w * 0.1, bottom: (w * 0.1)),
               child: Column(
                 children: [
                   SvgPicture.asset(
@@ -116,7 +117,7 @@ class HomePage extends StatelessWidget {
                   SizedBox(height: h * 0.020),
                   Text(
                     "LichenCare extends its function as a support system by providing a library of educational resources on Lichen Planus skin condition including its multiple variants. This allows patients to make an informed decision and explore the skin condition with ease.",
-                    style: TextStyle(fontSize: 18.0),
+                    style: TextStyle(fontSize: 17.0),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: h * 0.03),
@@ -157,7 +158,8 @@ class HomePage extends StatelessWidget {
 
             //Third set of content
             Container(
-              padding: EdgeInsets.all(w * 0.1),
+              padding: EdgeInsets.only(
+                  left: w * 0.1, right: w * 0.1, bottom: (w * 0.1)),
               child: Column(
                 children: [
                   SvgPicture.asset(
@@ -175,7 +177,7 @@ class HomePage extends StatelessWidget {
                   SizedBox(height: h * 0.025),
                   Text(
                     "LichenCare aspires to unite Lichen Planus patients with a community that shares a bond of support and care. A feature that illuminates the rare skin condition and empowers patients to openly exchange their experiences in battling the condition.",
-                    style: TextStyle(fontSize: 18.0),
+                    style: TextStyle(fontSize: 17.0),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: h * 0.03),
@@ -219,13 +221,14 @@ class HomePage extends StatelessWidget {
 
             //4th set of content
             Container(
-              padding: EdgeInsets.all(w * 0.1),
+              padding: EdgeInsets.only(
+                  left: w * 0.1, right: w * 0.1, bottom: (w * 0.1)),
               child: Column(
                 children: [
                   SvgPicture.asset(
                     'assets/svgs/AboutUs_image.svg',
                     width: w * 0.3,
-                    height: h * 0.35,
+                    height: h * 0.33,
                   ),
                   SizedBox(height: h * 0.025),
                   Text(
@@ -237,7 +240,7 @@ class HomePage extends StatelessWidget {
                   SizedBox(height: h * 0.025),
                   Text(
                     "Having an instant second opinion through information leads to improved clinical outcomes. The utilization of modern technology allows LichenCare to provide healthcare support for patients with Lichen Planus.",
-                    style: TextStyle(fontSize: 18.0),
+                    style: TextStyle(fontSize: 17.0),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: h * 0.020),
@@ -272,9 +275,7 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: h * 0.03,
-                  )
+
                 ],
               ),
             ),
@@ -377,7 +378,7 @@ class HomePage extends StatelessWidget {
             break;
           case 2:
             Navigator.of(context).pushNamed('/lichenCheck');
-            // print("lezgooooo"); 
+            // print("lezgooooo");
             // Navigate to the 'lichencheck' route
             break;
           case 3:

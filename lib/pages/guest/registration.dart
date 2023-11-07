@@ -123,7 +123,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     SizedBox(height: 30.0),
                     _buildTextField('Confirm Password', true, Icons.lock,
                         _confirmPassword, _confirmPasswordFocus),
-                    SizedBox(height: 60.0),
+                    SizedBox(height: 35.0),
                     Container(
                       child: ElevatedButton(
                         onPressed: _isLoading
@@ -253,7 +253,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20.0),
+                    SizedBox(height: 43.0),
                     Padding(
                       padding: const EdgeInsets.only(left: 13.0, right: 13.0),
                       child: RichText(
@@ -385,7 +385,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   void _showSnackBar(String message) {
     final isErrorMessage = message == errorMessage;
     final snackBarBackgroundColor =
-        isErrorMessage ? const Color.fromARGB(255, 196, 41, 30) : Colors.green;
+        isErrorMessage ? Colors.red : Colors.green;
 
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: snackBarBackgroundColor, // Set the background color
@@ -398,6 +398,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
           ),
         ),
       ),
+      duration: Duration(milliseconds: 3000),
     ));
   }
 }

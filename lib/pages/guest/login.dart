@@ -293,6 +293,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
+      duration: Duration(milliseconds: 3000),
     ));
   }
 }

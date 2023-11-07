@@ -344,7 +344,7 @@ class _LichenCheckState extends State<LichenCheck> {
                                     textAlign: TextAlign.center,
                                     text: const TextSpan(
                                         style: TextStyle(
-                                            color: Colors.black, fontSize: 18),
+                                            color: Colors.black, fontSize: 16),
                                         children: <TextSpan>[
                                           TextSpan(text: "Dear Users,"),
                                         ])),
@@ -356,7 +356,7 @@ class _LichenCheckState extends State<LichenCheck> {
                                     text: const TextSpan(
                                         style: TextStyle(
                                             color: Colors.black,
-                                            fontSize: 17,
+                                            fontSize: 16,
                                             height: 1.5),
                                         children: <TextSpan>[
                                           TextSpan(
