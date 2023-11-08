@@ -8,6 +8,12 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
+Color primaryBackgroundColor = const Color(0xFFFFF4E9);
+Color primaryforegroundColor = const Color(0xFFFF7F50);
+Color secondaryForegroundColor = const Color(0xFF66D7D1);
+Color successColor = Colors.green;
+Color errorColor = Colors.red;
+
 class _LoginPageState extends State<LoginPage> {
   late final TextEditingController _email;
   late final TextEditingController _password;
@@ -39,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: Color(0xFFFFF4E9),
+      backgroundColor: primaryBackgroundColor,
       body: SingleChildScrollView(
         child: Container(
           child: Column(
@@ -139,7 +145,12 @@ class _LoginPageState extends State<LoginPage> {
                                     _showSnackBar(errorMessage);
                                   }
                                 } on FirebaseAuthException catch (e) {
-                                  errorMessage = 'Error: ${e.message}';
+                                  errorMessage = '${e.message}';
+                                  if (errorMessage ==
+                                      "An internal error has occurred. [ INVALID_LOGIN_CREDENTIALS ]") {
+                                    errorMessage = "Invalid email or password.";
+                                    print(e.message);
+                                  }
                                   _showSnackBar(errorMessage);
                                 } finally {
                                   setState(() {
@@ -165,7 +176,7 @@ class _LoginPageState extends State<LoginPage> {
                             EdgeInsets.symmetric(horizontal: 40, vertical: 10),
                           ),
                           backgroundColor: MaterialStateProperty.all<Color>(
-                              const Color(0xFFFF7F50)),
+                              primaryforegroundColor),
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
@@ -203,7 +214,7 @@ class _LoginPageState extends State<LoginPage> {
                                   'Sign Up',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: Color(0xFFFF7F50),
+                                    color: primaryforegroundColor,
                                     fontSize: 16.0,
                                     height: 0.001,
                                   ),
@@ -240,10 +251,11 @@ class _LoginPageState extends State<LoginPage> {
         labelStyle: TextStyle(
           color: Colors.grey,
         ),
-        prefixIcon: Icon(
-          icon,
-          color: focusNode.hasFocus ? Color(0xFFFF7F50) : Colors.grey,
-        ),
+        prefixIcon: Icon(icon,
+            color: MaterialStateColor.resolveWith((states) =>
+                states.contains(MaterialState.selected)
+                    ? Colors.orange
+                    : Colors.grey)),
         prefixIconConstraints: BoxConstraints(
           minWidth: 40,
         ),
@@ -253,7 +265,7 @@ class _LoginPageState extends State<LoginPage> {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
           borderSide: BorderSide(
-            color: Color(0xFFFF7F50),
+            color: primaryforegroundColor,
           ),
         ),
         contentPadding: EdgeInsets.symmetric(
@@ -280,7 +292,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void _showSnackBar(String message) {
     final isErrorMessage = message == errorMessage;
-    final snackBarBackgroundColor = isErrorMessage ? Colors.red : Colors.green;
+    final snackBarBackgroundColor = isErrorMessage ? errorColor : successColor;
 
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: snackBarBackgroundColor, // Set the background color
@@ -293,7 +305,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
-      duration: Duration(milliseconds: 3000),
+      duration: Duration(milliseconds: 2000),
     ));
   }
 }

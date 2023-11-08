@@ -9,6 +9,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 // ignore: must_be_immutable
 class HomePage extends StatelessWidget {
   int _currentIndex = 0;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -275,7 +276,6 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                   ),
-
                 ],
               ),
             ),
@@ -366,28 +366,21 @@ class HomePage extends StatelessWidget {
         ),
       ],
       onTap: (index) {
-        // Handle navigation to different pages based on the index
         switch (index) {
           case 0:
-            Navigator.of(context)
-                .pushNamed('/home'); // Navigate to the 'home' route
+            Navigator.pushReplacementNamed(context, '/home');
             break;
           case 1:
-            Navigator.of(context).pushNamed(
-                '/lichenpedia'); // Navigate to the 'lichenpedia' route
+            Navigator.pushReplacementNamed(context, '/lichenpedia');
             break;
           case 2:
-            Navigator.of(context).pushNamed('/lichenCheck');
-            // print("lezgooooo");
-            // Navigate to the 'lichencheck' route
+            Navigator.pushReplacementNamed(context, '/lichenCheck');
             break;
           case 3:
-            Navigator.of(context)
-                .pushNamed('/lichenHub'); // Navigate to the 'lichenhub' route
+            Navigator.pushReplacementNamed(context, '/lichenHub');
             break;
           case 4:
-            Navigator.of(context)
-                .pushNamed('/profile'); // Navigate to the 'profile' route
+            Navigator.pushReplacementNamed(context, '/profile');
             break;
         }
       },

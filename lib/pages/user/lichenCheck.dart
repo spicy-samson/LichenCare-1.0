@@ -53,8 +53,9 @@ class _LichenCheckState extends State<LichenCheck> {
   Classifier? classifier;
 
   Color primaryBackgroundColor = const Color(0xFFFFF4E9);
-  Color primaryforegroundColor = const Color(0XFFF0784C);
-  Color secondaryForegroundColor = const Color(0XFF15D6b4);
+  Color primaryforegroundColor = const Color(0xFFFF7F50);
+  Color secondaryForegroundColor = const Color(0xFF66D7D1);
+  Color errorColor = Colors.red;
 
   void reset() {
     sourceSelected = false;
@@ -837,7 +838,7 @@ class _LichenCheckState extends State<LichenCheck> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                       duration: Duration(milliseconds: 1000),
-                      backgroundColor: primaryforegroundColor,
+                      backgroundColor: errorColor,
                       content: Text('Please fill up all fields.')),
                 );
               }
@@ -951,7 +952,7 @@ class _LichenCheckState extends State<LichenCheck> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                             duration: Duration(milliseconds: 1000),
-                            backgroundColor: primaryforegroundColor,
+                            backgroundColor: errorColor,
                             content: Text('Please fill up all fields.')),
                       );
                     }
@@ -1070,7 +1071,7 @@ class _LichenCheckState extends State<LichenCheck> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                             duration: Duration(milliseconds: 1000),
-                            backgroundColor: primaryforegroundColor,
+                            backgroundColor: errorColor,
                             content: Text('Please fill up all fields.')),
                       );
                     }
@@ -1189,7 +1190,7 @@ class _LichenCheckState extends State<LichenCheck> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                             duration: Duration(milliseconds: 1000),
-                            backgroundColor: primaryforegroundColor,
+                            backgroundColor: errorColor,
                             content: Text('Please fill up all fields.')),
                       );
                     }
