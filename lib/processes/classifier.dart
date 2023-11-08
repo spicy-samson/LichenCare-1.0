@@ -24,10 +24,6 @@ class Classifier {
 
   /// [ImageProcessor] used to pre-process the image
   ImageProcessor? imageProcessor;
-
-  /// Shapes of output tensors
-  List<List<int>>? _rpnOutputShapes;
-  List<List<int>>? _clsOutputShapes;
   // Provide labels from training [class_mapping]
   final List<String> labels = [
     "Linear Lichen Planus",
@@ -37,7 +33,7 @@ class Classifier {
   ];
 
   /// Number of results to show
-  static const int NUM_RESULTS = 16; // x4
+  static const int NUM_RESULTS = 1; // x4
   static const int MAX_RPN_BOXES = 300;
 
   int? _numROIS;
@@ -45,7 +41,6 @@ class Classifier {
   Classifier() {
     loadRPNModel();
     loadClassifierModel();
-    // loadLabels();
   }
 
   /// Loads interpreter from asset
@@ -180,22 +175,7 @@ class Classifier {
     averageColor[0] /= inputImage.shape[1] * inputImage.shape[2];
     averageColor[1] /= inputImage.shape[1] * inputImage.shape[2];
     averageColor[2] /= inputImage.shape[1] * inputImage.shape[2];
-    // print(averageColor);
-    // if (averageColor[0] > 200 ||
-    //     averageColor[0] < 80 ||
-    //     averageColor[1] > 165 ||
-    //     averageColor[1] < 65 ||
-    //     averageColor[2] > 150 ||
-    //     averageColor[2] < 55 ||
-    //     averageColor[0] - averageColor[1] < -2 ||
-    //     averageColor[1] - averageColor[2] < -7) {
-    //   print("not skin");
-    //   recognitions.add(Recognition(0, "", 0.0, Rect.fromLTRB(0, 0, 0, 0)));
-    //   return recognitions;
-    // }
-    // print(imageAsList[index - 3] + imgchannelmean[0]);
-    // print(imageAsList[index - 2] + imgchannelmean[1]);
-    // print(imageAsList[index - 1] + imgchannelmean[2]);
+
     inputImage.loadBuffer(Float32List.fromList(imageAsList).buffer);
     // Use [TensorImage.buffer] or [TensorBuffer.buffer] to pass by reference
     List<Object> inputs = [inputImage.buffer];
@@ -211,16 +191,9 @@ class Classifier {
     _rpnInterpreter!.runForMultipleInputs(inputs, rpnOutputs);
     _rpnInterpreter!.close();
     // Then we calculate the features from the output of the rpn model (RPN TO ROI)
-    // List<int> anchorSizes = [32, 64, 128];
     // Match anchors from Config.py
     double scaler = 1;
     List<double> anchorSizes = [64 * (scaler), 128 * (scaler), 256 * (scaler)];
-    // double width = 2 / sqrt(1.9);
-    // List<List<double>> anchorRatios = [
-    //   [1, 1],
-    //   [1 / width, width],
-    //   [width, 1 / width]
-    // ];
     List<List<double>> anchorRatios = [
       [1, 1],
       [1, 2],
@@ -465,55 +438,19 @@ class Classifier {
         double x2 = result[0][i][2];
         double y1 = result[0][i][1];
         double y2 = result[0][i][3];
-
-        // check detection if skin from average color
-        // List<double> averageColor = [0, 0, 0];
-        // for (int x = x1.toInt(); x <= x2; x++) {
-        //   for (int y = y1.toInt(); y <= y2; y++) {
-        //     averageColor[0] += data[x * y * 4];
-        //     averageColor[1] += data[x * y * 4 + 1];
-        //     averageColor[2] += data[x * y * 4 + 2];
-        //   }
-        // }
-        // double detection_size = (x2 - x1) * (y2 - y1);
-
-        // averageColor[0] /= detection_size;
-        // averageColor[1] /= detection_size;
-        // averageColor[2] /= detection_size;
-        // print(averageColor);
-        // if (averageColor[0] > 200 ||
-        //     averageColor[0] < 80 ||
-        //     averageColor[1] > 160 ||
-        //     averageColor[1] < 65 ||
-        //     averageColor[2] > 85 ||
-        //     averageColor[2] < 55 ||
-        //     averageColor[0] - averageColor[1] <= 0 ||
-        //     averageColor[1] - averageColor[2] <= 0) {
-        //   print("not skin");
-        //   continue;
-        // }
-
         recognitions.add(
           Recognition(i, key, result[1][i], Rect.fromLTRB(x1, y1, x2, y2)),
         );
       }
     });
-    // if (recognitions.isEmpty) {
-    //   recognitions.add(Recognition(0, "No Recognition", 0.0, Rect.fromLTRB(0, 0, 0, 0)));
-    // }
     if(recognitions.isNotEmpty) {
       recognitions.sort(((b, a) => a.score.compareTo(b.score)));
     }
-    // for (int i = 0; i < recognitions.length; i++)
-      // print(
-      //     "Class: ${recognitions[i].label} : Score: ${recognitions[i].score} : Rect:${recognitions[i].location}");
     return recognitions;
   }
 
   /// Gets the interpreter instance
-  Interpreter get rpnInterpreter => _rpnInterpreter!;
-  Interpreter get clsInterpreter => _clsInterpreter!;
+  // Interpreter get rpnInterpreter => _rpnInterpreter!;
+  // Interpreter get clsInterpreter => _clsInterpreter!;
 
-  /// Gets the loaded labels
-  // List<String> get labels => _labels!;
 }

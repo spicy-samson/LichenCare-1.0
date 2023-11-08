@@ -1311,7 +1311,6 @@ class _LichenCheckState extends State<LichenCheck> {
                       });
                       await pushPatientEntry();
                       var data = await rootBundle.loadString("assets/jsons/results.json");//latest Dart
-                      print(data);
                       setState(() {
                         patientInformation.resultsDescription = ResultsDescription(json.decode(data), lichenType: patientInformation.detection!);
                         pushingData=false;
@@ -1362,16 +1361,16 @@ class _LichenCheckState extends State<LichenCheck> {
     int threshold = 75;
     List<int> imageSize = [300, 400];
     var image = img.decodeImage(file.readAsBytesSync());
-    // resize image
+    // resize image add adjustmment filter for better prediction
     var reduced =
         img.adjustColor(image!, saturation: 2.0, contrast: 5.0, amount: 1.0);
     reduced = img.copyResize(reduced,
         width: imageSize[0],
         height: imageSize[1],
         interpolation: img.Interpolation.cubic); // resize
-    // add adjustmment filter for better prediction
-
+  
     // exit function if classifier object is not initialized
+    // 5707.89ms
     List<Recognition> recognitions = await classifier!.predict(reduced);
     if (recognitions.isNotEmpty) {
       double score = recognitions[0].score;
