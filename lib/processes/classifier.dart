@@ -32,7 +32,7 @@ class Classifier {
   final List<String> labels = [
     "Linear Lichen Planus",
     "Annular Lichen Planus",
-    "Hypertropic Lichen Planus",
+    "Hypertrophic Lichen Planus",
     "???"
   ];
 
