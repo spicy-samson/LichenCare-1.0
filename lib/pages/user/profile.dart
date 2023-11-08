@@ -208,8 +208,8 @@ class _ProfileState extends State<Profile> {
                 .pushNamed('/lichenHub'); // Navigate to the 'lichenhub' route
             break;
           case 4:
-            Navigator.of(context)
-                .pushNamed('/profile'); // Navigate to the 'profile' route
+            // Navigator.of(context)
+            //     .pushNamed('/profile'); // Navigate to the 'profile' route
             break;
         }
       },

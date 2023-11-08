@@ -21,6 +21,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+  
 
   //Root of Application
   @override
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'ABeeZee',
-        textTheme: Theme.of(context).textTheme.apply(fontFamily: 'ABeeZee'),
+        textTheme: Theme.of(context).textTheme.apply(fontFamily: 'ABeeZee',),
       ),
       home: MyCarousel(),
       routes: {
@@ -43,5 +44,22 @@ class MyApp extends StatelessWidget {
         '/profile': (context) => Profile(),
       },
     );
+  }
+}
+
+
+class NoTransitionsBuilder extends PageTransitionsBuilder {
+  const NoTransitionsBuilder();
+
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T>? route,
+    BuildContext? context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget? child,
+  ) {
+    // only return the child without warping it with animations
+    return child!;
   }
 }
