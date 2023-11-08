@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_picker/country_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -58,18 +60,84 @@ class _LichenCheckState extends State<LichenCheck> {
   Color secondaryForegroundColor = const Color(0xFF66D7D1);
   Color errorColor = Colors.red;
 
+  FirebaseAuth auth = FirebaseAuth.instance;
 
-  Future pushPatientEntry() async{
-    // this function is already asynchronous, pwede mag await calls which is usually ginagawa sa firebase
-    
-    // use patientInformation to extract information
-    print(patientInformation.age);
-    // await Future.delayed(Duration(seconds: 5));
-    // push to first table, patientInformation.image, patientInformation.age, etc.
-    // NOTE: search if pano maka upload ng "File" datatype (patientInformation.image) sa firebase, you may need to decode. 
-    
-    // push to second table, patientInformation.onset, patientInformation.itching, etc
+  // Future pushPatientEntry() async {
+  //   // this function is already asynchronous, pwede mag await calls which is usually ginagawa sa firebase
+  //   // Add user data to Firestore
+  //   User? user = auth.currentUser;
+  //   if (user != null) {
+  //     try {
+  //       DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+  //           .collection('users')
+  //           .doc(user.uid)
+  //           .get();
 
+  //       if (userSnapshot.exists) {
+  //         // Assuming 'first_name' is a field in your Firestore document
+  //         String collection = userSnapshot.get('Inputs');
+  //         print(collection);
+  //         print(collection.runtimeType);
+  //       }
+  //     } catch (e) {
+  //       print("Error fetching user data: $e");
+  //     }
+  //   }
+
+  //   // use patientInformation to extract information
+  //   print(patientInformation.age);
+  //   // await Future.delayed(Duration(seconds: 5));
+  //   // push to first table, patientInformation.image, patientInformation.age, etc.
+  //   // NOTE: search if pano maka upload ng "File" datatype (patientInformation.image) sa firebase, you may need to decode.
+
+  //   // push to second table, patientInformation.onset, patientInformation.itching, etc
+  // }
+
+  Future<void> pushPatientEntry() async {
+    User? user = auth.currentUser;
+
+    if (user != null) {
+      try {
+        // Reference to the Firestore collection 'users' using the user's UID
+        CollectionReference userCollection =
+            FirebaseFirestore.instance.collection('users');
+
+        // Create a document reference based on the user's UID
+        DocumentReference userDocRef = userCollection.doc(user.uid);
+
+        // Check if the document exists in Firestore
+        DocumentSnapshot userSnapshot = await userDocRef.get();
+
+        if (userSnapshot.exists) {
+          // Assuming 'Inputs' is a subcollection under the user document
+          CollectionReference inputsCollection =
+              userDocRef.collection('LichenCheck_inputs');
+
+          // Create a new document with an automatically generated ID
+          DocumentReference newInputDocRef = await inputsCollection.add({
+            'additional_info': {
+              'age': patientInformation.age,
+              'country': patientInformation.selectedCountry,
+              'ethnicity': patientInformation.selectedEthnicity,
+              'gender': patientInformation.gender,
+            },
+            'symptoms': {
+              'itching': patientInformation.itching,
+              'onset': patientInformation.onset,
+              'pain': patientInformation.pain,
+            },
+            'results': {
+              'detection': patientInformation.detection,
+              'detection_score': patientInformation.detectionScore,
+              'file_image': 'URL_OR_PATH_TO_THE_IMAGE',
+              // You can store the URL or path to the image in Firebase Storage
+            },
+          });
+        }
+      } catch (e) {
+        print('Error fetching user data: $e');
+      }
+    }
   }
 
   void reset() {
@@ -85,7 +153,7 @@ class _LichenCheckState extends State<LichenCheck> {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
 
-    double scaleFactor = h/1080;
+    double scaleFactor = h / 1080;
 
     return Stack(
       children: [
@@ -189,90 +257,102 @@ class _LichenCheckState extends State<LichenCheck> {
                 )
               : (hasImage)
                   ? (formCompleted)
-                      ? (pushingData) ? 
-                        const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                           SpinKitThreeBounce(
-                            color: Color(0XFFF0784C),
-                            size: 60.0,
-                          ),
-                           SizedBox(
-                            height: 20,
-                          ),
-                          Text("Saving your entries...")
-                        ],
-                      ):
-                      Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                          child: SingleChildScrollView(
-                            child: Column(
+                      ? (pushingData)
+                          ? const Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const SizedBox(
-                                  height: 20.0,
+                                SpinKitThreeBounce(
+                                  color: Color(0XFFF0784C),
+                                  size: 60.0,
                                 ),
-                                result(context),
-                                const SizedBox(
-                                  height: 30.0,
+                                SizedBox(
+                                  height: 20,
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 0.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.of(context)
-                                              .pushReplacementNamed('/home'); //
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                            shape: const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(15.0))),
-                                            backgroundColor:
-                                                primaryforegroundColor),
-                                        child: const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 0.0, vertical: 10.0),
-                                          child: Text(
-                                            "Back to Home",
-                                            style: TextStyle(fontSize: 16.0),
-                                          ),
-                                        ),
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            reset();
-                                          });
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                            shape: const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(15.0))),
-                                            backgroundColor:
-                                                primaryforegroundColor),
-                                        child: const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 10.0, vertical: 10.0),
-                                          child: Text(
-                                            "Scan Again",
-                                            style: TextStyle(fontSize: 16.0),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 45.0,
-                                )
+                                Text("Saving your entries...")
                               ],
-                            ),
-                          ),
-                        )
+                            )
+                          : Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30.0),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    const SizedBox(
+                                      height: 20.0,
+                                    ),
+                                    result(context),
+                                    const SizedBox(
+                                      height: 30.0,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 0.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.of(context)
+                                                  .pushReplacementNamed(
+                                                      '/home'); //
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                                shape:
+                                                    const RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    15.0))),
+                                                backgroundColor:
+                                                    primaryforegroundColor),
+                                            child: const Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 0.0,
+                                                  vertical: 10.0),
+                                              child: Text(
+                                                "Back to Home",
+                                                style:
+                                                    TextStyle(fontSize: 16.0),
+                                              ),
+                                            ),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                reset();
+                                              });
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                                shape:
+                                                    const RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    15.0))),
+                                                backgroundColor:
+                                                    primaryforegroundColor),
+                                            child: const Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 10.0,
+                                                  vertical: 10.0),
+                                              child: Text(
+                                                "Scan Again",
+                                                style:
+                                                    TextStyle(fontSize: 16.0),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 45.0,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            )
                       : Column(
                           children: [
                             const SizedBox(
@@ -329,7 +409,10 @@ class _LichenCheckState extends State<LichenCheck> {
             ? const SizedBox()
             : Padding(
                 padding: EdgeInsets.only(
-                    left: 15.0, right: 15.0, top: 200.0*scaleFactor, bottom: 120.0*scaleFactor),
+                    left: 15.0,
+                    right: 15.0,
+                    top: 200.0 * scaleFactor,
+                    bottom: 120.0 * scaleFactor),
                 child: Container(
                   width: double.infinity,
                   height: double.infinity,
@@ -376,7 +459,8 @@ class _LichenCheckState extends State<LichenCheck> {
                                     textAlign: TextAlign.center,
                                     text: TextSpan(
                                         style: TextStyle(
-                                            color: Colors.black, fontSize: 22*scaleFactor),
+                                            color: Colors.black,
+                                            fontSize: 22 * scaleFactor),
                                         children: const <TextSpan>[
                                           TextSpan(text: "Dear Users,"),
                                         ])),
@@ -388,7 +472,7 @@ class _LichenCheckState extends State<LichenCheck> {
                                     text: TextSpan(
                                         style: TextStyle(
                                             color: Colors.black,
-                                            fontSize: 22*scaleFactor,
+                                            fontSize: 22 * scaleFactor,
                                             height: 1.5),
                                         children: const <TextSpan>[
                                           TextSpan(
@@ -560,66 +644,82 @@ class _LichenCheckState extends State<LichenCheck> {
               ),
             ),
           ),
-            Center(
-             child: RichText(
-                  textAlign: TextAlign.justify,
-                  text: TextSpan(
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          height: 2,),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text:patientInformation.resultsDescription!.description),])),
-           ),
+          Center(
+            child: RichText(
+                textAlign: TextAlign.justify,
+                text: TextSpan(
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      height: 2,
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: patientInformation
+                              .resultsDescription!.description),
+                    ])),
+          ),
           Align(
             alignment: Alignment.centerLeft,
             child: Padding(
               padding: const EdgeInsets.only(top: 40.0, bottom: 10.0),
               child: Text(
-                "SYMPTOMMS",
+                "SYMPTOMS",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
             ),
           ),
-           Center(
-             child: RichText(
-                  textAlign: TextAlign.justify,
-                  text: TextSpan(
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          height: 2,),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text:patientInformation.resultsDescription!.symptoms.header),])),
-           ),
-           Column(children:List<Widget>.generate(patientInformation.resultsDescription!.symptoms.features.length, (int index) {
-                final features = patientInformation.resultsDescription!.symptoms.features;
-                return Column(children: [
+          Center(
+            child: RichText(
+                textAlign: TextAlign.justify,
+                text: TextSpan(
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      height: 2,
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: patientInformation
+                              .resultsDescription!.symptoms.header),
+                    ])),
+          ),
+          Column(
+            children: List<Widget>.generate(
+                patientInformation.resultsDescription!.symptoms.features.length,
+                (int index) {
+              final features =
+                  patientInformation.resultsDescription!.symptoms.features;
+              return Column(
+                children: [
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
                       padding: const EdgeInsets.only(top: 20.0, bottom: 5.0),
                       child: Text(
                         features.keys.elementAt(index),
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600),
                       ),
                     ),
                   ),
-                 RichText(
-                  textAlign: TextAlign.justify,
-                  text: TextSpan(
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          height: 2,),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text:features.values.elementAt(index),),])),
+                  RichText(
+                      textAlign: TextAlign.justify,
+                      text: TextSpan(
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            height: 2,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: features.values.elementAt(index),
+                            ),
+                          ])),
                 ],
-                );
-                } ),),
+              );
+            }),
+          ),
           Align(
             alignment: Alignment.centerLeft,
             child: Padding(
@@ -631,58 +731,73 @@ class _LichenCheckState extends State<LichenCheck> {
             ),
           ),
           Center(
-             child: RichText(
-                  textAlign: TextAlign.justify,
-                  text: TextSpan(
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          height: 2,),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text:patientInformation.resultsDescription!.treatments.header),])),
-           ),
-           Column(children:List<Widget>.generate(patientInformation.resultsDescription!.treatments.suggestions.length, (int index) {
-                final suggestions = patientInformation.resultsDescription!.treatments.suggestions;
-                return Column(children: [
+            child: RichText(
+                textAlign: TextAlign.justify,
+                text: TextSpan(
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      height: 2,
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: patientInformation
+                              .resultsDescription!.treatments.header),
+                    ])),
+          ),
+          Column(
+            children: List<Widget>.generate(
+                patientInformation.resultsDescription!.treatments.suggestions
+                    .length, (int index) {
+              final suggestions =
+                  patientInformation.resultsDescription!.treatments.suggestions;
+              return Column(
+                children: [
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
                       padding: const EdgeInsets.only(top: 20.0, bottom: 5.0),
                       child: Text(
                         suggestions.keys.elementAt(index),
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600),
                       ),
                     ),
                   ),
-                 RichText(
-                  textAlign: TextAlign.justify,
-                  text: TextSpan(
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          height: 2,),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text:suggestions.values.elementAt(index),),])),
+                  RichText(
+                      textAlign: TextAlign.justify,
+                      text: TextSpan(
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            height: 2,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: suggestions.values.elementAt(index),
+                            ),
+                          ])),
                 ],
-                );
-                } ),),
-
+              );
+            }),
+          ),
           const SizedBox(
             height: 20.0,
           ),
           Center(
-             child: RichText(
-                  textAlign: TextAlign.justify,
-                  text: TextSpan(
-                      style: const TextStyle(
-                          color: Colors.black87,
-                          fontSize: 16,
-                          height: 2.0,),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text:patientInformation.resultsDescription!.footer),])),)
+            child: RichText(
+                textAlign: TextAlign.justify,
+                text: TextSpan(
+                    style: const TextStyle(
+                      color: Colors.black87,
+                      fontSize: 16,
+                      height: 2.0,
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: patientInformation.resultsDescription!.footer),
+                    ])),
+          )
         ],
       );
     } else {
@@ -722,7 +837,7 @@ class _LichenCheckState extends State<LichenCheck> {
 
   // widget selector (page)
   Widget patientInformationForm(BuildContext context) {
-    double scaleFactor = MediaQuery.of(context).size.height/1080;
+    double scaleFactor = MediaQuery.of(context).size.height / 1080;
     List<String> onsets = [
       "within a week",
       "within a month",
@@ -738,15 +853,15 @@ class _LichenCheckState extends State<LichenCheck> {
             style: TextStyle(fontSize: 14.0),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 15.0*scaleFactor, bottom: 10),
+            padding: EdgeInsets.only(top: 15.0 * scaleFactor, bottom: 10),
             child: const Text(
               "Sex",
               style: TextStyle(fontSize: 18.0),
             ),
           ),
           Padding(
-            padding:
-               EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0*scaleFactor),
+            padding: EdgeInsets.symmetric(
+                horizontal: 15.0, vertical: 10.0 * scaleFactor),
             child: Row(
               children: [
                 ElevatedButton(
@@ -800,8 +915,8 @@ class _LichenCheckState extends State<LichenCheck> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 10.0*scaleFactor, bottom: 0),
-            child:const  Text(
+            padding: EdgeInsets.only(top: 10.0 * scaleFactor, bottom: 0),
+            child: const Text(
               "Age",
               style: TextStyle(fontSize: 18.0),
             ),
@@ -818,7 +933,7 @@ class _LichenCheckState extends State<LichenCheck> {
                 hintText: "Enter your age", border: InputBorder.none),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 10.0*scaleFactor, bottom: 0),
+            padding: EdgeInsets.only(top: 10.0 * scaleFactor, bottom: 0),
             child: const Text(
               "Country",
               style: TextStyle(fontSize: 18.0),
@@ -857,9 +972,9 @@ class _LichenCheckState extends State<LichenCheck> {
                       ),
                     ],
                   ))),
-         Padding(
+          Padding(
             padding: EdgeInsets.only(top: 10.0 * scaleFactor, bottom: 0),
-            child: const  Text(
+            child: const Text(
               "Ethnicity",
               style: TextStyle(fontSize: 18.0),
             ),
@@ -1304,18 +1419,23 @@ class _LichenCheckState extends State<LichenCheck> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () async{
-                    if (patientInformation.checkPageisComplete(currentPIPage)){
+                  onPressed: () async {
+                    if (patientInformation.checkPageisComplete(currentPIPage)) {
                       setState(() {
                         formCompleted = true;
                         pushingData = true;
                       });
                       await pushPatientEntry();
-                      var data = await rootBundle.loadString("assets/jsons/results.json");//latest Dart
-                      print(data);
+                      var data = await rootBundle.loadString(
+                          "assets/jsons/results.json"); //latest Dart
                       setState(() {
-                        patientInformation.resultsDescription = ResultsDescription(json.decode(data), lichenType: patientInformation.detection!);
-                        pushingData=false;
+                        if (patientInformation.detection != null) {
+                          patientInformation.resultsDescription =
+                              ResultsDescription(json.decode(data),
+                                  lichenType: patientInformation.detection!);
+                        }
+
+                        pushingData = false;
                       });
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -1625,30 +1745,33 @@ class PatientInformation {
   }
 }
 
-
-class ResultsDescription{
+class ResultsDescription {
   final String lichenType;
   late String description;
   late Symptoms symptoms;
   late Treatments treatments;
   late String footer;
-  ResultsDescription(row, {required this.lichenType}){
+  ResultsDescription(row, {required this.lichenType}) {
     print(lichenType);
     description = row[lichenType]['Description'];
-    symptoms = Symptoms(header: row[lichenType]['Symptoms']['Header'], features: row[lichenType]['Symptoms']['Features']);
-    treatments = Treatments(header: row[lichenType]['Treatments']['Header'], suggestions: row[lichenType]['Treatments']['Suggestions']);
+    symptoms = Symptoms(
+        header: row[lichenType]['Symptoms']['Header'],
+        features: row[lichenType]['Symptoms']['Features']);
+    treatments = Treatments(
+        header: row[lichenType]['Treatments']['Header'],
+        suggestions: row[lichenType]['Treatments']['Suggestions']);
     footer = row[lichenType]["Footer"];
   }
 }
 
-class Symptoms{
+class Symptoms {
   String header;
-  Map<String,dynamic> features;
+  Map<String, dynamic> features;
   Symptoms({required this.header, required this.features});
 }
 
-class Treatments{
+class Treatments {
   String header;
-  Map<String,dynamic> suggestions;
+  Map<String, dynamic> suggestions;
   Treatments({required this.header, required this.suggestions});
 }
