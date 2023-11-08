@@ -6,6 +6,12 @@ import 'package:lichen_care/pages/guest/home_sliders.dart';
 import '/firebase_options.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 
+Color primaryBackgroundColor = const Color(0xFFFFF4E9);
+Color primaryforegroundColor = const Color(0xFFFF7F50);
+Color secondaryForegroundColor = const Color(0xFF66D7D1);
+Color successColor = Colors.green;
+Color errorColor = Colors.red;
+
 class RegistrationPage extends StatefulWidget {
   @override
   _RegistrationPageState createState() => _RegistrationPageState();
@@ -242,7 +248,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             EdgeInsets.symmetric(horizontal: 40, vertical: 10),
                           ),
                           backgroundColor: MaterialStateProperty.all<Color>(
-                              const Color(0xFFFF7F50)),
+                              primaryforegroundColor),
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
@@ -264,8 +270,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               text: 'Already have an account?',
                               style: TextStyle(
                                 fontSize: 16.0,
-                                height:
-                                    0.8,
+                                height: 0.8,
                                 color: Colors.black,
                               ),
                             ),
@@ -327,10 +332,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
             labelStyle: TextStyle(
               color: Colors.grey,
             ),
-            prefixIcon: Icon(
-              icon,
-              color: focusNode.hasFocus ? Color(0xFFFF7F50) : Colors.grey,
-            ),
+            prefixIcon: Icon(icon,
+                color: MaterialStateColor.resolveWith((states) =>
+                    states.contains(MaterialState.selected)
+                        ? Colors.orange
+                        : Colors.grey)),
             prefixIconConstraints: BoxConstraints(
               minWidth: 40,
             ),
@@ -384,8 +390,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   void _showSnackBar(String message) {
     final isErrorMessage = message == errorMessage;
-    final snackBarBackgroundColor =
-        isErrorMessage ? Colors.red : Colors.green;
+    final snackBarBackgroundColor = isErrorMessage ? errorColor : successColor;
 
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: snackBarBackgroundColor, // Set the background color
