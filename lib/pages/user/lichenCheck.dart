@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:country_picker/country_picker.dart';
@@ -47,15 +48,29 @@ class _LichenCheckState extends State<LichenCheck> {
   bool sourceSelected = false;
   bool formCompleted = false;
   bool isPredicting = false;
+  bool pushingData = false;
   double predictionProgress = 0.25;
   int currentPIPage = 0;
-  File? image;
   Classifier? classifier;
 
   Color primaryBackgroundColor = const Color(0xFFFFF4E9);
   Color primaryforegroundColor = const Color(0xFFFF7F50);
   Color secondaryForegroundColor = const Color(0xFF66D7D1);
   Color errorColor = Colors.red;
+
+
+  Future pushPatientEntry() async{
+    // this function is already asynchronous, pwede mag await calls which is usually ginagawa sa firebase
+    
+    // use patientInformation to extract information
+    print(patientInformation.age);
+    // await Future.delayed(Duration(seconds: 5));
+    // push to first table, patientInformation.image, patientInformation.age, etc.
+    // NOTE: search if pano maka upload ng "File" datatype (patientInformation.image) sa firebase, you may need to decode. 
+    
+    // push to second table, patientInformation.onset, patientInformation.itching, etc
+
+  }
 
   void reset() {
     sourceSelected = false;
@@ -69,6 +84,8 @@ class _LichenCheckState extends State<LichenCheck> {
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
+
+    double scaleFactor = h/1080;
 
     return Stack(
       children: [
@@ -172,7 +189,21 @@ class _LichenCheckState extends State<LichenCheck> {
                 )
               : (hasImage)
                   ? (formCompleted)
-                      ? Padding(
+                      ? (pushingData) ? 
+                        const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                           SpinKitThreeBounce(
+                            color: Color(0XFFF0784C),
+                            size: 60.0,
+                          ),
+                           SizedBox(
+                            height: 20,
+                          ),
+                          Text("Saving your entries...")
+                        ],
+                      ):
+                      Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 30.0),
                           child: SingleChildScrollView(
                             child: Column(
@@ -297,8 +328,8 @@ class _LichenCheckState extends State<LichenCheck> {
         (disclaimerClosed)
             ? const SizedBox()
             : Padding(
-                padding: const EdgeInsets.only(
-                    left: 15.0, right: 15.0, top: 140.0, bottom: 100.0),
+                padding: EdgeInsets.only(
+                    left: 15.0, right: 15.0, top: 200.0*scaleFactor, bottom: 120.0*scaleFactor),
                 child: Container(
                   width: double.infinity,
                   height: double.infinity,
@@ -317,24 +348,24 @@ class _LichenCheckState extends State<LichenCheck> {
                               top: 20, right: 0, bottom: 25),
                           child: SvgPicture.asset(
                             'assets/svgs/#1 - lichencheck.svg',
-                            width: w * 0.03,
-                            height: h * 0.055,
+                            width: w * 0.02,
+                            height: h * 0.07,
                           ),
                         ),
                         RichText(
                             textAlign: TextAlign.center,
-                            text: const TextSpan(
+                            text: TextSpan(
                                 style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 20,
+                                    fontSize: 24 * (scaleFactor),
                                     fontWeight: FontWeight.bold),
-                                children: <TextSpan>[
+                                children: const <TextSpan>[
                                   TextSpan(
                                       text:
                                           'DISCLAIMER: Skin Rash Detection Limitation'),
                                 ])),
-                        const SizedBox(
-                          height: 25,
+                        SizedBox(
+                          height: 25 * scaleFactor,
                         ),
                         SizedBox(
                             width: double.infinity,
@@ -343,23 +374,23 @@ class _LichenCheckState extends State<LichenCheck> {
                               children: [
                                 RichText(
                                     textAlign: TextAlign.center,
-                                    text: const TextSpan(
+                                    text: TextSpan(
                                         style: TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                        children: <TextSpan>[
+                                            color: Colors.black, fontSize: 22*scaleFactor),
+                                        children: const <TextSpan>[
                                           TextSpan(text: "Dear Users,"),
                                         ])),
-                                const SizedBox(
-                                  height: 15,
+                                SizedBox(
+                                  height: 15 * scaleFactor,
                                 ),
                                 RichText(
                                     textAlign: TextAlign.center,
-                                    text: const TextSpan(
+                                    text: TextSpan(
                                         style: TextStyle(
                                             color: Colors.black,
-                                            fontSize: 16,
+                                            fontSize: 22*scaleFactor,
                                             height: 1.5),
-                                        children: <TextSpan>[
+                                        children: const <TextSpan>[
                                           TextSpan(
                                               text:
                                                   "Machine Learning's trend is rising, and "),
@@ -478,7 +509,7 @@ class _LichenCheckState extends State<LichenCheck> {
             decoration: BoxDecoration(
                 image: DecorationImage(
                     alignment: Alignment.center,
-                    image: FileImage(image!),
+                    image: FileImage(patientInformation.image!),
                     fit: BoxFit.fill)),
           ),
           Center(
@@ -509,7 +540,7 @@ class _LichenCheckState extends State<LichenCheck> {
           )),
           Center(
               child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.0),
+            padding: EdgeInsets.symmetric(vertical: 10.0),
             child: Text(
               patientInformation.detection!,
               style: TextStyle(
@@ -524,29 +555,71 @@ class _LichenCheckState extends State<LichenCheck> {
             child: Padding(
               padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
               child: Text(
-                "Description",
+                "DESCRIPTION",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
             ),
           ),
-          Text(
-            "Hypertrophic Lichen Planus is the second most common cutaneous variant of lichen planus. It is characterized as extremely pruritic and thick hyperkeratotic plaques are seen primarily on the shins or dosal aspec of the foot and may be covered by a fine adherent scale.",
-            style: TextStyle(fontSize: 16.0, height: 2.0),
-          ),
+            Center(
+             child: RichText(
+                  textAlign: TextAlign.justify,
+                  text: TextSpan(
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          height: 2,),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text:patientInformation.resultsDescription!.description),])),
+           ),
           Align(
             alignment: Alignment.centerLeft,
             child: Padding(
               padding: const EdgeInsets.only(top: 40.0, bottom: 10.0),
               child: Text(
-                "Symptoms",
+                "SYMPTOMMS",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
             ),
           ),
-          Text(
-            "Hypertrophic Lichen Planus is the second most common cutaneous variant of lichen planus. It is characterized as extremely pruritic and thick hyperkeratotic plaques are seen primarily on the shins or dosal aspec of the foot and may be covered by a fine adherent scale.",
-            style: TextStyle(fontSize: 16.0, height: 2.0),
-          ),
+           Center(
+             child: RichText(
+                  textAlign: TextAlign.justify,
+                  text: TextSpan(
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          height: 2,),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text:patientInformation.resultsDescription!.symptoms.header),])),
+           ),
+           Column(children:List<Widget>.generate(patientInformation.resultsDescription!.symptoms.features.length, (int index) {
+                final features = patientInformation.resultsDescription!.symptoms.features;
+                return Column(children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 20.0, bottom: 5.0),
+                      child: Text(
+                        features.keys.elementAt(index),
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ),
+                 RichText(
+                  textAlign: TextAlign.justify,
+                  text: TextSpan(
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          height: 2,),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text:features.values.elementAt(index),),])),
+                ],
+                );
+                } ),),
           Align(
             alignment: Alignment.centerLeft,
             child: Padding(
@@ -557,10 +630,59 @@ class _LichenCheckState extends State<LichenCheck> {
               ),
             ),
           ),
-          Text(
-            "Hypertrophic Lichen Planus is the second most common cutaneous variant of lichen planus. It is characterized as extremely pruritic and thick hyperkeratotic plaques are seen primarily on the shins or dosal aspec of the foot and may be covered by a fine adherent scale.",
-            style: TextStyle(fontSize: 16.0, height: 2.0),
+          Center(
+             child: RichText(
+                  textAlign: TextAlign.justify,
+                  text: TextSpan(
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          height: 2,),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text:patientInformation.resultsDescription!.treatments.header),])),
+           ),
+           Column(children:List<Widget>.generate(patientInformation.resultsDescription!.treatments.suggestions.length, (int index) {
+                final suggestions = patientInformation.resultsDescription!.treatments.suggestions;
+                return Column(children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 20.0, bottom: 5.0),
+                      child: Text(
+                        suggestions.keys.elementAt(index),
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ),
+                 RichText(
+                  textAlign: TextAlign.justify,
+                  text: TextSpan(
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          height: 2,),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text:suggestions.values.elementAt(index),),])),
+                ],
+                );
+                } ),),
+
+          const SizedBox(
+            height: 20.0,
           ),
+          Center(
+             child: RichText(
+                  textAlign: TextAlign.justify,
+                  text: TextSpan(
+                      style: const TextStyle(
+                          color: Colors.black87,
+                          fontSize: 16,
+                          height: 2.0,),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text:patientInformation.resultsDescription!.footer),])),)
         ],
       );
     } else {
@@ -600,6 +722,7 @@ class _LichenCheckState extends State<LichenCheck> {
 
   // widget selector (page)
   Widget patientInformationForm(BuildContext context) {
+    double scaleFactor = MediaQuery.of(context).size.height/1080;
     List<String> onsets = [
       "within a week",
       "within a month",
@@ -614,16 +737,16 @@ class _LichenCheckState extends State<LichenCheck> {
             "Please tell us a bit about yourself.",
             style: TextStyle(fontSize: 14.0),
           ),
-          const Padding(
-            padding: EdgeInsets.only(top: 15.0, bottom: 10),
-            child: Text(
+          Padding(
+            padding: EdgeInsets.only(top: 15.0*scaleFactor, bottom: 10),
+            child: const Text(
               "Sex",
               style: TextStyle(fontSize: 18.0),
             ),
           ),
           Padding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+               EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0*scaleFactor),
             child: Row(
               children: [
                 ElevatedButton(
@@ -676,9 +799,9 @@ class _LichenCheckState extends State<LichenCheck> {
               ],
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.only(top: 10.0, bottom: 0),
-            child: Text(
+          Padding(
+            padding: EdgeInsets.only(top: 10.0*scaleFactor, bottom: 0),
+            child:const  Text(
               "Age",
               style: TextStyle(fontSize: 18.0),
             ),
@@ -694,9 +817,9 @@ class _LichenCheckState extends State<LichenCheck> {
             decoration: const InputDecoration(
                 hintText: "Enter your age", border: InputBorder.none),
           ),
-          const Padding(
-            padding: EdgeInsets.only(top: 10.0, bottom: 0),
-            child: Text(
+          Padding(
+            padding: EdgeInsets.only(top: 10.0*scaleFactor, bottom: 0),
+            child: const Text(
               "Country",
               style: TextStyle(fontSize: 18.0),
             ),
@@ -734,9 +857,9 @@ class _LichenCheckState extends State<LichenCheck> {
                       ),
                     ],
                   ))),
-          const Padding(
-            padding: EdgeInsets.only(top: 10.0, bottom: 0),
-            child: Text(
+         Padding(
+            padding: EdgeInsets.only(top: 10.0 * scaleFactor, bottom: 0),
+            child: const  Text(
               "Ethnicity",
               style: TextStyle(fontSize: 18.0),
             ),
@@ -1181,10 +1304,18 @@ class _LichenCheckState extends State<LichenCheck> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    if (patientInformation.checkPageisComplete(currentPIPage)) {
+                  onPressed: () async{
+                    if (patientInformation.checkPageisComplete(currentPIPage)){
                       setState(() {
                         formCompleted = true;
+                        pushingData = true;
+                      });
+                      await pushPatientEntry();
+                      var data = await rootBundle.loadString("assets/jsons/results.json");//latest Dart
+                      print(data);
+                      setState(() {
+                        patientInformation.resultsDescription = ResultsDescription(json.decode(data), lichenType: patientInformation.detection!);
+                        pushingData=false;
                       });
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -1283,7 +1414,7 @@ class _LichenCheckState extends State<LichenCheck> {
       File labeled = file.copySync("${file.path}(labeld).jpg");
       labeled.writeAsBytes(jpg);
       setState(() {
-        this.image = labeled;
+        patientInformation.image = labeled;
         if (value >= threshold) {
           patientInformation.detection = recognitions[0].label;
           patientInformation.detectionScore =
@@ -1293,7 +1424,7 @@ class _LichenCheckState extends State<LichenCheck> {
       });
     } else {
       setState(() {
-        this.image = file;
+        patientInformation.image = file;
       });
       print("No recognition");
     }
@@ -1456,6 +1587,8 @@ class PatientInformation {
   String? selectedCountry;
   String? selectedEthnicity;
   String? detection;
+  File? image;
+  ResultsDescription? resultsDescription;
 
   PatientInformation();
 
@@ -1465,6 +1598,8 @@ class PatientInformation {
     onset = 0;
     itching = 0;
     pain = 0;
+    image = null;
+    resultsDescription = null;
     detection = null;
     detectionScore = null;
     selectedCountry = null;
@@ -1488,4 +1623,32 @@ class PatientInformation {
         return false;
     }
   }
+}
+
+
+class ResultsDescription{
+  final String lichenType;
+  late String description;
+  late Symptoms symptoms;
+  late Treatments treatments;
+  late String footer;
+  ResultsDescription(row, {required this.lichenType}){
+    print(lichenType);
+    description = row[lichenType]['Description'];
+    symptoms = Symptoms(header: row[lichenType]['Symptoms']['Header'], features: row[lichenType]['Symptoms']['Features']);
+    treatments = Treatments(header: row[lichenType]['Treatments']['Header'], suggestions: row[lichenType]['Treatments']['Suggestions']);
+    footer = row[lichenType]["Footer"];
+  }
+}
+
+class Symptoms{
+  String header;
+  Map<String,dynamic> features;
+  Symptoms({required this.header, required this.features});
+}
+
+class Treatments{
+  String header;
+  Map<String,dynamic> suggestions;
+  Treatments({required this.header, required this.suggestions});
 }

@@ -79,6 +79,7 @@ flutter:
   assets:
     - assets/imgs/
     - assets/svgs/
+    - assets/jsons/
     - assets/svgs/bottomNavBar/
     - assets/svgs/profileSection/
     - assets/model/model_rpn.tflite
