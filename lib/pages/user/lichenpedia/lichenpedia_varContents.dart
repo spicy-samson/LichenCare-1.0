@@ -381,8 +381,8 @@ class _LichenPediaVarContentState extends State<LichenPediaVarContent> {
                 .pushNamed('/home'); // Navigate to the 'home' route
             break;
           case 1:
-            Navigator.of(context).pushNamed(
-                '/lichenpedia'); // Navigate to the 'lichenpedia' route
+            // Navigator.of(context).pushNamed(
+            //     '/lichenpedia'); // Navigate to the 'lichenpedia' route
             break;
           case 2:
             Navigator.of(context).pushNamed(

@@ -8,36 +8,20 @@ class LichenPedia extends StatefulWidget {
 
 class _LichenPediaState extends State<LichenPedia> {
   final int _currentIndex = 1;
-  bool isSwipedDown = false;
-  final ScrollController _scrollController = ScrollController();
-  final GlobalKey _photosPaddingKey = GlobalKey();
 
-  void _onArrowDownPressed() {
-    setState(() {
-      isSwipedDown = !isSwipedDown;
-    });
-
-    if (isSwipedDown) {
-      double offset = _getOffsetToPhotosSection();
-      _scrollController.animateTo(offset,
-          duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
-    }
+  void _onArrowDownPressed(BuildContext context, GlobalKey scrollkey) {
+      Scrollable.ensureVisible(scrollkey.currentContext!, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
   }
 
-  double _getOffsetToPhotosSection() {
-    final RenderBox renderBox =
-        _photosPaddingKey.currentContext?.findRenderObject() as RenderBox;
-    if (renderBox != null) {
-      final offset = renderBox.localToGlobal(Offset.zero);
-      return offset.dy - 10; // Adjust as needed
-    }
-    return 0;
-  }
+  Map<String,GlobalKey> scrollKeys = {
+    "Overview" : GlobalKey(),
+  };
 
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
+    double scaleFactor = h/1080;
 
     return Scaffold(
       backgroundColor: const Color(0xFFFFF4E9),
@@ -63,27 +47,51 @@ class _LichenPediaState extends State<LichenPedia> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(height: 15),
-              const Align(
+              Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
                   padding: EdgeInsets.only(left: 35.0, right: 35),
-                  child: Text(
-                    'Welcome to Lichenpedia, your passport to Lichen Planus knowledge. Here, you\'ll find a treasure trove of educational resources, carefully curated to help you understand and navigate the complexities of this unique skin condition, Lichenpedia is your go-to-destination!',
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
+                  child: RichText(
+                    textAlign: TextAlign.justify,
+                    text: 
+                      TextSpan(
+                        style: TextStyle(
+                                    color: Colors.black,
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 22 * (scaleFactor),
+                                  ),
+                        children:[
+                          TextSpan(text:  'Welcome to Lichenpedia, your passport to Lichen Planus knowledge. Here, you\'ll find a treasure trove of educational resources, carefully curated to help you understand and navigate the complexities of this unique skin condition, Lichenpedia is your go-to-destination!')
+                        ],
+                       
+                      ),
+                    
                   ),
                 ),
               ),
-              const SizedBox(height: 15),
-              const Text(
-                'Lichen Planus',
-                style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
-              ),
-              const SizedBox(height: 15),
+              SizedBox(height: 10*scaleFactor),
+              RichText(
+                    textAlign: TextAlign.justify,
+                    text: 
+                      TextSpan(
+                        style: TextStyle(
+                                    color: Colors.black,
+                                    // fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 50 * (scaleFactor),
+                                  ),
+                        children:[
+                          TextSpan(text:  'Lichen Planus')
+                        ],
+                       
+                      ),
+                    
+                  ),
+              SizedBox(height: 15*scaleFactor),
               Container(
                 width: 320,
-                height: 300,
+                height: 400*scaleFactor,
                 decoration: BoxDecoration(
                   color: const Color(0xFFFF7F50),
                   borderRadius: BorderRadius.circular(14),
@@ -91,20 +99,17 @@ class _LichenPediaState extends State<LichenPedia> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: _buildTextWithDivider('Overview'),
-                    ),
-                    _buildTextWithDivider('Photos'),
-                    _buildTextWithDivider('Causes'),
-                    _buildTextWithDivider('Symptoms'),
-                    _buildTextWithDivider('Treatments'),
-                    _buildTextWithDivider('Variants of Lichen Planus'),
+                  children: [         
+                     _buildTextWithDivider('Overview', scaleFactor),
+                    _buildTextWithDivider('Photos', scaleFactor),
+                    _buildTextWithDivider('Causes', scaleFactor),
+                    _buildTextWithDivider('Symptoms', scaleFactor),
+                    _buildTextWithDivider('Treatments', scaleFactor),
+                     _buildTextWithDivider('Diagnosis', scaleFactor),
                   ],
                 ),
               ),
-              const SizedBox(height: 25),
+              SizedBox(height: 20*scaleFactor),
               Padding(
                 padding: const EdgeInsets.only(left: 45.0, right: 45),
                 child: Container(
@@ -123,7 +128,7 @@ class _LichenPediaState extends State<LichenPedia> {
                     ),
                     style: ButtonStyle(
                       padding: MaterialStateProperty.all<EdgeInsets>(
-                        EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                        EdgeInsets.symmetric(horizontal: 15, vertical: 20*scaleFactor),
                       ),
                       backgroundColor: MaterialStateProperty.all<Color>(
                           const Color(0xFFFF7F50)),
@@ -145,21 +150,22 @@ class _LichenPediaState extends State<LichenPedia> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      onPressed: _onArrowDownPressed,
+                      onPressed:(){ _onArrowDownPressed(context, scrollKeys["Overview"]!);},
                       icon: const Icon(Icons.keyboard_arrow_down,
                           color: Color(0xFFFF7F50)),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 30),
-              const Align(
+              SizedBox(height: 20*scaleFactor),
+              Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: EdgeInsets.only(left: 35.0),
+                  padding: const EdgeInsets.only(left: 35.0),
                   child: Text(
                     'What is Lichen Planus?',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
+                    key: scrollKeys["Overview"],
+                    style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
                   ),
                 ),
               ),
@@ -192,7 +198,7 @@ class _LichenPediaState extends State<LichenPedia> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      onPressed: _onArrowDownPressed,
+                      onPressed: (){},
                       icon: const Icon(Icons.keyboard_arrow_down,
                           color: Color(0xFFFF7F50)),
                     ),
@@ -215,7 +221,7 @@ class _LichenPediaState extends State<LichenPedia> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      onPressed: _onArrowDownPressed,
+                      onPressed: (){},
                       icon: const Icon(Icons.keyboard_arrow_up,
                           color: Color(0xFFFF7F50)),
                     ),
@@ -290,7 +296,7 @@ class _LichenPediaState extends State<LichenPedia> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      onPressed: _onArrowDownPressed,
+                      onPressed: (){},
                       icon: const Icon(Icons.keyboard_arrow_down,
                           color: Color(0xFFFF7F50)),
                     ),
@@ -313,7 +319,7 @@ class _LichenPediaState extends State<LichenPedia> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      onPressed: _onArrowDownPressed,
+                      onPressed: (){},
                       icon: const Icon(Icons.keyboard_arrow_up,
                           color: Color(0xFFFF7F50)),
                     ),
@@ -377,7 +383,7 @@ class _LichenPediaState extends State<LichenPedia> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      onPressed: _onArrowDownPressed,
+                      onPressed: (){},
                       icon: const Icon(Icons.keyboard_arrow_down,
                           color: Color(0xFFFF7F50)),
                     ),
@@ -400,7 +406,7 @@ class _LichenPediaState extends State<LichenPedia> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      onPressed: _onArrowDownPressed,
+                      onPressed: (){},
                       icon: const Icon(Icons.keyboard_arrow_up,
                           color: Color(0xFFFF7F50)),
                     ),
@@ -557,7 +563,7 @@ class _LichenPediaState extends State<LichenPedia> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      onPressed: _onArrowDownPressed,
+                      onPressed: (){},
                       icon: const Icon(Icons.keyboard_arrow_down,
                           color: Color(0xFFFF7F50)),
                     ),
@@ -687,7 +693,7 @@ class _LichenPediaState extends State<LichenPedia> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      onPressed: _onArrowDownPressed,
+                      onPressed: (){},
                       icon: const Icon(Icons.keyboard_arrow_up,
                           color: Color(0xFFFF7F50)),
                     ),
@@ -733,7 +739,7 @@ class _LichenPediaState extends State<LichenPedia> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      onPressed: _onArrowDownPressed,
+                      onPressed: (){},
                       icon: const Icon(Icons.keyboard_double_arrow_up_outlined,
                           color: Color(0xFFFF7F50)),
                     ),
@@ -974,28 +980,41 @@ class _LichenPediaState extends State<LichenPedia> {
   }
 }
 
-Widget _buildTextWithDivider(String text) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Padding(
-        padding: const EdgeInsets.only(
-          left: 30.0,
-          bottom: 6,
-        ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w400,
-            color: Colors.white,
+Widget _buildTextWithDivider(String text, double scaleFactor) {
+  return TextButton(
+    onPressed: (){},
+    style: TextButton.styleFrom(
+      shape: LinearBorder.bottom(
+        side: (text=="Diagnosis")? BorderSide.none : BorderSide(width: 1.5,
+          color: Colors.black12
+        )
+      )
+    ),
+    child: 
+        Padding(
+          padding: EdgeInsets.only(
+            left: 30.0,
+            right: 20.0,
+            // bottom: 6*scaleFactor,
+          ),
+          child: SizedBox(
+            width: double.infinity,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  text,
+                  style:  TextStyle(
+                    fontSize: 26*scaleFactor,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white,
+                  ),
+                ),
+                Icon(Icons.arrow_right, color: Colors.white, size: 40*scaleFactor,),
+              ],
+            ),
           ),
         ),
-      ),
-      if (text != 'Variants of Lichen Planus')
-        const Divider(
-          color: Colors.black,
-        ),
-    ],
   );
 }

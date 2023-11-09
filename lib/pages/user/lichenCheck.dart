@@ -53,7 +53,6 @@ class _LichenCheckState extends State<LichenCheck> {
   bool formCompleted = false;
   bool isPredicting = false;
   bool pushingData = false;
-  double predictionProgress = 0.25;
   int currentPIPage = 0;
   Classifier? classifier;
 
@@ -1543,19 +1542,12 @@ class _LichenCheckState extends State<LichenCheck> {
         isPredicting = true;
       });
       await Future.delayed(const Duration(seconds: 1));
-      setState(() {
-        predictionProgress = 0.75;
-      });
       await Future.delayed(const Duration(seconds: 1));
       await classifyImage(image);
-      setState(() {
-        predictionProgress = 1.0;
-      });
       await Future.delayed(const Duration(seconds: 1));
       setState(() {
         hasImage = true;
         isPredicting = false;
-        predictionProgress = 0.25;
       });
     } on PlatformException catch (e) {
       print(e);
