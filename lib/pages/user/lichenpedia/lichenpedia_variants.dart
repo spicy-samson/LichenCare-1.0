@@ -137,7 +137,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
               const SizedBox(height: 25),
               GestureDetector(
                 onTap: () {
-                  _onArrowDownPressed(context, scrollKeys["Nails"]!);
+                  _onArrowDownPressed(context, scrollKeys["Pigmentosus"]!);
                 },
                 child: const Padding(
                   padding: EdgeInsets.only(left: 45, right: 45.0),
