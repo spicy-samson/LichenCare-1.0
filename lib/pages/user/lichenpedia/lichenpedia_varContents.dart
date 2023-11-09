@@ -39,20 +39,13 @@ class _LichenPediaVarContentState extends State<LichenPediaVarContent> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(height: 20),
-              Center(
-                child: GestureDetector(
-                  onTap: () {
-                    // Scroll to the specific content
-                    _scrollToContent();
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.only(left: 35.0, right: 35),
-                    child: Text(
-                      'Cutaneous Lichen Planus',
-                      style:
-                          TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
-                      textAlign: TextAlign.center,
-                    ),
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.only(left: 35.0, right: 35),
+                  child: Text(
+                    'Cutaneous Lichen Planus',
+                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ),
