@@ -657,48 +657,51 @@ class _LichenCheckState extends State<LichenCheck> {
                               .resultsDescription!.symptoms.header),
                     ])),
           ),
-          Column(
-            children: List<Widget>.generate(
-                patientInformation.resultsDescription!.symptoms.features.length,
-                (int index) {
-              final features =
-                  patientInformation.resultsDescription!.symptoms.features;
-              return Column(
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 20.0, bottom: 5.0),
-                      child: Text(
-                        features.keys.elementAt(index),
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
+          Padding(
+            padding: const EdgeInsets.only(left:10.0),
+            child: Column(
+              children: List<Widget>.generate(
+                  patientInformation.resultsDescription!.symptoms.features.length,
+                  (int index) {
+                final features =
+                    patientInformation.resultsDescription!.symptoms.features;
+                return Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 20.0, bottom: 5.0),
+                        child: Text(
+                          features.keys.elementAt(index),
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
                       ),
                     ),
-                  ),
-                  RichText(
-                      textAlign: TextAlign.justify,
-                      text: TextSpan(
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            height: 2,
-                          ),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: features.values.elementAt(index),
+                    RichText(
+                        textAlign: TextAlign.justify,
+                        text: TextSpan(
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              height: 2,
                             ),
-                          ])),
-                ],
-              );
-            }),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: features.values.elementAt(index),
+                              ),
+                            ])),
+                  ],
+                );
+              }),
+            ),
           ),
-          Align(
+         const  Align(
             alignment: Alignment.centerLeft,
             child: Padding(
               padding: const EdgeInsets.only(top: 40.0, bottom: 10.0),
               child: Text(
-                "Treatments",
+                "TREATMENTS",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
             ),
@@ -718,41 +721,44 @@ class _LichenCheckState extends State<LichenCheck> {
                               .resultsDescription!.treatments.header),
                     ])),
           ),
-          Column(
-            children: List<Widget>.generate(
-                patientInformation.resultsDescription!.treatments.suggestions
-                    .length, (int index) {
-              final suggestions =
-                  patientInformation.resultsDescription!.treatments.suggestions;
-              return Column(
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 20.0, bottom: 5.0),
-                      child: Text(
-                        suggestions.keys.elementAt(index),
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0),
+            child: Column(
+              children: List<Widget>.generate(
+                  patientInformation.resultsDescription!.treatments.suggestions
+                      .length, (int index) {
+                final suggestions =
+                    patientInformation.resultsDescription!.treatments.suggestions;
+                return Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 20.0, bottom: 5.0),
+                        child: Text(
+                          suggestions.keys.elementAt(index),
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
                       ),
                     ),
-                  ),
-                  RichText(
-                      textAlign: TextAlign.justify,
-                      text: TextSpan(
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            height: 2,
-                          ),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: suggestions.values.elementAt(index),
+                    RichText(
+                        textAlign: TextAlign.justify,
+                        text: TextSpan(
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              height: 2,
                             ),
-                          ])),
-                ],
-              );
-            }),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: suggestions.values.elementAt(index),
+                              ),
+                            ])),
+                  ],
+                );
+              }),
+            ),
           ),
           const SizedBox(
             height: 20.0,
