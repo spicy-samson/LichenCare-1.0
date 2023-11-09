@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
+            children: [
               SizedBox(
                 height: h * 0.1,
               ),
@@ -199,6 +199,7 @@ class _LoginPageState extends State<LoginPage> {
                             TextSpan(
                               text: "Don't have an account?",
                               style: TextStyle(
+                                height: 0.8,
                                 fontSize: 16.0,
                                 color: Colors.black,
                               ),

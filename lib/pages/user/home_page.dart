@@ -9,7 +9,6 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 // ignore: must_be_immutable
 class HomePage extends StatelessWidget {
   int _currentIndex = 0;
-  
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +28,7 @@ class HomePage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
+        automaticallyImplyLeading: false,
         elevation: 0,
         toolbarHeight: 80.0,
       ),

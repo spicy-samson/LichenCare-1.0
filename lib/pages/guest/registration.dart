@@ -285,7 +285,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                   'Sign in',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: Color(0xFFFF7F50),
+                                    color: primaryforegroundColor,
                                     fontSize: 16.0,
                                     height: 0.001,
                                   ),
@@ -403,7 +403,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
           ),
         ),
       ),
-      duration: Duration(milliseconds: 3000),
+      duration: Duration(milliseconds: 2000),
     ));
   }
 }

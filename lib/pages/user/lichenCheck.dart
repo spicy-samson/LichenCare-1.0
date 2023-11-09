@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -61,82 +62,62 @@ class _LichenCheckState extends State<LichenCheck> {
   Color errorColor = Colors.red;
 
   FirebaseAuth auth = FirebaseAuth.instance;
-
-  // Future pushPatientEntry() async {
-  //   // this function is already asynchronous, pwede mag await calls which is usually ginagawa sa firebase
-  //   // Add user data to Firestore
-  //   User? user = auth.currentUser;
-  //   if (user != null) {
-  //     try {
-  //       DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-  //           .collection('users')
-  //           .doc(user.uid)
-  //           .get();
-
-  //       if (userSnapshot.exists) {
-  //         // Assuming 'first_name' is a field in your Firestore document
-  //         String collection = userSnapshot.get('Inputs');
-  //         print(collection);
-  //         print(collection.runtimeType);
-  //       }
-  //     } catch (e) {
-  //       print("Error fetching user data: $e");
-  //     }
-  //   }
-
-  //   // use patientInformation to extract information
-  //   print(patientInformation.age);
-  //   // await Future.delayed(Duration(seconds: 5));
-  //   // push to first table, patientInformation.image, patientInformation.age, etc.
-  //   // NOTE: search if pano maka upload ng "File" datatype (patientInformation.image) sa firebase, you may need to decode.
-
-  //   // push to second table, patientInformation.onset, patientInformation.itching, etc
-  // }
+  final storage = FirebaseStorage.instance;
 
   Future<void> pushPatientEntry() async {
-    User? user = auth.currentUser;
+    final user = auth.currentUser;
 
-    if (user != null) {
-      try {
-        // Reference to the Firestore collection 'users' using the user's UID
-        CollectionReference userCollection =
-            FirebaseFirestore.instance.collection('users');
+    if (user == null) {
+      return; // No user is logged in, exit the function
+    }
 
-        // Create a document reference based on the user's UID
-        DocumentReference userDocRef = userCollection.doc(user.uid);
+    try {
+      final userDocRef =
+          FirebaseFirestore.instance.collection('users').doc(user.uid);
+      final userSnapshot = await userDocRef.get();
 
-        // Check if the document exists in Firestore
-        DocumentSnapshot userSnapshot = await userDocRef.get();
+      if (userSnapshot.exists) {
+        final inputsCollection = userDocRef.collection('LichenCheck_inputs');
+        final storageRef = storage
+            .ref()
+            .child('lichencheck_images/${user.uid}/${DateTime.now()}.jpg');
 
-        if (userSnapshot.exists) {
-          // Assuming 'Inputs' is a subcollection under the user document
-          CollectionReference inputsCollection =
-              userDocRef.collection('LichenCheck_inputs');
+        if (patientInformation.image != null) {
+          final uploadTask =
+              await storageRef.putFile(patientInformation.image!);
 
-          // Create a new document with an automatically generated ID
-          DocumentReference newInputDocRef = await inputsCollection.add({
-            'additional_info': {
-              'age': patientInformation.age,
-              'country': patientInformation.selectedCountry,
-              'ethnicity': patientInformation.selectedEthnicity,
-              'gender': patientInformation.gender,
-            },
-            'symptoms': {
-              'itching': patientInformation.itching,
-              'onset': patientInformation.onset,
-              'pain': patientInformation.pain,
-            },
-            'results': {
-              'detection': patientInformation.detection,
-              'detection_score': patientInformation.detectionScore,
-              'file_image': 'URL_OR_PATH_TO_THE_IMAGE',
-              // You can store the URL or path to the image in Firebase Storage
-            },
-          });
+          if (uploadTask.state == TaskState.success) {
+            final imageUrl = await uploadTask.ref.getDownloadURL();
+
+            final newInputDocRef = await inputsCollection.add({
+              'additional_info': {
+                'age': patientInformation.age,
+                'country': patientInformation.selectedCountry,
+                'ethnicity': patientInformation.selectedEthnicity,
+                'gender': patientInformation.gender,
+              },
+              'symptoms': {
+                'itching': patientInformation.itching,
+                'onset': patientInformation.onset,
+                'pain': patientInformation.pain,
+              },
+              'results': {
+                'detection': patientInformation.detection,
+                'detection_score': patientInformation.detectionScore,
+                'file_image': imageUrl, // Store the image URL
+              },
+            });
+          } else {
+            print('Error uploading the image to Firebase Storage');
+          }
+        } else {
+          print('patientInformation.image is null');
         }
-      } catch (e) {
-        print('Error fetching user data: $e');
+      } else {
+        print('User document does not exist in Firestore');
       }
+    } catch (e) {
+      print('Error: $e');
     }
   }
 
@@ -725,7 +706,7 @@ class _LichenCheckState extends State<LichenCheck> {
             child: Padding(
               padding: const EdgeInsets.only(top: 40.0, bottom: 10.0),
               child: Text(
-                "Treatments",
+                "TREATMENTS",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
             ),
