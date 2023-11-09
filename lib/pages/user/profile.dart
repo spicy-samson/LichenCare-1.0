@@ -37,7 +37,6 @@ class _ProfileState extends State<Profile> {
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
-              SizedBox(height: h * 0.05),
               buildCustomDivider(2, Colors.grey),
               Padding(
                 padding: const EdgeInsets.all(12),
@@ -94,9 +93,12 @@ class _ProfileState extends State<Profile> {
               Padding(
                 padding: const EdgeInsets.all(12),
                 child: buildRow(
-                    'Logout', 'assets/svgs/profileSection/logout_icon.svg', () {
-                  _signOut();
-                }),
+                  'Logout',
+                  'assets/svgs/profileSection/logout_icon.svg',
+                  () {
+                    _showLogoutConfirmationDialog();
+                  },
+                ),
               ),
               buildCustomDivider(2, Colors.grey),
             ],
@@ -206,8 +208,8 @@ class _ProfileState extends State<Profile> {
                 .pushNamed('/lichenHub'); // Navigate to the 'lichenhub' route
             break;
           case 4:
-            Navigator.of(context)
-                .pushNamed('/profile'); // Navigate to the 'profile' route
+            // Navigator.of(context)
+            //     .pushNamed('/profile'); // Navigate to the 'profile' route
             break;
         }
       },
@@ -256,9 +258,74 @@ class _ProfileState extends State<Profile> {
   Future<void> _signOut() async {
     try {
       await FirebaseAuth.instance.signOut();
-      Navigator.of(context).pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
     } catch (e) {
       print("Error while signing out: $e");
     }
+  }
+
+  void _showLogoutConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "Logout",
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: const Color(0xFFFF7F50), // Set the text color to orange
+                  ),
+                ),
+                SizedBox(height: 16),
+                Text(
+                  "Are you sure you want to log out?",
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(); // Close the dialog
+                      },
+                      child: Text(
+                        "Cancel",
+                        style: TextStyle(
+                          color: const Color(0xFFFF7F50), // Set the text color to orange
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(); // Close the dialog
+                        _signOut(); // Call your logout function
+                      },
+                      child: Text(
+                        "Logout",
+                        style: TextStyle(
+                          color: const Color(0xFFFF7F50), // Set the text color to orange
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }

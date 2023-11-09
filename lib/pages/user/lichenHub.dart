@@ -140,8 +140,8 @@ class _LichenHubState extends State<LichenHub> {
                 '/lichenCheck'); // Navigate to the 'lichencheck' route
             break;
           case 3:
-            Navigator.of(context)
-                .pushNamed('/lichenHub'); // Navigate to the 'lichenhub' route
+            // Navigator.of(context)
+            //     .pushNamed('/lichenHub'); // Navigate to the 'lichenhub' route
             break;
           case 4:
             Navigator.of(context)

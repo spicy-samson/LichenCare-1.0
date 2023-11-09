@@ -1,0 +1,84 @@
+{
+    "Annular Lichen Planus" : {
+        "Description" : "Annular Lichen Planus (ALP) is a less common variant of the cutaneous lichen planus that is characterized by a ring-shaped or annular pattern of lesions on the skin. The rings may be solitary or multiple and can occur anywhere on the patient’s body, but are commonly found on the arms, legs, and trunk.",
+        "Symptoms" : {
+            "Header" : "Annular Lichen Planus is commonly characterized by its ring-shaped or annular lesion on the skin. The following are the better-known symptoms of the Annular Lichen Planus with its distinctive features:",
+            "Features": {
+                "Annular or Ring-shaped Lesions": "The hallmark of Annular Lichen Planus is the presence of circular or oval-shaped, raised, reddish, or purplish plaques on the skin wherein these lesions have a distinct border and a central area that may appear less inflamed.",
+                "Itching": "ALP are usually pruritic which means they tend to be itchy and uncomfortable.",
+                "Central Clearing": "One characteristic feature of ALP is the central clearing of the lesion wherein the skin in the middle of the ring is relatively unaffected and may appear closer to normal skin.",
+                "Koebner Phenomenon":"The Koebner Phenomenon (KP) is the appearance of new skin lesions on previously unaffected skin secondary. In the case of ALP and Lichen Planus in general, it can develop in areas of skin trauma or injury, such as scratches or burns.",
+                "Symmetrical Distribution" : "ALP lesions often occur in a symmetrical pattern as they appear on both sides of the body, mirroring each other. They can develop on various parts of the body, including the arms, legs, trunk, and genital area.",
+                "Hyperpigmentation/Hypopigmentation" : "After the annular lesions resolve, they may leave behind areas of Hyperpigmentation (darkening of the skin) or Hypopigmentation (lightening of the skin). These pigment changes can persist for some time.",
+                "Nail Involvement" : "In some rare cases, Lichen Planus can affect the nails, causing ridges, pitting, or other changes."
+            }
+        },
+        "Treatments":{
+            "Header":"Lichen Planus in general does not have a specific cure, the rashes are often observed to go away on their own. While the symptoms for every LP can be annoying and bothersome, there are still some treatments to alleviate and improve the healing recovery. The following are some clinical treatments suggested by dermatologists and researchers to bring relief to Lichen Planus:",
+            "Suggestions":{
+                "Antihistamines":  "Prescription of antihistamines can help relieve itching.",
+                "Local Wound Care": "Non-irritating and fragrance-free moisturizers can be applied regularly to keep the affected areas clean and moisturized to prevent complications and promote healing.",
+                "Phototherapy": "Ultraviolet (UV) light therapy, including UVB or PUVA (psolaren plus UVA), is a light treatment that can be beneficial for some patients to clear the skin.",
+                "Retinoids": "Oral or topical retinoids can be considered to be used to help control inflammation and promote healing of the skin.",
+                "Immunosuppressants": "In case of severe or refractory Lichen Planus, immune-modulating medications such as methotrexate or cyclosporine prescribed by a dermatologist can be used in alleviating the pain.",
+                "Topical Corticosteroids": "Topical corticosteroid creams or ointments are often the first-line treatment for Lichen Planus as these can help reduce inflammation and itching. Higher-potency corticosteroids may be necessary for thicker lesions.",
+                "Topical Calcineurin Inhibitors" : "Tacrolimus ointment and pimecrolimus cream are topical immunosuppressive medicaments for sensitive areas if corticosteroids are not suitable."
+            }
+        },
+        "Footer":"Seeking consultation with a dermatologist is vital to secure an accurate diagnosis and to craft a treatment plan customized to your unique condition and requirements. Keep in mind that the response to treatment can differ from one individual to another, and visible improvements may require some time. Consistent follow-up appointments are crucial for tracking the evolution of your condition and making any necessary adjustments to your treatment strategy."
+    },
+    "Linear Lichen Planus" : {
+        "Description" : "Linear Lichen Planus (LLP) is a rare form of lichen planus, which is a condition that affects the skin and/or mouth. In LLP, specifically, affected people develop itchy, purple, flat-topped papules (bumps) in a linear distribution along the lines of Blaschko. While it can appear anywhere on the body, it can be more commonly found on the limbs, trunk, or the patient’s genital area.",
+        "Symptoms" : {
+            "Header" : "Linear Lichen Planus is commonly characterized by its linear or streak-like lesions on the skin or mucous membranes. The following are the better-known symptoms of the Linear Lichen Planus with its distinctive features:",
+            "Features": {
+                "Streak-like Lesions": "The presence of linear or streak-like patterns along the skin is the most defining characteristic of Linear Lichen Planus (LLP) as they appear as raised, reddish, or purplish streaks that may be slightly itchy or sometimes painful.",
+                "Scaling and Texture Changes": "The affected skin may become scaly or exhibit changes in texture, appearing rough or warty in some cases.",
+                "Pain or Tenderness": "Some individuals may experience pain or tenderness in the linear lesions.",
+                "Koebner Phenomenon":"The Koebner Phenomenon (KP) is the appearance of new skin lesions on previously unaffected skin secondary. In the case of ALP and Lichen Planus in general, it can develop in areas of skin trauma or injury, such as scratches or burns."
+            }
+        },
+        "Treatments":{
+            "Header":"Lichen Planus in general does not have a specific cure, the rashes are often observed to go away on their own. While the symptoms for every LP can be annoying and bothersome, there are still some treatments to alleviate and improve the healing recovery. The following are some clinical treatments suggested by dermatologists and researchers to bring relief to Lichen Planus:",
+            "Suggestions":{
+                "Antihistamines":  "Prescription of antihistamines can help relieve itching.",
+                "Local Wound Care": "Non-irritating and fragrance-free moisturizers can be applied regularly to keep the affected areas clean and moisturized to prevent complications and promote healing.",
+                "Phototherapy": "Ultraviolet (UV) light therapy, including UVB or PUVA (psolaren plus UVA), is a light treatment that can be beneficial for some patients to clear the skin.",
+                "Retinoids": "Oral or topical retinoids can be considered to be used to help control inflammation and promote healing of the skin.",
+                "Immunosuppressants": "In case of severe or refractory Lichen Planus, immune-modulating medications such as methotrexate or cyclosporine prescribed by a dermatologist can be used in alleviating the pain.",
+                "Topical Corticosteroids": "Topical corticosteroid creams or ointments are often the first-line treatment for Lichen Planus as these can help reduce inflammation and itching. Higher-potency corticosteroids may be necessary for thicker lesions.",
+                "Topical Calcineurin Inhibitors" : "Tacrolimus ointment and pimecrolimus cream are topical immunosuppressive medicaments for sensitive areas if corticosteroids are not suitable."
+            }
+        },
+        "Footer":"It's crucial to emphasize that while the linear pattern is a distinguishing feature of lichen planus, not all cases of this condition display this characteristic. If you suspect you may have linear lichen planus or are experiencing symptoms consistent with this condition, it's imperative to seek evaluation and diagnosis from a qualified dermatologist or healthcare provider. They are equipped to provide an accurate diagnosis, suggest suitable treatment options, and offer valuable guidance on effectively managing this condition."
+    },
+    "Hypertrophic Lichen Planus" : {
+        "Description" : "Hypertrophic Lichen Planus (HLP) is the second most common cutaneous variant of lichen planus. It is characterized as extremely pruritic, and thick hyperkeratotic plaques are seen primarily on the shins or dorsal aspect of the foot and may be covered by a fine adherent scale.",
+        "Symptoms" : {
+            "Header" : "Hypertrophic Lichen Planus is commonly characterized by its thickened, raised, and often itchy lesions on the skin or mucous membranes. The following are the better-known symptoms of the Hypertrophic Lichen Planus with its distinctive features:",
+            "Features": {
+                "Thickened and Raised Lesions": "This is the primary feature of the Hypertrophic Lichen Planus (HLP) wherein there is a presence of thickened, elevated, and often firm or rough lesions of the skin that can range in size from small papules to larger plaques.",
+                "Itching or Pain": "Individuals with HLP can experience itching, which can vary from mild to severe. Some may also report pain and discomfort associated with the lesions, especially if they develop on areas of friction or pressure.",
+                "Hyperkeratosis": "This is the thickening of the outer layer of the skin (stratum corneum) which makes the lesions appear scaly, warty, or rough in texture.",
+                "Color Changes":"The lesions are typically red or violaceous (purplish) in color and may appear darker or lighter depending on the individual’s skin tone.",
+                "Symmetrical Distribution" : "ALP lesions often occur in a symmetrical pattern as they appear on both sides of the body, mirroring each other. They can develop on various parts of the body, including the arms, legs, trunk, and genital area.",
+                "Localization":"HLP can occur on various parts of the body including the wrists, shins, ankles, genital area, and oral musoca (inside the mouth). ",
+                "Nail Involvement" : "In some rare cases, Lichen Planus can affect the nails, causing ridges, pitting, or other changes."
+
+            }
+        },
+        "Treatments":{
+            "Header":"Lichen Planus in general does not have a specific cure, the rashes are often observed to go away on their own. While the symptoms for every LP can be annoying and bothersome, there are still some treatments to alleviate and improve the healing recovery. The following are some clinical treatments suggested by dermatologists and researchers to bring relief to Lichen Planus:",
+            "Suggestions":{
+                "Antihistamines":  "Prescription of antihistamines can help relieve itching.",
+                "Local Wound Care": "Non-irritating and fragrance-free moisturizers can be applied regularly to keep the affected areas clean and moisturized to prevent complications and promote healing.",
+                "Phototherapy": "Ultraviolet (UV) light therapy, including UVB or PUVA (psolaren plus UVA), is a light treatment that can be beneficial for some patients to clear the skin.",
+                "Retinoids": "Oral or topical retinoids can be considered to be used to help control inflammation and promote healing of the skin.",
+                "Immunosuppressants": "In case of severe or refractory Lichen Planus, immune-modulating medications such as methotrexate or cyclosporine prescribed by a dermatologist can be used in alleviating the pain.",
+                "Topical Corticosteroids": "Topical corticosteroid creams or ointments are often the first-line treatment for Lichen Planus as these can help reduce inflammation and itching. Higher-potency corticosteroids may be necessary for thicker lesions.",
+                "Topical Calcineurin Inhibitors" : "Tacrolimus ointment and pimecrolimus cream are topical immunosuppressive medicaments for sensitive areas if corticosteroids are not suitable."
+            }
+        },
+        "Footer":"If you suspect you have hypertrophic lichen planus or are experiencing symptoms in line with this condition, it's crucial to promptly consult a dermatologist or healthcare provider for a comprehensive evaluation and diagnosis. A correct diagnosis is the cornerstone for tailoring the right treatment and effectively managing the condition. Treatment strategies are designed to combat inflammation, relieve symptoms, and support the healing process of the lesions."
+    }    
+}

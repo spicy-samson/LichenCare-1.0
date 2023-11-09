@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imageLib;
 import 'package:tflite_flutter/tflite_flutter.dart';
@@ -8,9 +9,13 @@ import 'package:tflite_flutter_helper/tflite_flutter_helper.dart';
 import 'recognitions.dart';
 import 'package:typed_data/typed_data.dart';
 import 'dart:typed_data';
+import 'dart:isolate';
 
 /// Classifier
 class Classifier {
+  // Image
+  imageLib.Image? image;
+
   /// Instance of Interpreter
   Interpreter? _rpnInterpreter;
   Interpreter? _clsInterpreter;
@@ -20,19 +25,15 @@ class Classifier {
   static const String LABEL_FILE_NAME = "model/labels.txt";
 
   /// Result score threshold
-  static const double THRESHOLD = 0.1;
+  static const double THRESHOLD = 0.3;
 
   /// [ImageProcessor] used to pre-process the image
   ImageProcessor? imageProcessor;
-
-  /// Shapes of output tensors
-  List<List<int>>? _rpnOutputShapes;
-  List<List<int>>? _clsOutputShapes;
   // Provide labels from training [class_mapping]
   final List<String> labels = [
     "Linear Lichen Planus",
     "Annular Lichen Planus",
-    "Hypertropic Lichen Planus",
+    "Hypertrophic Lichen Planus",
     "???"
   ];
 
@@ -45,15 +46,16 @@ class Classifier {
   Classifier() {
     loadRPNModel();
     loadClassifierModel();
-    // loadLabels();
   }
 
   /// Loads interpreter from asset
   void loadClassifierModel() async {
     try {
+      var options = InterpreterOptions();
+      options.threads = 2;
       _clsInterpreter = await Interpreter.fromAsset(
         MODEL_CLASSIFIER_FILENAME,
-        options: InterpreterOptions()..threads = 1,
+        options: options
       );
     } catch (e) {
       print("Error while creating interpreter: $e");
@@ -62,9 +64,11 @@ class Classifier {
 
   void loadRPNModel() async {
     try {
+      var options = InterpreterOptions();
+      options.threads = 2;
       _rpnInterpreter = await Interpreter.fromAsset(
         MODEL_RPN_FILENAME,
-        options: InterpreterOptions()..threads = 1,
+        options: options
       );
     } catch (e) {
       print("Error while creating rpn interpreter: $e");
@@ -148,8 +152,13 @@ class Classifier {
     return [pickedBoxes, pickedProbs, index];
   }
 
+  // Place on the classifier
+  void putImage(imageLib.Image image){
+    this.image = image;
+  }
+
   /// Runs obect detection on the input image
-  Future predict(imageLib.Image image) async {
+  Future predict() async{
     loadRPNModel();
     if (_rpnInterpreter == null) {
       print("RPN interpreter not initialized");
@@ -161,7 +170,7 @@ class Classifier {
         _rpnInterpreter!.getInputTensors()[0].shape,
         _rpnInterpreter!.getOutputTensors()[0].type);
     // Preprocess image channels according to model
-    final data = image.getBytes();
+    final data = image!.getBytes();
 
     List<double> imageAsList = List<double>.filled(
         inputImage.shape[1] * inputImage.shape[2] * inputImage.shape[3], 0.0);
@@ -180,22 +189,7 @@ class Classifier {
     averageColor[0] /= inputImage.shape[1] * inputImage.shape[2];
     averageColor[1] /= inputImage.shape[1] * inputImage.shape[2];
     averageColor[2] /= inputImage.shape[1] * inputImage.shape[2];
-    // print(averageColor);
-    // if (averageColor[0] > 200 ||
-    //     averageColor[0] < 80 ||
-    //     averageColor[1] > 165 ||
-    //     averageColor[1] < 65 ||
-    //     averageColor[2] > 150 ||
-    //     averageColor[2] < 55 ||
-    //     averageColor[0] - averageColor[1] < -2 ||
-    //     averageColor[1] - averageColor[2] < -7) {
-    //   print("not skin");
-    //   recognitions.add(Recognition(0, "", 0.0, Rect.fromLTRB(0, 0, 0, 0)));
-    //   return recognitions;
-    // }
-    // print(imageAsList[index - 3] + imgchannelmean[0]);
-    // print(imageAsList[index - 2] + imgchannelmean[1]);
-    // print(imageAsList[index - 1] + imgchannelmean[2]);
+
     inputImage.loadBuffer(Float32List.fromList(imageAsList).buffer);
     // Use [TensorImage.buffer] or [TensorBuffer.buffer] to pass by reference
     List<Object> inputs = [inputImage.buffer];
@@ -211,16 +205,9 @@ class Classifier {
     _rpnInterpreter!.runForMultipleInputs(inputs, rpnOutputs);
     _rpnInterpreter!.close();
     // Then we calculate the features from the output of the rpn model (RPN TO ROI)
-    // List<int> anchorSizes = [32, 64, 128];
     // Match anchors from Config.py
     double scaler = 1;
     List<double> anchorSizes = [64 * (scaler), 128 * (scaler), 256 * (scaler)];
-    // double width = 2 / sqrt(1.9);
-    // List<List<double>> anchorRatios = [
-    //   [1, 1],
-    //   [1 / width, width],
-    //   [width, 1 / width]
-    // ];
     List<List<double>> anchorRatios = [
       [1, 1],
       [1, 2],
@@ -365,6 +352,17 @@ class Classifier {
     _numROIS = _clsInterpreter!.getInputTensors()[1].shape[1];
     List<double> ROIS = List<double>.filled(_numROIS! * 4, 0.0);
 
+        // Outputs Buffer of classifier
+    TensorBuffer PregrLayer = TensorBuffer.createFixedSize(
+        _clsInterpreter!.getOutputTensors()[0].shape,
+        _clsInterpreter!.getOutputTensors()[0].type);
+    TensorBuffer PclsLayer = TensorBuffer.createFixedSize(
+        _clsInterpreter!.getOutputTensors()[1].shape,
+        _clsInterpreter!.getOutputTensors()[1].type);
+    TensorBuffer inputROIS = TensorBuffer.createFixedSize(
+        _clsInterpreter!.getInputTensors()[1].shape,
+        _clsInterpreter!.getInputTensors()[1].type);
+
     for (int i = 0; i < (result[2] / _numROIS) + 1; i++) {
       if (i >= NUM_RESULTS) {
         break;
@@ -378,16 +376,6 @@ class Classifier {
           }
         }
       }
-      // Outputs Buffer of classifier
-      TensorBuffer PregrLayer = TensorBuffer.createFixedSize(
-          _clsInterpreter!.getOutputTensors()[0].shape,
-          _clsInterpreter!.getOutputTensors()[0].type);
-      TensorBuffer PclsLayer = TensorBuffer.createFixedSize(
-          _clsInterpreter!.getOutputTensors()[1].shape,
-          _clsInterpreter!.getOutputTensors()[1].type);
-      TensorBuffer inputROIS = TensorBuffer.createFixedSize(
-          _clsInterpreter!.getInputTensors()[1].shape,
-          _clsInterpreter!.getInputTensors()[1].type);
 
       inputROIS.loadBuffer(Float32List.fromList(ROIS).buffer);
 
@@ -395,6 +383,7 @@ class Classifier {
       Map<int, Object> clsOuputs = {0: PregrLayer.buffer, 1: PclsLayer.buffer};
 
       _clsInterpreter!.runForMultipleInputs(clsInputs, clsOuputs);
+    
 
       for (int ii = 0; ii < PclsLayer.shape[1]; ii++) {
         for (int p = 0; p < PclsLayer.shape[2]; p++) {
@@ -412,7 +401,6 @@ class Classifier {
           bboxes[className] = [];
           probs[className] = [];
         }
-
         // regression
         double x = ROIS[(ii * 4) + 0];
         double y = ROIS[(ii * 4) + 1];
@@ -465,55 +453,20 @@ class Classifier {
         double x2 = result[0][i][2];
         double y1 = result[0][i][1];
         double y2 = result[0][i][3];
-
-        // check detection if skin from average color
-        // List<double> averageColor = [0, 0, 0];
-        // for (int x = x1.toInt(); x <= x2; x++) {
-        //   for (int y = y1.toInt(); y <= y2; y++) {
-        //     averageColor[0] += data[x * y * 4];
-        //     averageColor[1] += data[x * y * 4 + 1];
-        //     averageColor[2] += data[x * y * 4 + 2];
-        //   }
-        // }
-        // double detection_size = (x2 - x1) * (y2 - y1);
-
-        // averageColor[0] /= detection_size;
-        // averageColor[1] /= detection_size;
-        // averageColor[2] /= detection_size;
-        // print(averageColor);
-        // if (averageColor[0] > 200 ||
-        //     averageColor[0] < 80 ||
-        //     averageColor[1] > 160 ||
-        //     averageColor[1] < 65 ||
-        //     averageColor[2] > 85 ||
-        //     averageColor[2] < 55 ||
-        //     averageColor[0] - averageColor[1] <= 0 ||
-        //     averageColor[1] - averageColor[2] <= 0) {
-        //   print("not skin");
-        //   continue;
-        // }
-
         recognitions.add(
           Recognition(i, key, result[1][i], Rect.fromLTRB(x1, y1, x2, y2)),
         );
       }
     });
-    // if (recognitions.isEmpty) {
-    //   recognitions.add(Recognition(0, "No Recognition", 0.0, Rect.fromLTRB(0, 0, 0, 0)));
-    // }
     if(recognitions.isNotEmpty) {
       recognitions.sort(((b, a) => a.score.compareTo(b.score)));
     }
-    // for (int i = 0; i < recognitions.length; i++)
-      // print(
-      //     "Class: ${recognitions[i].label} : Score: ${recognitions[i].score} : Rect:${recognitions[i].location}");
     return recognitions;
   }
 
   /// Gets the interpreter instance
-  Interpreter get rpnInterpreter => _rpnInterpreter!;
-  Interpreter get clsInterpreter => _clsInterpreter!;
+  // Interpreter get rpnInterpreter => _rpnInterpreter!;
+  // Interpreter get clsInterpreter => _clsInterpreter!;
 
-  /// Gets the loaded labels
-  // List<String> get labels => _labels!;
 }
+

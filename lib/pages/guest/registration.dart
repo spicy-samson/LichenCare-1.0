@@ -6,6 +6,12 @@ import 'package:lichen_care/pages/guest/home_sliders.dart';
 import '/firebase_options.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 
+Color primaryBackgroundColor = const Color(0xFFFFF4E9);
+Color primaryforegroundColor = const Color(0xFFFF7F50);
+Color secondaryForegroundColor = const Color(0xFF66D7D1);
+Color successColor = Colors.green;
+Color errorColor = Colors.red;
+
 class RegistrationPage extends StatefulWidget {
   @override
   _RegistrationPageState createState() => _RegistrationPageState();
@@ -92,7 +98,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         ),
         centerTitle: true,
         elevation: 0,
-        toolbarHeight: 100.0,
+        toolbarHeight: 70.0,
       ),
       body: isFirebaseInitialized
           ? SingleChildScrollView(
@@ -123,7 +129,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     SizedBox(height: 30.0),
                     _buildTextField('Confirm Password', true, Icons.lock,
                         _confirmPassword, _confirmPasswordFocus),
-                    SizedBox(height: 60.0),
+                    SizedBox(height: 35.0),
                     Container(
                       child: ElevatedButton(
                         onPressed: _isLoading
@@ -228,8 +234,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             ? CircularProgressIndicator(
                                 valueColor:
                                     AlwaysStoppedAnimation<Color>(Colors.white),
-                                strokeWidth:
-                                    4.0,
+                                strokeWidth: 4.0,
                               ) // Show a loading indicator
                             : Text(
                                 'Sign Up',
@@ -243,7 +248,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             EdgeInsets.symmetric(horizontal: 40, vertical: 10),
                           ),
                           backgroundColor: MaterialStateProperty.all<Color>(
-                              const Color(0xFFFF7F50)),
+                              primaryforegroundColor),
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
@@ -254,28 +259,43 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Already have an account?',
-                            style: TextStyle(fontSize: 16.0)),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                '/login', (Route<dynamic> route) => false);
-                          },
-                          child: Text(
-                            'Sign in',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFFFF7F50),
-                              fontSize: 16.0,
+                    SizedBox(height: 43.0),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 13.0, right: 13.0),
+                      child: RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Already have an account?',
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                height: 0.8,
+                                color: Colors.black,
+                              ),
                             ),
-                          ),
+                            WidgetSpan(
+                              child: TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pushNamedAndRemoveUntil(
+                                      '/login',
+                                      (Route<dynamic> route) => false);
+                                },
+                                child: Text(
+                                  'Sign in',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFFF7F50),
+                                    fontSize: 16.0,
+                                    height: 0.001,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -312,10 +332,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
             labelStyle: TextStyle(
               color: Colors.grey,
             ),
-            prefixIcon: Icon(
-              icon,
-              color: focusNode.hasFocus ? Color(0xFFFF7F50) : Colors.grey,
-            ),
+            prefixIcon: Icon(icon,
+                color: MaterialStateColor.resolveWith((states) =>
+                    states.contains(MaterialState.selected)
+                        ? Colors.orange
+                        : Colors.grey)),
             prefixIconConstraints: BoxConstraints(
               minWidth: 40,
             ),
@@ -368,10 +389,21 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 
   void _showSnackBar(String message) {
+    final isErrorMessage = message == errorMessage;
+    final snackBarBackgroundColor = isErrorMessage ? errorColor : successColor;
+
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: snackBarBackgroundColor, // Set the background color
       content: Center(
-        child: Text(message, textAlign: TextAlign.center),
+        child: Text(
+          message,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.white, // Set the text color to white
+          ),
+        ),
       ),
+      duration: Duration(milliseconds: 3000),
     ));
   }
 }
