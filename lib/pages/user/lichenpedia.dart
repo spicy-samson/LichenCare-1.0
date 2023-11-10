@@ -488,10 +488,7 @@ class _LichenPediaState extends State<LichenPedia> {
                     alignment: Alignment.centerLeft,
                     child: Padding(
                       padding: EdgeInsets.only(left: 35.0, right: 35),
-                      child: Text(
-                        'Systemic Viral Infection',
-                        style: TextStyle(fontSize: 24*scaleFactor, fontWeight: FontWeight.w600),
-                      ),
+                      child: richText('Systemic Viral Infection',  fontSize: 20*scaleFactor, fontWeight: FontWeight.w600, fontStyle:FontStyle.italic)  
                     ),
                   ),
                    SizedBox(height: 15*scaleFactor),
@@ -512,10 +509,7 @@ class _LichenPediaState extends State<LichenPedia> {
                     alignment: Alignment.centerLeft,
                     child: Padding(
                       padding: EdgeInsets.only(left: 35.0, right: 35),
-                      child: Text(
-                        'Genetic Predisposition',
-                        style: TextStyle(fontSize: 24*scaleFactor, fontWeight: FontWeight.w600),
-                      ),
+                      child: richText("Genetic Predisposition",  fontSize: 20*scaleFactor, fontWeight: FontWeight.w600, fontStyle:FontStyle.italic) 
                     ),
                   ),
                   SizedBox(height: 15*scaleFactor),
@@ -623,13 +617,7 @@ class _LichenPediaState extends State<LichenPedia> {
                               ),
                             ),
                             SizedBox(height: 15*scaleFactor),
-                            Text(
-                              'Skin',
-                              style: TextStyle(
-                                fontSize: 20*scaleFactor,
-                                fontWeight: FontWeight.w600
-                              ),
-                            ),
+                            richText("Skin", fontSize: 20*scaleFactor, fontWeight: FontWeight.w600, fontStyle:FontStyle.italic),
                             SizedBox(height: 15*scaleFactor),
                             Text(
                               'The primary symptoms often involve the presence of shiny, red or purple raised bumps on the skin. These bumps are typically solid and can vary in their level of itchiness, ranging from mild to intense. An individual may experience a few or numerous of theses bumps. Additionally, there is a noticeable fine white lines or scales accompanying the bumps. While they can appear on various parts of the body, they are most frequently found on the wrists, arms, back and ankles.',
@@ -719,9 +707,8 @@ class _LichenPediaState extends State<LichenPedia> {
                     alignment: Alignment.centerLeft,
                     child: Padding(
                       padding: EdgeInsets.only(left: 35.0),
-                      child: Text('General Measures',
-                          style:
-                              TextStyle(fontSize: 20*scaleFactor, fontWeight: FontWeight.w600)),
+                      child: richText("General Measures",  fontSize: 20*scaleFactor, fontWeight: FontWeight.w600, fontStyle:FontStyle.italic)
+                      
                     ),
                   ),
                   SizedBox(height: 15*scaleFactor),
@@ -759,9 +746,7 @@ class _LichenPediaState extends State<LichenPedia> {
                     alignment: Alignment.centerLeft,
                     child: Padding(
                       padding: EdgeInsets.only(left: 35.0, right: 35),
-                      child: Text('Specific Measures (Topical Treatments)',
-                          style:
-                              TextStyle(fontSize: 20*scaleFactor, fontWeight: FontWeight.w600)),
+                      child: richText("Specific Measures (Topical Treatments)",  fontSize: 20*scaleFactor, fontWeight: FontWeight.w600, fontStyle:FontStyle.italic)
                     ),
                   ),
                   SizedBox(height: 15*scaleFactor),
@@ -794,17 +779,15 @@ class _LichenPediaState extends State<LichenPedia> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 15),
+                  SizedBox(height: 15*scaleFactor),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
                       padding: EdgeInsets.only(left: 35.0, right: 35),
-                      child: Text('Specific Measures (Systematic Treatments)',
-                          style:
-                              TextStyle(fontSize: 20*scaleFactor, fontWeight: FontWeight.w600)),
+                      child: richText("Specific Measures (Systematic Treatments)",  fontSize: 20*scaleFactor, fontWeight: FontWeight.w600, fontStyle:FontStyle.italic)
                     ),
                   ),
-                  const SizedBox(height: 15),
+                  SizedBox(height: 15*scaleFactor),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
@@ -909,9 +892,7 @@ class _LichenPediaState extends State<LichenPedia> {
                       alignment: Alignment.centerLeft,
                       child: Padding(
                         padding: EdgeInsets.only(left: 35.0, right: 35),
-                        child: Text('How is Lichen Planus diagnosed?',
-                            style:
-                                TextStyle(fontSize: 22*scaleFactor, fontWeight: FontWeight.w600)),
+                        child: richText('How is Lichen Planus diagnosed?',fontSize: 22*scaleFactor, fontWeight: FontWeight.w600, fontStyle: FontStyle.italic)
                       ),
                     ),
                     SizedBox(height: 15*scaleFactor),
