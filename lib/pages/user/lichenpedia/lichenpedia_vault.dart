@@ -60,10 +60,10 @@ class _LichenPediaVaultState extends State<LichenPediaVault> {
       ),
 
       // Body
-      body: SingleChildScrollView(
+      body: Container(
+        height: double.infinity,
         child: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(height: 20),
               const Text(
@@ -82,41 +82,42 @@ class _LichenPediaVaultState extends State<LichenPediaVault> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Image.asset('assets/imgs/videovault_1.jpg'),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 10.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Lichen planus - causes, symptoms,',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w300,
+                      const Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 10.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      'Lichen planus - causes, symptoms, diagnosis, treatment, pathology',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            Text(
-                              'diagnosis, treatment, pathology',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w300,
+                              SizedBox(height: 15),
+                              Text(
+                                'Youtube - Osmosis from Elsevier',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w100,
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 15),
-                            Text(
-                              'Youtube - Osmosis from Elsevier',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w100,
+                              Text(
+                                'January 17, 2019',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w100,
+                                ),
                               ),
-                            ),
-                            Text(
-                              'January 17, 2019',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w100,
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -138,39 +139,40 @@ class _LichenPediaVaultState extends State<LichenPediaVault> {
                         'assets/imgs/videovault_2.jpg',
                         // Adjust the height as needed
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 10.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Lichen planus - Daily',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w300,
+                      const Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 10.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      'Lichen planus - Daily Do\'s of Dermatology',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            Text(
-                              'Do\'s of Dermatology',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w300,
+                              SizedBox(height: 15),
+                              Text(
+                                'Youtube - Doctorpedia',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w100,
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 15),
-                            Text(
-                              'Youtube - Doctorpedia',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w100,
+                              Text(
+                                'July 5, 2019',
+                                style: TextStyle(
+                                    fontSize: 10, fontWeight: FontWeight.w100),
                               ),
-                            ),
-                            Text(
-                              'July 5, 2019',
-                              style: TextStyle(
-                                  fontSize: 10, fontWeight: FontWeight.w100),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -191,44 +193,83 @@ class _LichenPediaVaultState extends State<LichenPediaVault> {
                       Image.asset(
                         'assets/imgs/videovault_3.jpg',
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 10.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Lichen Planus Webcast',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w300,
+                      const Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 10.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      'Lichen Planus Webcast with Dr. James Sciubba',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            Text(
-                              'with Dr. James Sciubba',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w300,
+                              SizedBox(height: 15),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      'Youtube - Texas A&M College of Dentistry',
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w100,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            SizedBox(height: 15),
-                            Text(
-                              'Youtube - Texas A&M College of Dentistry',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w100,
+                              Text(
+                                'October 21, 2016',
+                                style: TextStyle(
+                                    fontSize: 10, fontWeight: FontWeight.w100),
                               ),
-                            ),
-                            Text(
-                              'October 21, 2016',
-                              style: TextStyle(
-                                  fontSize: 10, fontWeight: FontWeight.w100),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
+              ),
+              const Spacer(),
+               ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                          const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                        ),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            const Color(0xFFFF7F50)),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: const BorderSide(
+                                color: Colors.white,
+                                width: 2.0), // Add the white border here
+                          ),
+                        ),
+                      ),
+                      child: const Text(
+                        'Go back',
+                        style: TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+              const SizedBox(
+                height: 40,
               ),
             ],
           ),

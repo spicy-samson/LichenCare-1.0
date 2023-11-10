@@ -1,5 +1,6 @@
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
+import 'package:lichen_care/helpers/helpers.dart';
 
 class LichenPediaReferences extends StatefulWidget {
   @override
@@ -38,8 +39,8 @@ class _LichenPediaReferencesState extends State<LichenPediaReferences> {
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
-    double h = MediaQuery.of(context).size.height;
-
+    double h = MediaQuery.of(context).size.height- MediaQuery.of(context).padding.top;
+    double scaleFactor = h/1080;
     return Scaffold(
       backgroundColor: const Color(0xFFFFF4E9),
       appBar: AppBar(
@@ -58,32 +59,59 @@ class _LichenPediaReferencesState extends State<LichenPediaReferences> {
       ),
 
       // Body
-      body: const SingleChildScrollView(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+      body: Container(
+        height: double.infinity,
+        child: Column(
             children: [
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'References',
-                style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
+                style: TextStyle(fontSize: 32, fontWeight: FontWeight.w900),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
                   padding: EdgeInsets.only(left: 35.0, right: 35),
-                  child: Text(
-                    'Chen J., Oakley A., Liu J. (2023). Lichen Planus. DermNet. https://dermnetnz.org/topics/lichen-planus Singh A., Jarrett P., Mitchell G. (2022). Graft Versus Host Disease. DermNet. https://dermnetnz.org/topics/graft-versus-host-disease Bridges KH. Lichen Planus and Lichen Nitidus. In: Kelly A, Taylor SC, Lim HW, et al., eds. Taylor and Kelly\'s Dermatology for Skin of Color, 2nd Edition. McGraw Hill; 2016. Mangold AR, Pittelkow MR. Lichen Planus. In: Kang S, Amagai M, Bruckner AL, et al., eds. Fitzpatrick\'s Dermatology, 9th Edition. McGraw Hill; 2019. Payette M., Weston G., Humphrey S., Yu J., Holland K. (2016). Lichen planus and other lichenoid dermatoses: Kids are not just little people. Clinics in Dermatology. https://pubmed.ncbi.nlm.nih.gov/26686015/',
-                    style: TextStyle(
-                      fontSize: 18,
-                    ),
+                  child: richText('Chen J., Oakley A., Liu J. (2023). Lichen Planus. DermNet. https://dermnetnz.org/topics/lichen-planus Singh A., Jarrett P., Mitchell G. (2022). Graft Versus Host Disease. DermNet. https://dermnetnz.org/topics/graft-versus-host-disease Bridges KH. Lichen Planus and Lichen Nitidus. In: Kelly A, Taylor SC, Lim HW, et al., eds. Taylor and Kelly\'s Dermatology for Skin of Color, 2nd Edition. McGraw Hill; 2016. Mangold AR, Pittelkow MR. Lichen Planus. In: Kang S, Amagai M, Bruckner AL, et al., eds. Fitzpatrick\'s Dermatology, 9th Edition. McGraw Hill; 2019. Payette M., Weston G., Humphrey S., Yu J., Holland K. (2016). Lichen planus and other lichenoid dermatoses: Kids are not just little people. Clinics in Dermatology. https://pubmed.ncbi.nlm.nih.gov/26686015/',
+                    fontSize:22*scaleFactor
                   ),
                 ),
               ),
+              const Spacer(),
+              ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                          const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                        ),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            const Color(0xFFFF7F50)),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: const BorderSide(
+                                color: Colors.white,
+                                width: 2.0), // Add the white border here
+                          ),
+                        ),
+                      ),
+                      child: const Text(
+                        'Go back',
+                        style: TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+              const SizedBox(
+                height: 40,
+              ),
             ],
           ),
-        ),
       ),
 
       // Floating action button

@@ -14,7 +14,6 @@ import 'package:lichen_care/pages/user/lichenpedia/lichenpedia_vault.dart';
 import 'package:lichen_care/pages/user/lichenpedia/lichenpedia_archives.dart';
 import 'package:lichen_care/pages/user/lichenpedia/lichenpedia_variants.dart';
 import 'package:lichen_care/pages/user/lichenpedia/lichenpedia_reference.dart';
-import 'package:lichen_care/pages/user/lichenpedia/lichenpedia_varContents.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,7 +45,6 @@ class MyApp extends StatelessWidget {
         '/lichenpedia': (context) => LichenPedia(),
         '/lichenpedia_archive': (context) => LichenPediaArchive(),
         '/lichenpedia_variant': (context) => LichenPediaVariant(),
-        '/lichenpedia_varcontent': (context) => LichenPediaVarContent(),
         '/lichenpedia_vault': (context) => LichenPediaVault(),
         '/lichenpedia_reference': (context) => LichenPediaReferences(),
         '/lichenHub': (context) => LichenHub(),

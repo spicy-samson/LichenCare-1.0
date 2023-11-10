@@ -10,7 +10,7 @@ class LichenPediaVariant extends StatefulWidget {
 
 class _LichenPediaVariantState extends State<LichenPediaVariant> {
   final int _currentIndex = 1;
-  void _onArrowDownPressed(BuildContext context, GlobalKey scrollkey) {
+  void _onArrowDownPressed( GlobalKey scrollkey) {
     Scrollable.ensureVisible(scrollkey.currentContext!,
         duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
   }
@@ -22,13 +22,14 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
     "Pigmentosus": GlobalKey(),
     "Eruption": GlobalKey(),
     "Mucosal": GlobalKey(),
+    "List" : GlobalKey(),
   };
 
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
-    double h = MediaQuery.of(context).size.height;
-
+    double h = MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
+    double scaleFactor = h/1080;
     return Scaffold(
       backgroundColor: const Color(0xFFFFF4E9),
       appBar: AppBar(
@@ -52,205 +53,232 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 20),
-              const Center(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 35.0, right: 35),
-                  child: Text(
-                    'Variants of Lichen Planus',
-                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
-                    textAlign: TextAlign
-                        .center, // Center align the text within the Text widget
-                  ),
-                ),
-              ),
-              const SizedBox(height: 50),
-              GestureDetector(
-                onTap: () {
-                  _onArrowDownPressed(context, scrollKeys["Cutaneous"]!);
-                },
-                child: const Padding(
-                  padding: EdgeInsets.only(left: 45, right: 45.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        'Cutaneous Lichen Planus',
-                        style: TextStyle(
-                          fontSize: 18,
-                          decoration: TextDecoration.underline,
+              SizedBox(
+                height: h - 200,
+                child:Column(children: [
+                  SizedBox(height: 35*scaleFactor,key: scrollKeys["List"],),
+                  const SizedBox(
+                    width: double.infinity,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 40.0),
+                      child: FittedBox(
+                        child: Center(
+                          child: Text(
+                              'Variants of Lichen Planus',
+                              style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
+                              textAlign: TextAlign
+                                  .center, // Center align the text within the Text widget
+                            ),
                         ),
                       ),
-                      Icon(Icons.arrow_forward_ios, color: Colors.orange),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-              GestureDetector(
-                onTap: () {
-                  _onArrowDownPressed(context, scrollKeys["Planopilaris"]!);
-                },
-                child: const Padding(
-                  padding: EdgeInsets.only(left: 45, right: 45.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        'Lichen Planopilaris',
-                        style: TextStyle(
-                          fontSize: 18,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                      Icon(Icons.arrow_forward_ios, color: Colors.orange),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-              GestureDetector(
-                onTap: () {
-                  _onArrowDownPressed(context, scrollKeys["Nails"]!);
-                },
-                child: const Padding(
-                  padding: EdgeInsets.only(left: 45, right: 45.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        'Lichen Planus of the Nails',
-                        style: TextStyle(
-                          fontSize: 18,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                      Icon(Icons.arrow_forward_ios, color: Colors.orange),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 25),
-              GestureDetector(
-                onTap: () {
-                  _onArrowDownPressed(context, scrollKeys["Pigmentosus"]!);
-                },
-                child: const Padding(
-                  padding: EdgeInsets.only(left: 45, right: 45.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        'Lichen Planus Pigmentosus',
-                        style: TextStyle(
-                          fontSize: 18,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                      Icon(Icons.arrow_forward_ios, color: Colors.orange),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 25),
-              GestureDetector(
-                onTap: () {
-                  _onArrowDownPressed(context, scrollKeys["Eruption"]!);
-                },
-                child: const Padding(
-                  padding: EdgeInsets.only(left: 45, right: 45.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        'Lichen drug eruption',
-                        style: TextStyle(
-                          fontSize: 18,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                      Icon(Icons.arrow_forward_ios, color: Colors.orange),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 25),
-              GestureDetector(
-                onTap: () {
-                  _onArrowDownPressed(context, scrollKeys["Mucosal"]!);
-                },
-                child: const Padding(
-                  padding: EdgeInsets.only(left: 45, right: 45.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        'Mucosal Lichen Planus',
-                        style: TextStyle(
-                          fontSize: 18,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                      Icon(Icons.arrow_forward_ios, color: Colors.orange),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 120),
-              Padding(
-                padding: const EdgeInsets.only(left: 45.0, right: 45),
-                child: Container(
-                  // Adjust the padding
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed('/lichenpedia');
+                  SizedBox(height: 35*scaleFactor),
+                  GestureDetector(
+                    onTap: () {
+                      _onArrowDownPressed(scrollKeys["Cutaneous"]!);
                     },
-                    child: Text(
-                      'Go back',
-                      style: TextStyle(
-                        fontSize: 15.0,
-                        color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 45, right: 45.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Flexible(
+                            child: Text(
+                              'Cutaneous Lichen Planus',
+                              style: TextStyle(
+                                fontSize: 18,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                          const Icon(Icons.arrow_forward_ios, color: Colors.orange),
+                        ],
                       ),
-                      textAlign: TextAlign.center,
                     ),
-                    style: ButtonStyle(
-                      padding: MaterialStateProperty.all<EdgeInsets>(
-                        EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                  ),
+                  SizedBox(
+                    height: 25*scaleFactor,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      _onArrowDownPressed(scrollKeys["Planopilaris"]!);
+                    },
+                    child:  Padding(
+                      padding:const  EdgeInsets.only(left: 45, right: 45.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Flexible(
+                            child: Text(
+                              'Lichen Planopilaris',
+                              style: TextStyle(
+                                fontSize: 18,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                          const Icon(Icons.arrow_forward_ios, color: Colors.orange),
+                        ],
                       ),
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          const Color(0xFFFF7F50)),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          side: BorderSide(
-                              color: Colors.white,
-                              width: 2.0), // Add the white border here
+                    ),
+                  ),
+                  SizedBox(
+                    height: 25*scaleFactor,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      _onArrowDownPressed(scrollKeys["Nails"]!);
+                    },
+                    child:  Padding(
+                      padding: const EdgeInsets.only(left: 45, right: 45.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Flexible(
+                            child: Text(
+                              'Lichen Planus of the Nails',
+                              style: TextStyle(
+                                fontSize: 18,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                          const Icon(Icons.arrow_forward_ios, color: Colors.orange),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 25*scaleFactor),
+                  GestureDetector(
+                    onTap: () {
+                      _onArrowDownPressed(scrollKeys["Pigmentosus"]!);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 45, right: 45.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Flexible(
+                            child: Text(
+                              'Lichen Planus Pigmentosus',
+                              style: TextStyle(
+                                fontSize: 18,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                          const Icon(Icons.arrow_forward_ios, color: Colors.orange),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 25*scaleFactor),
+                  GestureDetector(
+                    onTap: () {
+                      _onArrowDownPressed(scrollKeys["Eruption"]!);
+                    },
+                    child:  Padding(
+                      padding:const EdgeInsets.only(left: 45, right: 45.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Flexible(
+                            child: Text(
+                              'Lichen drug eruption',
+                              style: TextStyle(
+                                fontSize: 18,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                          const Icon(Icons.arrow_forward_ios, color: Colors.orange),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 25*scaleFactor),
+                  GestureDetector(
+                    onTap: () {
+                      _onArrowDownPressed(scrollKeys["Mucosal"]!);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 45, right: 45.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Flexible(
+                            child: Text(
+                              'Mucosal Lichen Planus',
+                              style: TextStyle(
+                                fontSize: 18,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                          const Icon(Icons.arrow_forward_ios, color: Colors.orange),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 45.0, right: 45),
+                    child: Container(
+                      // Adjust the padding
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          'Go back',
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all<EdgeInsets>(
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                          ),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              const Color(0xFFFF7F50)),
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: BorderSide(
+                                  color: Colors.white,
+                                  width: 2.0), // Add the white border here
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
+                ],)
               ),
-              const SizedBox(height: 60),
+              SizedBox(height: 45*scaleFactor),
               SizedBox(
                 height: 25,
                 key: scrollKeys["Cutaneous"],
               ),
-              const Center(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 35.0, right: 35),
-                  child: Text(
-                    'Cutaneous Lichen Planus',
-                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
-                    textAlign: TextAlign.center,
+              const SizedBox(
+                width: double.infinity,
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 35.0, right: 35),
+                    child: FittedBox(
+                      child: Text(
+                        'Cutaneous Lichen Planus',
+                        style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                   ),
                 ),
               ),
-              const SizedBox(height: 50),
+              SizedBox(height: 50*scaleFactor),
               const Padding(
                 padding: EdgeInsets.only(left: 45, right: 45.0),
                 child: Column(
@@ -264,7 +292,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                   ],
                 ),
               ),
-              const SizedBox(height: 25),
+              SizedBox(height: 25*scaleFactor),
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
@@ -316,7 +344,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                   padding: EdgeInsets.only(left: 35.0),
                   child: Text(
                     'Sub-Types of Cutaneous Lichen Planus',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
                   ),
                 ),
               ),
@@ -400,12 +428,17 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 key: scrollKeys["Planopilaris"],
               ),
               const Center(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 35.0, right: 35),
-                  child: Text(
-                    'Lichen Planopilaris',
-                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
-                    textAlign: TextAlign.center,
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 35.0, right: 35),
+                    child: FittedBox(
+                      child: Text(
+                        'Lichen Planopilaris',
+                        style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -430,7 +463,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                   padding: EdgeInsets.only(left: 35.0),
                   child: Text(
                     'Sub-Types of Lichen Planopilaris',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
                   ),
                 ),
               ),
@@ -684,14 +717,14 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                   ],
                 ),
               ),
-              const SizedBox(height: 85),
+              const SizedBox(height: 40),
               Padding(
                 padding: const EdgeInsets.only(left: 45.0, right: 45),
                 child: Container(
                   // Adjust the padding
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamed('/lichenpedia_variant');
+                     _onArrowDownPressed(scrollKeys["List"]!);
                     },
                     child: Text(
                       'Go back to the list',
@@ -834,29 +867,4 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
       },
     );
   }
-}
-
-Widget _buildTextWithDivider(String text) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Padding(
-        padding: const EdgeInsets.only(
-          left: 30.0,
-          bottom: 6,
-        ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-      ),
-      if (text != 'Variants of Lichen Planus')
-        const Divider(
-          color: Colors.black,
-        ),
-    ],
-  );
 }
