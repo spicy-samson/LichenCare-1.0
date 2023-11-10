@@ -56,40 +56,37 @@ class HomePage extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: h * 0.02),
-                  Text(
+                  const Text(
                     "Machine Learning's trend is rising, and LichenCare saw this technology as the cornerstone in achieving improved healthcare quality outcomes. Have yourself a Lichen Planus detector that can give an additional layer of screening.",
                     style: TextStyle(fontSize: 17.0),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: h * 0.03),
-                  Container(
-                    // Adjust the padding
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed('/lichenCheck');
-                      },
-                      child: Text(
-                        'Scan Now',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.white,
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/lichenCheck');
+                    },
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all<EdgeInsets>(
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      ),
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          const Color(0xFFFF7F50)),
+                      shape:
+                          MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          side: BorderSide(
+                              color: Colors.white,
+                              width: 2.0), // Add the white border here
                         ),
                       ),
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        ),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            const Color(0xFFFF7F50)),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            side: BorderSide(
-                                color: Colors.white,
-                                width: 2.0), // Add the white border here
-                          ),
-                        ),
+                    ),
+                    child: const Text(
+                      'Scan Now',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.white,
                       ),
                     ),
                   ),

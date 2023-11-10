@@ -85,7 +85,7 @@ class _LichenPediaReferencesState extends State<LichenPediaReferences> {
                       },
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all<EdgeInsets>(
-                          const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 22*scaleFactor),
                         ),
                         backgroundColor: MaterialStateProperty.all<Color>(
                             const Color(0xFFFF7F50)),
@@ -108,7 +108,7 @@ class _LichenPediaReferencesState extends State<LichenPediaReferences> {
                       ),
                     ),
               const SizedBox(
-                height: 40,
+                height: 50,
               ),
             ],
           ),

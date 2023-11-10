@@ -61,7 +61,7 @@ class _LichenPediaArchiveState extends State<LichenPediaArchive> {
                         height: 100,
                       ),
                        Padding(
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                           left: 10.0,
                         ),
                         child: Column(
@@ -309,7 +309,7 @@ class _LichenPediaArchiveState extends State<LichenPediaArchive> {
                       },
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all<EdgeInsets>(
-                          const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 22*scaleFactor),
                         ),
                         backgroundColor: MaterialStateProperty.all<Color>(
                             const Color(0xFFFF7F50)),
@@ -332,7 +332,7 @@ class _LichenPediaArchiveState extends State<LichenPediaArchive> {
                       ),
                     ),
               const SizedBox(
-                height: 40,
+                height: 50,
               ),
             ],
           ),

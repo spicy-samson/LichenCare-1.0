@@ -240,7 +240,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                         ),
                         style: ButtonStyle(
                           padding: MaterialStateProperty.all<EdgeInsets>(
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 22*scaleFactor),
                           ),
                           backgroundColor: MaterialStateProperty.all<Color>(
                               const Color(0xFFFF7F50)),

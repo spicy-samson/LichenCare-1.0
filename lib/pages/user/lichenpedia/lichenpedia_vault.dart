@@ -10,38 +10,12 @@ class LichenPediaVault extends StatefulWidget {
 
 class _LichenPediaVaultState extends State<LichenPediaVault> {
   final int _currentIndex = 1;
-  bool isSwipedDown = false;
-  final ScrollController _scrollController = ScrollController();
-  final GlobalKey _photosPaddingKey = GlobalKey();
-
-  void _onArrowDownPressed() {
-    setState(() {
-      isSwipedDown = !isSwipedDown;
-    });
-
-    if (isSwipedDown) {
-      // Calculate the offset for scrolling to the "Photos" section
-      double offset = _getOffsetToPhotosSection();
-      _scrollController.animateTo(offset,
-          duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
-    }
-  }
-
-  double _getOffsetToPhotosSection() {
-    final RenderBox renderBox =
-        _photosPaddingKey.currentContext?.findRenderObject() as RenderBox;
-    if (renderBox != null) {
-      final offset = renderBox.localToGlobal(Offset.zero);
-      return offset.dy - 10; // Adjust as needed
-    }
-    return 0; // Handle the case where the render box is not available
-  }
 
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
-    double h = MediaQuery.of(context).size.height;
-
+    double h = MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
+    double scaleFactor = h/1080;
     return Scaffold(
       backgroundColor: const Color(0xFFFFF4E9),
       appBar: AppBar(
@@ -246,7 +220,7 @@ class _LichenPediaVaultState extends State<LichenPediaVault> {
                       },
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all<EdgeInsets>(
-                          const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 22*scaleFactor),
                         ),
                         backgroundColor: MaterialStateProperty.all<Color>(
                             const Color(0xFFFF7F50)),
@@ -269,7 +243,7 @@ class _LichenPediaVaultState extends State<LichenPediaVault> {
                       ),
                     ),
               const SizedBox(
-                height: 40,
+                height: 50,
               ),
             ],
           ),
