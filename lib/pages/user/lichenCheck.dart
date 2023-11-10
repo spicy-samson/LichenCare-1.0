@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -14,6 +15,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lichen_care/processes/classifier.dart';
 import 'package:lichen_care/processes/recognitions.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class LichenCheck extends StatefulWidget {
   const LichenCheck({super.key});
@@ -52,7 +54,6 @@ class _LichenCheckState extends State<LichenCheck> {
   bool formCompleted = false;
   bool isPredicting = false;
   bool pushingData = false;
-  double predictionProgress = 0.25;
   int currentPIPage = 0;
   Classifier? classifier;
 
@@ -665,43 +666,46 @@ class _LichenCheckState extends State<LichenCheck> {
                               .resultsDescription!.symptoms.header),
                     ])),
           ),
-          Column(
-            children: List<Widget>.generate(
-                patientInformation.resultsDescription!.symptoms.features.length,
-                (int index) {
-              final features =
-                  patientInformation.resultsDescription!.symptoms.features;
-              return Column(
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 20.0, bottom: 5.0),
-                      child: Text(
-                        features.keys.elementAt(index),
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
+          Padding(
+            padding: const EdgeInsets.only(left:10.0),
+            child: Column(
+              children: List<Widget>.generate(
+                  patientInformation.resultsDescription!.symptoms.features.length,
+                  (int index) {
+                final features =
+                    patientInformation.resultsDescription!.symptoms.features;
+                return Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 20.0, bottom: 5.0),
+                        child: Text(
+                          features.keys.elementAt(index),
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
                       ),
                     ),
-                  ),
-                  RichText(
-                      textAlign: TextAlign.justify,
-                      text: TextSpan(
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            height: 2,
-                          ),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: features.values.elementAt(index),
+                    RichText(
+                        textAlign: TextAlign.justify,
+                        text: TextSpan(
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              height: 2,
                             ),
-                          ])),
-                ],
-              );
-            }),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: features.values.elementAt(index),
+                              ),
+                            ])),
+                  ],
+                );
+              }),
+            ),
           ),
-          Align(
+         const  Align(
             alignment: Alignment.centerLeft,
             child: Padding(
               padding: const EdgeInsets.only(top: 40.0, bottom: 10.0),
@@ -726,41 +730,44 @@ class _LichenCheckState extends State<LichenCheck> {
                               .resultsDescription!.treatments.header),
                     ])),
           ),
-          Column(
-            children: List<Widget>.generate(
-                patientInformation.resultsDescription!.treatments.suggestions
-                    .length, (int index) {
-              final suggestions =
-                  patientInformation.resultsDescription!.treatments.suggestions;
-              return Column(
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 20.0, bottom: 5.0),
-                      child: Text(
-                        suggestions.keys.elementAt(index),
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0),
+            child: Column(
+              children: List<Widget>.generate(
+                  patientInformation.resultsDescription!.treatments.suggestions
+                      .length, (int index) {
+                final suggestions =
+                    patientInformation.resultsDescription!.treatments.suggestions;
+                return Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 20.0, bottom: 5.0),
+                        child: Text(
+                          suggestions.keys.elementAt(index),
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
                       ),
                     ),
-                  ),
-                  RichText(
-                      textAlign: TextAlign.justify,
-                      text: TextSpan(
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            height: 2,
-                          ),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: suggestions.values.elementAt(index),
+                    RichText(
+                        textAlign: TextAlign.justify,
+                        text: TextSpan(
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              height: 2,
                             ),
-                          ])),
-                ],
-              );
-            }),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: suggestions.values.elementAt(index),
+                              ),
+                            ])),
+                  ],
+                );
+              }),
+            ),
           ),
           const SizedBox(
             height: 20.0,
@@ -1415,7 +1422,6 @@ class _LichenCheckState extends State<LichenCheck> {
                               ResultsDescription(json.decode(data),
                                   lichenType: patientInformation.detection!);
                         }
-
                         pushingData = false;
                       });
                     } else {
@@ -1459,22 +1465,24 @@ class _LichenCheckState extends State<LichenCheck> {
     }
   }
 
+
   // Input and processing
   Future classifyImage(File file) async {
     int threshold = 75;
     List<int> imageSize = [300, 400];
     var image = img.decodeImage(file.readAsBytesSync());
-    // resize image
+    // resize image add adjustmment filter for better prediction
     var reduced =
         img.adjustColor(image!, saturation: 2.0, contrast: 5.0, amount: 1.0);
     reduced = img.copyResize(reduced,
         width: imageSize[0],
         height: imageSize[1],
         interpolation: img.Interpolation.cubic); // resize
-    // add adjustmment filter for better prediction
-
+  
     // exit function if classifier object is not initialized
-    List<Recognition> recognitions = await classifier!.predict(reduced);
+    classifier!.putImage(reduced);
+    // 5707.89ms
+    List<Recognition> recognitions = await classifier!.predict();
     if (recognitions.isNotEmpty) {
       double score = recognitions[0].score;
       var value = (score * 100);
@@ -1549,19 +1557,12 @@ class _LichenCheckState extends State<LichenCheck> {
         isPredicting = true;
       });
       await Future.delayed(const Duration(seconds: 1));
-      setState(() {
-        predictionProgress = 0.75;
-      });
       await Future.delayed(const Duration(seconds: 1));
       await classifyImage(image);
-      setState(() {
-        predictionProgress = 1.0;
-      });
       await Future.delayed(const Duration(seconds: 1));
       setState(() {
         hasImage = true;
         isPredicting = false;
-        predictionProgress = 0.25;
       });
     } on PlatformException catch (e) {
       print(e);
@@ -1733,7 +1734,6 @@ class ResultsDescription {
   late Treatments treatments;
   late String footer;
   ResultsDescription(row, {required this.lichenType}) {
-    print(lichenType);
     description = row[lichenType]['Description'];
     symptoms = Symptoms(
         header: row[lichenType]['Symptoms']['Header'],
