@@ -270,7 +270,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               text: 'Already have an account?',
                               style: TextStyle(
                                 fontSize: 16.0,
-                                height: 0.8,
                                 color: Colors.black,
                               ),
                             ),
@@ -287,7 +286,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                     fontWeight: FontWeight.bold,
                                     color: primaryforegroundColor,
                                     fontSize: 16.0,
-                                    height: 0.001,
                                   ),
                                 ),
                               ),

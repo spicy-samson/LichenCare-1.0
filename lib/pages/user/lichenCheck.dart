@@ -16,7 +16,7 @@ import 'package:lichen_care/processes/classifier.dart';
 import 'package:lichen_care/processes/recognitions.dart';
 
 class LichenCheck extends StatefulWidget {
-   LichenCheck({super.key});
+  LichenCheck({super.key});
 
   @override
   State<LichenCheck> createState() => _LichenCheckState();
@@ -665,11 +665,11 @@ class _LichenCheckState extends State<LichenCheck> {
                     ])),
           ),
           Padding(
-            padding: const EdgeInsets.only(left:10.0),
+            padding: const EdgeInsets.only(left: 10.0),
             child: Column(
               children: List<Widget>.generate(
-                  patientInformation.resultsDescription!.symptoms.features.length,
-                  (int index) {
+                  patientInformation.resultsDescription!.symptoms.features
+                      .length, (int index) {
                 final features =
                     patientInformation.resultsDescription!.symptoms.features;
                 return Column(
@@ -703,7 +703,7 @@ class _LichenCheckState extends State<LichenCheck> {
               }),
             ),
           ),
-         const  Align(
+          const Align(
             alignment: Alignment.centerLeft,
             child: Padding(
               padding: const EdgeInsets.only(top: 40.0, bottom: 10.0),
@@ -734,8 +734,8 @@ class _LichenCheckState extends State<LichenCheck> {
               children: List<Widget>.generate(
                   patientInformation.resultsDescription!.treatments.suggestions
                       .length, (int index) {
-                final suggestions =
-                    patientInformation.resultsDescription!.treatments.suggestions;
+                final suggestions = patientInformation
+                    .resultsDescription!.treatments.suggestions;
                 return Column(
                   children: [
                     Align(
@@ -1463,7 +1463,6 @@ class _LichenCheckState extends State<LichenCheck> {
     }
   }
 
-
   // Input and processing
   Future classifyImage(File file) async {
     int threshold = 75;
@@ -1476,7 +1475,7 @@ class _LichenCheckState extends State<LichenCheck> {
         width: imageSize[0],
         height: imageSize[1],
         interpolation: img.Interpolation.cubic); // resize
-  
+
     // exit function if classifier object is not initialized
     classifier!.putImage(reduced);
     // 5707.89ms
