@@ -10,6 +10,7 @@ class LichenPedia extends StatefulWidget {
 class _LichenPediaState extends State<LichenPedia> {
   final int _currentIndex = 1;
   int currentSection = 0;
+
   Map<String, GlobalKey> scrollKeys = {
     "Table": GlobalKey(),
     "Overview": GlobalKey(),
@@ -495,7 +496,7 @@ class _LichenPediaState extends State<LichenPedia> {
                         child: Padding(
                             padding: EdgeInsets.only(left: 35.0, right: 35),
                             child: richText('Systemic Viral Infection',
-                                fontSize: 20 * scaleFactor,
+                                fontSize: 21 * scaleFactor,
                                 fontWeight: FontWeight.w600,
                                 fontStyle: FontStyle.italic)),
                       ),
@@ -518,7 +519,7 @@ class _LichenPediaState extends State<LichenPedia> {
                         child: Padding(
                             padding: EdgeInsets.only(left: 35.0, right: 35),
                             child: richText("Genetic Predisposition",
-                                fontSize: 20 * scaleFactor,
+                                fontSize: 21 * scaleFactor,
                                 fontWeight: FontWeight.w600,
                                 fontStyle: FontStyle.italic)),
                       ),
@@ -639,10 +640,10 @@ class _LichenPediaState extends State<LichenPedia> {
                                 ),
                                 SizedBox(height: 15 * scaleFactor),
                                 richText("Skin",
-                                    fontSize: 20 * scaleFactor,
+                                    fontSize: 21 * scaleFactor,
                                     fontWeight: FontWeight.w600,
                                     fontStyle: FontStyle.italic),
-                                SizedBox(height: 15 * scaleFactor),
+                                SizedBox(height: 10 * scaleFactor),
                                 Text(
                                   'The primary symptoms often involve the presence of shiny, red or purple raised bumps on the skin. These bumps are typically solid and can vary in their level of itchiness, ranging from mild to intense. An individual may experience a few or numerous of theses bumps. Additionally, there is a noticeable fine white lines or scales accompanying the bumps. While they can appear on various parts of the body, they are most frequently found on the wrists, arms, back and ankles.',
                                   style: TextStyle(
@@ -741,7 +742,7 @@ class _LichenPediaState extends State<LichenPedia> {
                       child: Padding(
                           padding: EdgeInsets.only(left: 35.0),
                           child: richText("General Measures",
-                              fontSize: 20 * scaleFactor,
+                              fontSize: 21 * scaleFactor,
                               fontWeight: FontWeight.w600,
                               fontStyle: FontStyle.italic)),
                     ),
@@ -782,7 +783,7 @@ class _LichenPediaState extends State<LichenPedia> {
                           padding: EdgeInsets.only(left: 35.0, right: 35),
                           child: richText(
                               "Specific Measures (Topical Treatments)",
-                              fontSize: 20 * scaleFactor,
+                              fontSize: 21 * scaleFactor,
                               fontWeight: FontWeight.w600,
                               fontStyle: FontStyle.italic)),
                     ),
@@ -823,7 +824,7 @@ class _LichenPediaState extends State<LichenPedia> {
                           padding: EdgeInsets.only(left: 35.0, right: 35),
                           child: richText(
                               "Specific Measures (Systematic Treatments)",
-                              fontSize: 20 * scaleFactor,
+                              fontSize: 21 * scaleFactor,
                               fontWeight: FontWeight.w600,
                               fontStyle: FontStyle.italic)),
                     ),

@@ -16,7 +16,7 @@ import 'package:lichen_care/processes/classifier.dart';
 import 'package:lichen_care/processes/recognitions.dart';
 
 class LichenCheck extends StatefulWidget {
-  const LichenCheck({super.key});
+   LichenCheck({super.key});
 
   @override
   State<LichenCheck> createState() => _LichenCheckState();
@@ -488,7 +488,7 @@ class _LichenCheckState extends State<LichenCheck> {
                               children: [
                                 ElevatedButton(
                                   onPressed: () {
-                                    Navigator.pop(context);
+                                    Navigator.of(context).pop();
                                   },
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.symmetric(
