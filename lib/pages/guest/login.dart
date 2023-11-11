@@ -199,7 +199,7 @@ class _LoginPageState extends State<LoginPage> {
                             TextSpan(
                               text: "Don't have an account?",
                               style: TextStyle(
-                                height: 0.8,
+                                // height: 0.8,
                                 fontSize: 16.0,
                                 color: Colors.black,
                               ),
@@ -211,13 +211,15 @@ class _LoginPageState extends State<LoginPage> {
                                       '/registration',
                                       (Route<dynamic> route) => false);
                                 },
-                                child: Text(
-                                  'Sign Up',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: primaryforegroundColor,
-                                    fontSize: 16.0,
-                                    height: 0.001,
+                                child: Center(
+                                  child: Text(
+                                    'Sign Up',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: primaryforegroundColor,
+                                      fontSize: 16.0,
+                                      // height: 0.001,
+                                    ),
                                   ),
                                 ),
                               ),
