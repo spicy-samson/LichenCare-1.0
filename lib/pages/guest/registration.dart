@@ -281,13 +281,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                       '/login',
                                       (Route<dynamic> route) => false);
                                 },
-                                child: Text(
-                                  'Sign in',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: primaryforegroundColor,
-                                    fontSize: 16.0,
-                                    height: 0.001,
+                                child: Center(
+                                  child: Text(
+                                    'Sign in',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: primaryforegroundColor,
+                                      fontSize: 16.0,
+                                      height: 0.8,
+                                    ),
                                   ),
                                 ),
                               ),
