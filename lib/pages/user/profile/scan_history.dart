@@ -13,13 +13,13 @@ User? user = auth.currentUser;
 
 class LichenCheckEntry {
   final Map<String, dynamic> additionalInfo;
-  final Map<String, dynamic> symptoms;
   final Map<String, dynamic> results;
+  final Map<String, dynamic> symptoms;
 
   LichenCheckEntry({
     required this.additionalInfo,
-    required this.symptoms,
     required this.results,
+    required this.symptoms,
   });
 }
 
@@ -27,6 +27,9 @@ Color primaryforegroundColor = const Color(0xFFFF7F50);
 
 class _ScanHistory extends State<ScanHistory> {
   int _currentIndex = 4;
+  String selectedOption = 'Detections'; // Default selected option
+  bool showDropdown = false;
+
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -39,7 +42,8 @@ class _ScanHistory extends State<ScanHistory> {
         automaticallyImplyLeading: false,
         backgroundColor: Color(0xFFFFF4E9),
         title: Padding(
-          padding: EdgeInsets.only(top: h * 0.04, right: w * 0.45),
+          padding:
+              EdgeInsets.only(top: h * 0.04, right: w * 0.45, left: w * 0.005),
           child: SvgPicture.asset(
             'assets/svgs/profileSection/profileAppBars/scan_history(copy).svg',
             width: w * 0.1,
@@ -51,48 +55,120 @@ class _ScanHistory extends State<ScanHistory> {
       ),
 
       // Body
-      // Body
       body: SingleChildScrollView(
         child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: 
-                FutureBuilder<List<LichenCheckEntry>>(
-              future: getLichenCheckEntries(),
+            padding: const EdgeInsets.only(left: 15, right: 15, bottom: 15),
+            child: FutureBuilder<Map<String, String>>(
+              future: getUserData(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return CircularProgressIndicator(
+                    color: primaryforegroundColor,
+                  );
                 } else if (snapshot.hasError) {
                   return Text("Error: ${snapshot.error}");
                 } else {
-                  final entries = snapshot.data ?? [];
+                  Map<String, String> userData = snapshot.data ?? {};
 
                   return Column(
-                    children: entries.map((entry) {
-                      return Card(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              SizedBox(
-                                height: 200 * scaleFactor,
-                                width: 200 * scaleFactor,
-                                child: Image.network(
-                                  'assets/imgs/lichenpedia_image1.png',
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () async {
+                              fetchData();
+                              setState(() {
+                                showDropdown = !showDropdown;
+                              });
+                            },
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 10),
+                              ),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  primaryforegroundColor),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  side: BorderSide(
+                                      color: Colors.white, width: 2.0),
                                 ),
                               ),
-                              SizedBox(
-                                height: 200 * scaleFactor,
-                                width: 200 * scaleFactor,
-                                child: Image.asset(
-                                  'assets/imgs/lichenpedia_image2.png',
-                                ),
-                              ),
-                            ],
+                            ),
+                            child: Text("Sort Results"),
                           ),
-                        ),
-                      );
-                    }).toList(),
+                          if (showDropdown)
+                            DropdownButton<String>(
+                              value: selectedOption,
+                              icon: const Icon(Icons.arrow_downward),
+                              iconSize: 24,
+                              elevation: 16,
+                              style: TextStyle(color: primaryforegroundColor),
+                              underline: Container(
+                                height: 2,
+                                color: primaryforegroundColor,
+                              ),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  selectedOption = newValue!;
+                                });
+                              },
+                              items: <String>[
+                                'Detections',
+                                'No Detections'
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                            ),
+                        ],
+                      ),
+                      SizedBox(height: 20),
+                      Column(
+                        children: [
+                          Row(
+                            children: List.generate(
+                              2, // number of images
+                              (index) => Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Image.network(
+                                    'https://picsum.photos/200',
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ).fold<List<Widget>>(
+                              [],
+                              (previousValue, element) {
+                                if (previousValue.isEmpty) {
+                                  return [element];
+                                } else {
+                                  previousValue.last is SizedBox
+                                      ? previousValue[
+                                          previousValue.length - 2] = Row(
+                                          children: [
+                                            previousValue[
+                                                previousValue.length - 2],
+                                            element,
+                                          ],
+                                        )
+                                      : previousValue.add(SizedBox(width: 8));
+                                  previousValue.add(element);
+                                  return previousValue;
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
                   );
                 }
               },
@@ -214,28 +290,58 @@ class _ScanHistory extends State<ScanHistory> {
     }
   }
 
-  Future<List<LichenCheckEntry>> getLichenCheckEntries() async {
+  Future<Map<String, LichenCheckEntry>> getLichenCheckEntries(
+      {bool detections = true}) async {
     if (user == null) {
-      return [];
+      return {};
     }
 
     try {
       final userDocRef =
           FirebaseFirestore.instance.collection('users').doc(user?.uid);
-      final inputsCollection = userDocRef.collection('LichenCheck_inputs'); 
-      final querySnapshot = await inputsCollection.get();
+      final inputsCollection = userDocRef.collection('LichenCheck_inputs');
 
-      return querySnapshot.docs.map((doc) {
-        return LichenCheckEntry(
-          additionalInfo: doc['additional_info'] ?? {},
-          symptoms: doc['symptoms'] ?? {},
-          results: doc['results'] ?? {},
+      QuerySnapshot querySnapshot;
+      if (detections) {
+        // Fetch entries with detections
+        querySnapshot =
+            await inputsCollection.where('results', isNull: false).get();
+      } else {
+        // Fetch entries with no detections
+        querySnapshot =
+            await inputsCollection.where('results', isNull: true).get();
+      }
+
+      return Map.fromEntries(querySnapshot.docs.map((doc) {
+        return MapEntry(
+          doc.id,
+          LichenCheckEntry(
+            additionalInfo: doc['additional_info'] ?? {},
+            results: doc['results'] ?? {},
+            symptoms: doc['symptoms'] ?? {},
+          ),
         );
-      }).toList();
+      }));
     } catch (e) {
       print('Error fetching LichenCheck entries: $e');
-      return [];
+      return {};
     }
+  }
+
+  Future<void> fetchData() async {
+    Map<String, LichenCheckEntry> lichenCheckEntries =
+        await getLichenCheckEntries(detections: true);
+
+    // Accessing values in the map
+    lichenCheckEntries.forEach((String docId, LichenCheckEntry entry) {
+      print('Document ID: $docId');
+      print('Additional Info: ${entry.additionalInfo}');
+      print('Symptoms: ${entry.symptoms}');
+      print('Results: ${entry.results}');
+      print('------------------------');
+    });
+
+    print(lichenCheckEntries.values);
   }
 
   Future<Map<String, String>> getUserData() async {
