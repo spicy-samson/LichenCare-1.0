@@ -88,6 +88,8 @@ class _LichenCheckState extends State<LichenCheck> {
           if (uploadTask.state == TaskState.success) {
             final imageUrl = await uploadTask.ref.getDownloadURL();
 
+            final timestamp = Timestamp.now(); // Get the current timestamp
+
             final newInputDocRef = await inputsCollection.add({
               'additional_info': {
                 'age': patientInformation.age,
@@ -104,6 +106,7 @@ class _LichenCheckState extends State<LichenCheck> {
                 'detection': patientInformation.detection,
                 'detection_score': patientInformation.detectionScore,
                 'file_image': imageUrl, // Store the image URL
+                'date_uploaded': timestamp, // Add the date uploaded field
               },
             });
           } else {
@@ -1611,10 +1614,10 @@ class _LichenCheckState extends State<LichenCheck> {
       currentIndex: _currentIndex,
       items: [
         BottomNavigationBarItem(
-          icon: Icon(
-            Icons.home,
-            size: 30,
-            color: Color(0xFFFF7F50),
+          icon: SvgPicture.asset(
+            'assets/svgs/bottomNavBar/Home_icon.svg',
+            width: 32,
+            height: 32,
           ),
           label: 'Home',
         ),
@@ -1648,27 +1651,21 @@ class _LichenCheckState extends State<LichenCheck> {
         ),
       ],
       onTap: (index) {
-        // Handle navigation to different pages based on the index
         switch (index) {
           case 0:
-            Navigator.of(context)
-                .pushReplacementNamed('/home'); // Navigate to the 'home' route
+            Navigator.pushReplacementNamed(context, '/home');
             break;
           case 1:
-            Navigator.of(context).pushReplacementNamed(
-                '/lichenpedia'); // Navigate to the 'lichenpedia' route
+            Navigator.pushReplacementNamed(context, '/lichenpedia');
             break;
           case 2:
-            // Navigator.of(context).pushNamed(
-            //     '/lichenCheck'); // Navigate to the 'lichencheck' route
+            Navigator.pushReplacementNamed(context, '/lichenCheck');
             break;
           case 3:
-            Navigator.of(context).pushReplacementNamed(
-                '/lichenHub'); // Navigate to the 'lichenhub' route
+            Navigator.pushReplacementNamed(context, '/lichenHub');
             break;
           case 4:
-            Navigator.of(context).pushReplacementNamed(
-                '/profile'); // Navigate to the 'profile' route
+            Navigator.pushReplacementNamed(context, '/profile');
             break;
         }
       },

@@ -384,35 +384,4 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  void checkCurrentUser() {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-
-    if (user != null) {
-      print(user);
-    } else {
-      print("User is not logged in.");
-    }
-  }
-
-  Future<String?> getUserFirstName() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      try {
-        DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .get();
-
-        if (userSnapshot.exists) {
-          // Assuming 'first_name' is a field in your Firestore document
-          String firstName = userSnapshot.get('first_name');
-          print(firstName);
-        }
-      } catch (e) {
-        print("Error fetching user data: $e");
-      }
-    }
-    return null;
-  }
 }

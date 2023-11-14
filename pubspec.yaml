@@ -82,6 +82,7 @@ flutter:
     - assets/jsons/
     - assets/svgs/bottomNavBar/
     - assets/svgs/profileSection/
+    - assets/svgs/profileSection/profileAppBars/
     - assets/model/model_rpn.tflite
     - assets/model/labels.txt
     - assets/model/model_classifier.tflite

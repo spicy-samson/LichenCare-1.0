@@ -1,13 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class LichenHub extends StatefulWidget {
-  @override
-  _LichenHubState createState() => _LichenHubState();
-}
+class TermsAndConditions extends StatelessWidget {
+  int _currentIndex = 4;
 
-class _LichenHubState extends State<LichenHub> {
-  int _currentIndex = 3;
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -19,11 +17,11 @@ class _LichenHubState extends State<LichenHub> {
         automaticallyImplyLeading: false,
         backgroundColor: Color(0xFFFFF4E9),
         title: Padding(
-          padding: EdgeInsets.only(top: h * 0.05, right: w * 0.5),
+          padding: EdgeInsets.only(top: h * 0.04, right: w * 0.45),
           child: SvgPicture.asset(
-            'assets/svgs/#3 - lichenhub.svg',
+            'assets/svgs/profileSection/profileAppBars/terms_and_conditions(copy).svg',
             width: w * 0.1,
-            height: h * 0.045,
+            height: h * 0.8,
           ),
         ),
         elevation: 0,
@@ -31,16 +29,8 @@ class _LichenHubState extends State<LichenHub> {
       ),
 
       // Body
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              Text('LichenHub page'),
-            ],
-          ),
-        ),
-      ),
+      // Body
+      body: SingleChildScrollView(),
 
       // Floating action button
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -145,4 +135,49 @@ class _LichenHubState extends State<LichenHub> {
       },
     );
   }
+
+  void checkCurrentUser() {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+
+    if (user != null) {
+      print(user);
+    } else {
+      print("User is not logged in.");
+    }
+  }
+
+  Future<Map<String, String>> getUserData() async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      try {
+        DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        if (userSnapshot.exists) {
+          String firstName = userSnapshot.get('first_name') ?? '';
+          String lastName = userSnapshot.get('last_name') ?? '';
+          String email = userSnapshot.get('email') ?? '';
+          return {
+            'firstName': firstName,
+            'lastName': lastName,
+            'email': email,
+          };
+        }
+      } catch (e) {
+        print("Error fetching user data: $e");
+      }
+    }
+
+    return {
+      'firstName': '',
+      'lastName': '',
+      'email': '',
+    };
+  }
 }
+
+Color primaryforegroundColor = const Color(0xFFFF7F50);

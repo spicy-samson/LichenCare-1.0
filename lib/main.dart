@@ -1,6 +1,11 @@
-
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/routes/default_transitions.dart';
+import 'package:lichen_care/pages/user/profile/about_us.dart';
+import 'package:lichen_care/pages/user/profile/account.dart';
+import 'package:lichen_care/pages/user/profile/user_feedback.dart';
+import 'package:lichen_care/pages/user/profile/privacy_policy.dart';
+import 'package:lichen_care/pages/user/profile/scan_history.dart';
+import 'package:lichen_care/pages/user/profile/terms_and_conditions.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,7 +32,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-  
+
   //Root of Application
   @override
   Widget build(BuildContext context) {
@@ -36,11 +41,13 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'ABeeZee',
-        textTheme: Theme.of(context).textTheme.apply(fontFamily: 'ABeeZee',),
+        textTheme: Theme.of(context).textTheme.apply(
+              fontFamily: 'ABeeZee',
+            ),
       ),
       home: MyCarousel(),
-      onGenerateRoute: (route){
-        switch(route.name){
+      onGenerateRoute: (route) {
+        switch (route.name) {
           case '/login':
             return pageRoute(route, LoginPage(), 0);
           case '/registration':
@@ -49,13 +56,13 @@ class MyApp extends StatelessWidget {
             return pageRoute(route, HomePage(), 0);
           case '/lichenpedia':
             return pageRoute(route, LichenPedia(), 0);
-          case '/lichenpedia_archive':
+          case '/lichenpedia/lichenpedia_archive':
             return pageRoute(route, LichenPediaArchive(), 0);
-          case '/lichenpedia_variant':
+          case '/lichenpedia/lichenpedia_variant':
             return pageRoute(route, LichenPediaVariant(), 0);
-          case '/lichenpedia_vault':
+          case '/lichenpedia/lichenpedia_vault':
             return pageRoute(route, LichenPediaVault(), 0);
-          case '/lichenpedia_reference':
+          case '/lichenpedia/lichenpedia_reference':
             return pageRoute(route, LichenPediaReferences(), 0);
           case '/lichenHub':
             return pageRoute(route, LichenHub(), 0);
@@ -63,23 +70,37 @@ class MyApp extends StatelessWidget {
             return pageRoute(route, LichenCheck(), 100);
           case '/profile':
             return pageRoute(route, Profile(), 0);
+          case '/profile/account':
+            return pageRoute(route, Account(), 0);
+          case '/profile/scan_history':
+            return pageRoute(route, ScanHistory(), 0);
+          case '/profile/user_feedback':
+            return pageRoute(route, UserFeedback(), 0);
+          case '/profile/about_us':
+            return pageRoute(route, AboutUs(), 0);
+          case '/profile/terms_and_conditions':
+            return pageRoute(route, TermsAndConditions(), 0);
+          case '/profile/privacy_policy':
+            return pageRoute(route, PrivacyPolicy(), 0);
         }
       },
     );
   }
 }
 
-Route pageRoute(route, page, transitionDuration){
+Route pageRoute(route, page, transitionDuration) {
   const beginZoom = 0.5;
   const endZoom = 1.0;
-  final tween = Tween(begin: beginZoom, end: endZoom).chain(CurveTween(curve: Curves.ease));
+  final tween = Tween(begin: beginZoom, end: endZoom)
+      .chain(CurveTween(curve: Curves.ease));
   return PageRouteBuilder(
     settings: route,
-    pageBuilder: (_,__,___) => page,
-    transitionsBuilder: (_, animation,__,child){
+    pageBuilder: (_, __, ___) => page,
+    transitionsBuilder: (_, animation, __, child) {
       return FadeTransition(
         opacity: animation.drive(tween),
-        child: ScaleTransition(scale: animation.drive(tween),
+        child: ScaleTransition(
+          scale: animation.drive(tween),
           child: child,
         ),
       );

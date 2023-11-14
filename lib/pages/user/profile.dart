@@ -20,7 +20,7 @@ class _ProfileState extends State<Profile> {
         automaticallyImplyLeading: false,
         backgroundColor: Color(0xFFFFF4E9),
         title: Padding(
-          padding: EdgeInsets.only(top: h * 0.05, right: w * 0.5),
+          padding: EdgeInsets.only(top: h * 0.05, right: w * 0.45),
           child: SvgPicture.asset(
             'assets/svgs/profileSection/profile(copy).svg',
             width: w * 0.1,
@@ -43,7 +43,7 @@ class _ProfileState extends State<Profile> {
                 child: buildRow(
                     'Account', 'assets/svgs/profileSection/account_icon.svg',
                     () {
-                  // Function to execute when the 'Account' row is clicked
+                  Navigator.of(context).pushNamed('/profile/account');
                 }),
               ),
               buildCustomDivider(2, Colors.grey),
@@ -51,7 +51,7 @@ class _ProfileState extends State<Profile> {
                 padding: const EdgeInsets.all(12),
                 child: buildRow('Scan History',
                     'assets/svgs/profileSection/scan history_icon.svg', () {
-                  // Function to execute when the 'Scan History' row is clicked
+                  Navigator.of(context).pushNamed('/profile/scan_history');
                 }),
               ),
               buildCustomDivider(2, Colors.grey),
@@ -60,7 +60,7 @@ class _ProfileState extends State<Profile> {
                 child: buildRow(
                     'Feedback', 'assets/svgs/profileSection/feedback_icon.svg',
                     () {
-                  // Function to execute when the 'Feedback' row is clicked
+                  Navigator.of(context).pushNamed('/profile/user_feedback');
                 }),
               ),
               buildCustomDivider(2, Colors.grey),
@@ -69,7 +69,7 @@ class _ProfileState extends State<Profile> {
                 child: buildRow(
                     'About us', 'assets/svgs/profileSection/about us_icon.svg',
                     () {
-                  // Function to execute when the 'About us' row is clicked
+                  Navigator.of(context).pushNamed('/profile/about_us');
                 }),
               ),
               buildCustomDivider(2, Colors.grey),
@@ -78,7 +78,7 @@ class _ProfileState extends State<Profile> {
                 child: buildRow('Terms and conditions',
                     'assets/svgs/profileSection/terms and conditions_icon.svg',
                     () {
-                  // Function to execute when the 'Terms and conditions' row is clicked
+                  Navigator.of(context).pushNamed('/profile/terms_and_conditions');
                 }),
               ),
               buildCustomDivider(2, Colors.grey),
@@ -86,7 +86,7 @@ class _ProfileState extends State<Profile> {
                 padding: const EdgeInsets.all(12),
                 child: buildRow('Privacy policy',
                     'assets/svgs/profileSection/privacy policy_icon.svg', () {
-                  // Function to execute when the 'Privacy policy' row is clicked
+                  Navigator.of(context).pushNamed('/profile/privacy_policy');
                 }),
               ),
               buildCustomDivider(2, Colors.grey),
@@ -152,10 +152,10 @@ class _ProfileState extends State<Profile> {
       currentIndex: _currentIndex,
       items: [
         BottomNavigationBarItem(
-          icon: Icon(
-            Icons.home,
-            size: 30,
-            color: Color(0xFFFF7F50),
+          icon: SvgPicture.asset(
+            'assets/svgs/bottomNavBar/Home_icon.svg',
+            width: 32,
+            height: 32,
           ),
           label: 'Home',
         ),
@@ -189,27 +189,21 @@ class _ProfileState extends State<Profile> {
         ),
       ],
       onTap: (index) {
-        // Handle navigation to different pages based on the index
         switch (index) {
           case 0:
-            Navigator.of(context)
-                .pushNamed('/home'); // Navigate to the 'home' route
+            Navigator.pushReplacementNamed(context, '/home');
             break;
           case 1:
-            Navigator.of(context).pushNamed(
-                '/lichenpedia'); // Navigate to the 'lichenpedia' route
+            Navigator.pushReplacementNamed(context, '/lichenpedia');
             break;
           case 2:
-            Navigator.of(context).pushNamed(
-                '/lichenCheck'); // Navigate to the 'lichencheck' route
+            Navigator.pushReplacementNamed(context, '/lichenCheck');
             break;
           case 3:
-            Navigator.of(context)
-                .pushNamed('/lichenHub'); // Navigate to the 'lichenhub' route
+            Navigator.pushReplacementNamed(context, '/lichenHub');
             break;
           case 4:
-            // Navigator.of(context)
-            //     .pushNamed('/profile'); // Navigate to the 'profile' route
+            Navigator.pushReplacementNamed(context, '/profile');
             break;
         }
       },
@@ -282,7 +276,8 @@ class _ProfileState extends State<Profile> {
                   "Logout",
                   style: TextStyle(
                     fontSize: 20,
-                    color: const Color(0xFFFF7F50), // Set the text color to orange
+                    color:
+                        const Color(0xFFFF7F50), // Set the text color to orange
                   ),
                 ),
                 SizedBox(height: 16),
@@ -303,7 +298,8 @@ class _ProfileState extends State<Profile> {
                       child: Text(
                         "Cancel",
                         style: TextStyle(
-                          color: const Color(0xFFFF7F50), // Set the text color to orange
+                          color: const Color(
+                              0xFFFF7F50), // Set the text color to orange
                         ),
                       ),
                     ),
@@ -315,7 +311,8 @@ class _ProfileState extends State<Profile> {
                       child: Text(
                         "Logout",
                         style: TextStyle(
-                          color: const Color(0xFFFF7F50), // Set the text color to orange
+                          color: const Color(
+                              0xFFFF7F50), // Set the text color to orange
                         ),
                       ),
                     ),

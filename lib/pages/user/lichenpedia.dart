@@ -21,7 +21,7 @@ class _LichenPediaState extends State<LichenPedia> {
     "Diagnosis": GlobalKey(),
     "Oral": GlobalKey(),
   };
-  
+
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -52,16 +52,18 @@ class _LichenPediaState extends State<LichenPedia> {
           double swipeSensitivity = 0.1;
           if (details.primaryVelocity! > swipeSensitivity) {
             // swiped down
-            if(currentSection!=0){
+            if (currentSection != 0) {
               currentSection -= 1;
-              _onArrowDownPressed(scrollKeys[scrollKeys.keys.elementAt(currentSection)]!);
+              _onArrowDownPressed(
+                  scrollKeys[scrollKeys.keys.elementAt(currentSection)]!);
             }
           }
           if (details.primaryVelocity! < -swipeSensitivity) {
             // swiped up
-            if(currentSection <  scrollKeys.length-1){
-               currentSection += 1;
-              _onArrowDownPressed(scrollKeys[scrollKeys.keys.elementAt(currentSection)]!);
+            if (currentSection < scrollKeys.length - 1) {
+              currentSection += 1;
+              _onArrowDownPressed(
+                  scrollKeys[scrollKeys.keys.elementAt(currentSection)]!);
             }
           }
         },
@@ -142,7 +144,7 @@ class _LichenPediaState extends State<LichenPedia> {
                         child: ElevatedButton(
                           onPressed: () {
                             Navigator.of(context)
-                                .pushNamed('/lichenpedia_variant');
+                                .pushNamed('/lichenpedia/lichenpedia_variant');
                           },
                           style: ButtonStyle(
                             padding: MaterialStateProperty.all<EdgeInsets>(
@@ -599,7 +601,7 @@ class _LichenPediaState extends State<LichenPedia> {
                         Center(
                           child: GestureDetector(
                             onTap: () {
-                              currentSection -= 1;                             
+                              currentSection -= 1;
                               _onArrowDownPressed(scrollKeys["Causes"]!);
                             },
                             child: const Text(
@@ -1084,7 +1086,7 @@ class _LichenPediaState extends State<LichenPedia> {
                             fontSize: 20 * scaleFactor,
                           ),
                         ),
-                        SizedBox(height:15*scaleFactor),
+                        SizedBox(height: 15 * scaleFactor),
                         Text(
                           'Lichen Planus is not a dangerous disease, and it usually goes away on its own. However, in some people, it may come back.',
                           style: TextStyle(
@@ -1097,7 +1099,7 @@ class _LichenPediaState extends State<LichenPedia> {
                 ),
                 const SizedBox(height: 15),
                 GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     currentSection = 1;
                     _onArrowDownPressed(scrollKeys["Overview"]!);
                   },
@@ -1133,8 +1135,9 @@ class _LichenPediaState extends State<LichenPedia> {
                     padding: EdgeInsets.only(left: 35.0, right: 35),
                     child: Text(
                       'Discover more about Lichen Planus',
-                      style:
-                          TextStyle(fontSize: 26*scaleFactor, fontWeight: FontWeight.w900),
+                      style: TextStyle(
+                          fontSize: 26 * scaleFactor,
+                          fontWeight: FontWeight.w900),
                       textAlign: TextAlign
                           .center, // Center align the text within the Text widget
                     ),
@@ -1147,7 +1150,8 @@ class _LichenPediaState extends State<LichenPedia> {
                     // Adjust the padding
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/lichenpedia_vault');
+                        Navigator.of(context)
+                            .pushNamed('/lichenpedia/lichenpedia_vault');
                       },
                       child: Text(
                         'Explore Lichen Planus through Online Videos',
@@ -1159,7 +1163,8 @@ class _LichenPediaState extends State<LichenPedia> {
                       ),
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 20*scaleFactor),
+                          EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 20 * scaleFactor),
                         ),
                         backgroundColor: MaterialStateProperty.all<Color>(
                             const Color(0xFFFF7F50)),
@@ -1176,14 +1181,15 @@ class _LichenPediaState extends State<LichenPedia> {
                     ),
                   ),
                 ),
-                SizedBox(height: 25*scaleFactor),
+                SizedBox(height: 25 * scaleFactor),
                 Padding(
                   padding: const EdgeInsets.only(left: 45.0, right: 45),
                   child: Container(
                     // Adjust the padding
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/lichenpedia_archive');
+                        Navigator.of(context)
+                            .pushNamed('/lichenpedia/lichenpedia_archive');
                       },
                       child: Text(
                         'Discover Lichen Planus through Academic Publications',
@@ -1195,7 +1201,8 @@ class _LichenPediaState extends State<LichenPedia> {
                       ),
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 20*scaleFactor),
+                          EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 20 * scaleFactor),
                         ),
                         backgroundColor: MaterialStateProperty.all<Color>(
                             const Color(0xFFFF7F50)),
@@ -1212,7 +1219,7 @@ class _LichenPediaState extends State<LichenPedia> {
                     ),
                   ),
                 ),
-                SizedBox(height: 25*scaleFactor),
+                SizedBox(height: 25 * scaleFactor),
                 Padding(
                   padding: const EdgeInsets.only(left: 45.0, right: 45),
                   child: Container(
@@ -1220,7 +1227,7 @@ class _LichenPediaState extends State<LichenPedia> {
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.of(context)
-                            .pushNamed('/lichenpedia_reference');
+                            .pushNamed('/lichenpedia/lichenpedia_reference');
                       },
                       child: Text(
                         ' See References and Sources                ',
@@ -1232,7 +1239,8 @@ class _LichenPediaState extends State<LichenPedia> {
                       ),
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 20*scaleFactor),
+                          EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 20 * scaleFactor),
                         ),
                         backgroundColor: MaterialStateProperty.all<Color>(
                             const Color(0xFFFF7F50)),
@@ -1302,10 +1310,10 @@ class _LichenPediaState extends State<LichenPedia> {
       currentIndex: _currentIndex,
       items: [
         BottomNavigationBarItem(
-          icon: Icon(
-            Icons.home,
-            size: 30,
-            color: Color(0xFFFF7F50),
+          icon: SvgPicture.asset(
+            'assets/svgs/bottomNavBar/Home_icon.svg',
+            width: 32,
+            height: 32,
           ),
           label: 'Home',
         ),
@@ -1339,27 +1347,21 @@ class _LichenPediaState extends State<LichenPedia> {
         ),
       ],
       onTap: (index) {
-        // Handle navigation to different pages based on the index
         switch (index) {
           case 0:
-            Navigator.of(context)
-                .pushNamed('/home'); // Navigate to the 'home' route
+            Navigator.pushReplacementNamed(context, '/home');
             break;
           case 1:
-            // Navigator.of(context).pushNamed(
-            //     '/lichenpedia'); // Navigate to the 'lichenpedia' route
+            Navigator.pushReplacementNamed(context, '/lichenpedia');
             break;
           case 2:
-            Navigator.of(context).pushNamed(
-                '/lichencheck'); // Navigate to the 'lichencheck' route
+            Navigator.pushReplacementNamed(context, '/lichenCheck');
             break;
           case 3:
-            Navigator.of(context)
-                .pushNamed('/lichenHub'); // Navigate to the 'lichenhub' route
+            Navigator.pushReplacementNamed(context, '/lichenHub');
             break;
           case 4:
-            Navigator.of(context)
-                .pushNamed('/profile'); // Navigate to the 'profile' route
+            Navigator.pushReplacementNamed(context, '/profile');
             break;
         }
       },
@@ -1378,7 +1380,7 @@ class _LichenPediaState extends State<LichenPedia> {
               side: (category == "Diagnosis")
                   ? BorderSide.none
                   : const BorderSide(width: 2.0, color: Colors.black12))),
-      onPressed: (){
+      onPressed: () {
         currentSection = scrollKeys.keys.toList().indexOf(category);
         _onArrowDownPressed(scrollKeys[category]!);
       },
