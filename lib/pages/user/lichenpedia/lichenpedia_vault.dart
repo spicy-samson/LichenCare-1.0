@@ -14,8 +14,9 @@ class _LichenPediaVaultState extends State<LichenPediaVault> {
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
-    double h = MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
-    double scaleFactor = h/1080;
+    double h =
+        MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
+    double scaleFactor = h / 1080;
     return Scaffold(
       backgroundColor: const Color(0xFFFFF4E9),
       appBar: AppBar(
@@ -214,34 +215,35 @@ class _LichenPediaVaultState extends State<LichenPediaVault> {
                 ),
               ),
               const Spacer(),
-               ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 22*scaleFactor),
-                        ),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            const Color(0xFFFF7F50)),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            side: const BorderSide(
-                                color: Colors.white,
-                                width: 2.0), // Add the white border here
-                          ),
-                        ),
-                      ),
-                      child: const Text(
-                        'Go back',
-                        style: TextStyle(
-                          fontSize: 15.0,
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                style: ButtonStyle(
+                  padding: MaterialStateProperty.all<EdgeInsets>(
+                    EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 22 * scaleFactor),
+                  ),
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(const Color(0xFFFF7F50)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      side: const BorderSide(
                           color: Colors.white,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
+                          width: 2.0), // Add the white border here
                     ),
+                  ),
+                ),
+                child: const Text(
+                  'Go back',
+                  style: TextStyle(
+                    fontSize: 15.0,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
               const SizedBox(
                 height: 50,
               ),
