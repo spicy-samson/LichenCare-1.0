@@ -211,16 +211,19 @@ class _ScanHistory extends State<ScanHistory> {
                                   child: Row(
                                     children: [
                                       Expanded(
-                                        child: CachedNetworkImage(
-                                          imageUrl:
-                                              "${lichenCheckData[entryKey]?.results['file_image']}",
-                                          fit: BoxFit.cover,
-                                          placeholder: (context, url) =>
-                                              FadeInImage(
-                                            placeholder: AssetImage(
-                                                'assets/imgs/placeholder-image.jpg'), // Your placeholder image asset
-                                            image: NetworkImage(url),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: CachedNetworkImage(
+                                            imageUrl:
+                                                "${lichenCheckData[entryKey]?.results['file_image']}",
                                             fit: BoxFit.cover,
+                                            placeholder: (context, url) =>
+                                                FadeInImage(
+                                              placeholder: AssetImage(
+                                                  'assets/imgs/placeholder-image.jpg'), // Your placeholder image asset
+                                              image: NetworkImage(url),
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
                                         ),
                                       ),
