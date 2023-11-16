@@ -2,9 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:lichen_care/pages/user/profile/scan_history.dart';
+import 'package:lichen_care/pages/user/profile/scan_history.dart'
+    as ScanHistoryPage;
 
 class ScanHistoryDetails extends StatelessWidget {
+  final ScanHistoryPage.LichenCheckEntry? lichenCheckEntry;
+
+  ScanHistoryDetails({Key? key, this.lichenCheckEntry}) : super(key: key);
+
   int _currentIndex = 4;
 
   String selectedOption = 'All';
@@ -37,33 +42,242 @@ class ScanHistoryDetails extends StatelessWidget {
 
       // Body
       body: SingleChildScrollView(
-          child: ElevatedButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        style: ButtonStyle(
-          padding: MaterialStateProperty.all<EdgeInsets>(
-            EdgeInsets.symmetric(horizontal: 20, vertical: 22 * scaleFactor),
-          ),
-          backgroundColor:
-              MaterialStateProperty.all<Color>(const Color(0xFFFF7F50)),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              side: const BorderSide(
-                  color: Colors.white, width: 2.0), // Add the white border here
+        child: Column(
+          children: [
+            Container(
+              width: 220,
+              height: 220,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  alignment: Alignment.center,
+                  image: NetworkImage(
+                      "${lichenCheckEntry?.results['file_image']}"),
+                  fit: BoxFit.fill,
+                ),
+              ),
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Confidence Score:",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 5.0,
+                  ),
+                  Text(
+                    "${lichenCheckEntry?.results['detection_score'] ?? 'N/A'}",
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 3, horizontal: 6),
+              child: Text(
+                "${lichenCheckEntry?.results['detection'] ?? 'NO DETECTIONS'}",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.0,
+                  color: Color.fromARGB(255, 126, 64, 7),
+                ),
+              ),
+            ),
+            // Additional information about the detection
+            if (lichenCheckEntry?.results['detection'] != null)
+              Padding(
+                padding: EdgeInsets.only(left: w * 0.08),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 20),
+                      Text(
+                        "Detection Details:",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        "Age: ${lichenCheckEntry?.additionalInfo['age']}",
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                      Text("Sex: ${lichenCheckEntry?.additionalInfo['gender']}",
+                          style: TextStyle(
+                            fontSize: 15,
+                          )),
+                      Text(
+                          "Country: ${lichenCheckEntry?.additionalInfo['country']}",
+                          style: TextStyle(
+                            fontSize: 15,
+                          )),
+                      Text(
+                          "Ethnicity: ${lichenCheckEntry?.additionalInfo['ethnicity']}",
+                          style: TextStyle(
+                            fontSize: 15,
+                          )),
+                      SizedBox(height: 10),
+                      Text(
+                        "When did the onset began?",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      Text(
+                        " -> ${lichenCheckEntry?.symptoms['onset']}",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        "Severity of Itching",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      Text(
+                        " -> ${lichenCheckEntry?.symptoms['itching']}",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        "Severity of Pain",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      Text(
+                        " -> ${lichenCheckEntry?.symptoms['pain']}",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            SizedBox(height: w * 0.08),
+
+            //Back and Delete buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all<EdgeInsets>(
+                      EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 22 * scaleFactor),
+                    ),
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        const Color(0xFFFF7F50)),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        side: const BorderSide(
+                            color: Colors.white,
+                            width: 2.0), // Add the white border here
+                      ),
+                    ),
+                  ),
+                  child: const Text(
+                    'Back',
+                    style: TextStyle(
+                      fontSize: 15.0,
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+
+                //DELETE BUTTON w/ FUNCTION
+                ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      User? user = FirebaseAuth.instance.currentUser;
+
+                      if (user != null) {
+                        final userDocRef = FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(user.uid);
+                        final lichenCheckDocRef = userDocRef
+                            .collection('LichenCheck_inputs')
+                            .doc('${lichenCheckEntry?.documentId}');
+
+                        await lichenCheckDocRef.delete();
+
+                        // Document deleted successfully, now pop to the previous page
+                        Navigator.of(context).pop();
+                      }
+                    } catch (e) {
+                      print('Error deleting document: $e');
+                    }
+                  },
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all<EdgeInsets>(
+                      EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 22 * scaleFactor),
+                    ),
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        const Color(0xFFFF7F50)),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        side: const BorderSide(
+                            color: Colors.white,
+                            width: 2.0), // Add the white border here
+                      ),
+                    ),
+                  ),
+                  child: const Text(
+                    'Delete',
+                    style: TextStyle(
+                      fontSize: 15.0,
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
+
+            SizedBox(
+              height: h * 0.05,
+            )
+          ],
         ),
-        child: const Text(
-          'Go back',
-          style: TextStyle(
-            fontSize: 15.0,
-            color: Colors.white,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      )),
+      ),
 
       // Floating action button
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

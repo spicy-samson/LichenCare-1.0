@@ -95,12 +95,12 @@ class _LichenCheckState extends State<LichenCheck> {
                 'age': patientInformation.age,
                 'country': patientInformation.selectedCountry,
                 'ethnicity': patientInformation.selectedEthnicity,
-                'gender': patientInformation.gender,
+                'gender': getGenderString(patientInformation.gender),
               },
               'symptoms': {
-                'itching': patientInformation.itching,
-                'onset': patientInformation.onset,
-                'pain': patientInformation.pain,
+                'itching': getSeverityofItchString(patientInformation.itching),
+                'onset': getOnsetString(patientInformation.onset),
+                'pain': getSeverityofPainString(patientInformation.pain),
               },
               'results': {
                 'detection': patientInformation.detection,
@@ -1750,3 +1750,51 @@ class Treatments {
   Map<String, dynamic> suggestions;
   Treatments({required this.header, required this.suggestions});
 }
+
+String getGenderString(int? gender) {
+    if (gender == 1) {
+      return 'Male';
+    } else if (gender == 2) {
+      return 'Female';
+    } else {
+      return 'Unknown';
+    }
+  }
+
+  String getOnsetString(int? onset) {
+    if (onset == 1) {
+      return 'within a week';
+    } else if (onset == 2) {
+      return 'within a month';
+    } else if (onset == 3) {
+      return 'within a year';
+    } else if (onset == 4) {
+      return 'over a year/congenital';
+    } else {
+      return 'Unknown';
+    }
+  }
+
+  String getSeverityofItchString(int? itch) {
+    if (itch == 1) {
+      return 'none';
+    } else if (itch == 2) {
+      return 'mild/moderate';
+    } else if (itch == 3) {
+      return 'severe';
+    } else {
+      return 'Unknown';
+    }
+  }
+
+  String getSeverityofPainString(int? pain) {
+    if (pain == 1) {
+      return 'none';
+    } else if (pain == 2) {
+      return 'mild/moderate';
+    } else if (pain == 3) {
+      return 'severe';
+    } else {
+      return 'Unknown';
+    }
+  }

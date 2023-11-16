@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:lichen_care/pages/user/profile/scan_history_details.dart';
 
 class ScanHistory extends StatefulWidget {
@@ -13,11 +14,13 @@ class LichenCheckEntry {
   final Map<String, dynamic> additionalInfo;
   final Map<String, dynamic> results;
   final Map<String, dynamic> symptoms;
+  final String documentId; // Include documentId
 
   LichenCheckEntry({
     required this.additionalInfo,
     required this.results,
     required this.symptoms,
+    required this.documentId, // Include documentId
   });
 }
 
@@ -136,37 +139,40 @@ class _ScanHistory extends State<ScanHistory> {
                               ),
                             ),
                             for (var entryKey in lichenCheckData.keys)
-                              if (lichenCheckData[entryKey]
-                                          ?.results['detection'] !=
-                                      null ||
-                                  lichenCheckData[entryKey]
-                                          ?.results['detection'] ==
-                                      null)
-                                InkWell(
-                                  onTap: () {
-                                    // Navigate to ScanHistoryDetails and pass lichenCheckEntry data
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            ScanHistoryDetails(),
+                              InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ScanHistoryDetails(
+                                        lichenCheckEntry:
+                                            lichenCheckData[entryKey],
                                       ),
-                                    );
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Image.network(
-                                            "${lichenCheckData[entryKey]?.results['file_image']}",
+                                    ),
+                                  );
+                                },
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: CachedNetworkImage(
+                                          imageUrl:
+                                              "${lichenCheckData[entryKey]?.results['file_image']}",
+                                          fit: BoxFit.cover,
+                                          placeholder: (context, url) =>
+                                              FadeInImage(
+                                            placeholder: AssetImage(
+                                                'assets/imgs/placeholder-image.jpg'), // Your placeholder image asset
+                                            image: NetworkImage(url),
                                             fit: BoxFit.cover,
                                           ),
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
+                              ),
                           ],
                         )
 
@@ -189,18 +195,37 @@ class _ScanHistory extends State<ScanHistory> {
                               if (lichenCheckData[entryKey]
                                       ?.results['detection'] !=
                                   null)
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Image.network(
-                                          "${lichenCheckData[entryKey]?.results['file_image']}",
-                                          fit: BoxFit.cover,
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ScanHistoryDetails(
+                                          lichenCheckEntry:
+                                              lichenCheckData[entryKey],
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    );
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: CachedNetworkImage(
+                                          imageUrl:
+                                              "${lichenCheckData[entryKey]?.results['file_image']}",
+                                          fit: BoxFit.cover,
+                                          placeholder: (context, url) =>
+                                              FadeInImage(
+                                            placeholder: AssetImage(
+                                                'assets/imgs/placeholder-image.jpg'), // Your placeholder image asset
+                                            image: NetworkImage(url),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                           ],
                         )
@@ -224,18 +249,40 @@ class _ScanHistory extends State<ScanHistory> {
                               if (lichenCheckData[entryKey]
                                       ?.results['detection'] ==
                                   null)
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Image.network(
-                                          "${lichenCheckData[entryKey]?.results['file_image']}",
-                                          fit: BoxFit.cover,
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ScanHistoryDetails(
+                                          lichenCheckEntry:
+                                              lichenCheckData[entryKey],
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    );
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: CachedNetworkImage(
+                                            imageUrl:
+                                                "${lichenCheckData[entryKey]?.results['file_image']}",
+                                            fit: BoxFit.cover,
+                                            placeholder: (context, url) =>
+                                                FadeInImage(
+                                              placeholder: AssetImage(
+                                                  'assets/imgs/placeholder-image.jpg'), // Your placeholder image asset
+                                              image: NetworkImage(url),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                           ],
                         )
@@ -270,11 +317,9 @@ class _ScanHistory extends State<ScanHistory> {
 
       QuerySnapshot querySnapshot;
       if (detections) {
-        // Fetch entries with detections
         querySnapshot =
             await inputsCollection.where('results', isNull: false).get();
       } else {
-        // Fetch entries with no detections
         querySnapshot =
             await inputsCollection.where('results', isNull: true).get();
       }
@@ -286,6 +331,7 @@ class _ScanHistory extends State<ScanHistory> {
             additionalInfo: doc['additional_info'] ?? {},
             results: doc['results'] ?? {},
             symptoms: doc['symptoms'] ?? {},
+            documentId: doc.id, // Include the documentId
           ),
         );
       }));
