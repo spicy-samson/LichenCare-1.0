@@ -35,11 +35,11 @@ class _LichenPediaState extends State<LichenPedia> {
         automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFFFFF4E9),
         title: Padding(
-          padding: EdgeInsets.only(top: h * 0.05, right: w * 0.5),
+          padding: EdgeInsets.only(top: h * 0.06, right: w * 0.42),
           child: SvgPicture.asset(
             'assets/svgs/#2 - lichenpedia.svg',
             width: w * 0.1,
-            height: h * 0.047,
+            height: h * 0.6,
           ),
         ),
         elevation: 0,

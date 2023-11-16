@@ -8,6 +8,17 @@ class LichenHub extends StatefulWidget {
 
 class _LichenHubState extends State<LichenHub> {
   int _currentIndex = 3;
+
+  Color primaryBackgroundColor = const Color(0xFFFFF4E9);
+  Color primaryforegroundColor = const Color(0xFFFF7F50);
+  Color secondaryForegroundColor = const Color(0xFF66D7D1);
+
+  List<Post> posts = [
+    Post(id: "1", user: "Anonymous User", datetime: DateTime.now(), title: "", 
+    content: "Hi, All\nI'm new to the group and hoping to get some answers. My toddler (almost 2) us itchy all over, mostly lower back, stomach and scalph. We thought it was caused by dustmite allergy but it can't be that alone.\nIs this LP?", 
+    likes: 2, comments: [])
+  ];
+
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -19,28 +30,38 @@ class _LichenHubState extends State<LichenHub> {
         automaticallyImplyLeading: false,
         backgroundColor: Color(0xFFFFF4E9),
         title: Padding(
-          padding: EdgeInsets.only(top: h * 0.05, right: w * 0.5),
+          padding: EdgeInsets.only(top: h * 0.05, right: w * 0.3),
           child: SvgPicture.asset(
             'assets/svgs/#3 - lichenhub.svg',
             width: w * 0.1,
-            height: h * 0.045,
+            height: h * 0.06,
           ),
         ),
         elevation: 0,
         toolbarHeight: 80.0,
+        actions: [
+          SizedBox(height: 80, width: 80,
+            child: Padding(
+              padding:  EdgeInsets.only(top: h * 0.05,),
+              child: FittedBox(
+                child: InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap: (){},
+                  child: Icon(Icons.notifications,color: primaryforegroundColor ,),
+                ),
+              ),
+            ),
+          )
+        ],
       ),
 
       // Body
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              Text('LichenHub page'),
-            ],
-          ),
-        ),
-      ),
+      body: (posts.isEmpty) ? const Center(child: Text("No Posts Yet."),) : ListView.builder(
+        itemCount: posts.length,
+        itemBuilder: (BuildContext context, int index){
+          return PostBox(post: posts[index]);
+        }),
 
       // Floating action button
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -145,4 +166,51 @@ class _LichenHubState extends State<LichenHub> {
       },
     );
   }
+}
+
+
+
+class PostBox extends StatelessWidget {
+  final Post post;
+  const PostBox({super.key, required this.post});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(15.0))
+      ),
+    );
+  }
+}
+
+
+class Post{
+  String id;
+  String user;
+  DateTime datetime;
+  String title;
+  String content;
+  int likes;
+  List<Comment> comments;
+  Post({
+    required this.id,
+    required this.user,
+    required this.datetime,
+    required this.title,
+    required this.content,
+    required this.likes,
+    required this.comments
+  });
+}
+
+class Comment{
+  String id;
+  String sender;
+  String reply;
+  Comment({
+    required this.id,
+    required this.sender,
+    required this.reply
+  });
 }

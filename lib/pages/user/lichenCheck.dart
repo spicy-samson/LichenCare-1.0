@@ -147,11 +147,11 @@ class _LichenCheckState extends State<LichenCheck> {
             automaticallyImplyLeading: false,
             backgroundColor: Color(0xFFFFF4E9),
             title: Padding(
-              padding: EdgeInsets.only(top: h * 0.05, right: w * 0.5),
+              padding: EdgeInsets.only(top: h * 0.05, right: w * 0.42),
               child: SvgPicture.asset(
                 'assets/svgs/#1 - lichencheck.svg',
                 width: w * 0.1,
-                height: h * 0.045,
+                height: h * 0.06,
               ),
             ),
             elevation: 0,
@@ -491,7 +491,7 @@ class _LichenCheckState extends State<LichenCheck> {
                               children: [
                                 ElevatedButton(
                                   onPressed: () {
-                                    Navigator.of(context).pop();
+                                    Navigator.pushReplacementNamed(context, '/home');
                                   },
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.symmetric(
@@ -1012,7 +1012,7 @@ class _LichenCheckState extends State<LichenCheck> {
                                                     patientInformation
                                                             .selectedEthnicity =
                                                         ethnicities[index];
-                                                    Navigator.of(context).pop();
+                                                    Navigator.pushReplacementNamed(context, '/home');
                                                   });
                                                 },
                                                 child: Padding(

@@ -74,9 +74,17 @@ class _LichenPediaReferencesState extends State<LichenPediaReferences> {
               alignment: Alignment.centerLeft,
               child: Padding(
                 padding: EdgeInsets.only(left: 35.0, right: 35),
-                child: richText(
-                    'Chen J., Oakley A., Liu J. (2023). Lichen Planus. DermNet. https://dermnetnz.org/topics/lichen-planus Singh A., Jarrett P., Mitchell G. (2022). Graft Versus Host Disease. DermNet. https://dermnetnz.org/topics/graft-versus-host-disease Bridges KH. Lichen Planus and Lichen Nitidus. In: Kelly A, Taylor SC, Lim HW, et al., eds. Taylor and Kelly\'s Dermatology for Skin of Color, 2nd Edition. McGraw Hill; 2016. Mangold AR, Pittelkow MR. Lichen Planus. In: Kang S, Amagai M, Bruckner AL, et al., eds. Fitzpatrick\'s Dermatology, 9th Edition. McGraw Hill; 2019. Payette M., Weston G., Humphrey S., Yu J., Holland K. (2016). Lichen planus and other lichenoid dermatoses: Kids are not just little people. Clinics in Dermatology. https://pubmed.ncbi.nlm.nih.gov/26686015/',
-                    fontSize: 22 * scaleFactor),
+                child:RichText(
+                  textAlign: TextAlign.justify,
+                  text: TextSpan(
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 22*scaleFactor
+                  ),
+                  children: [
+                  TextSpan(text: 
+                    'Chen J., Oakley A., Liu J. (2023). Lichen Planus. DermNet. https://dermnetnz.org/topics/lichen-planus Singh A., Jarrett P., Mitchell G. (2022). Graft Versus Host Disease. DermNet. https://dermnetnz.org/topics/graft-versus-host-disease Bridges KH. Lichen Planus and Lichen Nitidus. In: Kelly A, Taylor SC, Lim HW, et al., eds. Taylor and Kelly\'s Dermatology for Skin of Color, 2nd Edition. McGraw Hill; 2016. Mangold AR, Pittelkow MR. Lichen Planus. In: Kang S, Amagai M, Bruckner AL, et al., eds. Fitzpatrick\'s Dermatology, 9th Edition. McGraw Hill; 2019. Payette M., Weston G., Humphrey S., Yu J., Holland K. (2016). Lichen planus and other lichenoid dermatoses: Kids are not just little people. Clinics in Dermatology. https://pubmed.ncbi.nlm.nih.gov/26686015/')
+                ])),
               ),
             ),
             const Spacer(),
