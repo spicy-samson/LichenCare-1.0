@@ -2,24 +2,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:lichen_care/pages/user/profile/scan_history_details.dart';
 
 class ScanHistory extends StatefulWidget {
   @override
   _ScanHistory createState() => _ScanHistory();
 }
 
-FirebaseAuth auth = FirebaseAuth.instance;
-User? user = auth.currentUser;
-
 class LichenCheckEntry {
   final Map<String, dynamic> additionalInfo;
   final Map<String, dynamic> results;
   final Map<String, dynamic> symptoms;
+  final String documentId; // Include documentId
 
   LichenCheckEntry({
     required this.additionalInfo,
     required this.results,
     required this.symptoms,
+    required this.documentId, // Include documentId
   });
 }
 
@@ -27,7 +28,7 @@ Color primaryforegroundColor = const Color(0xFFFF7F50);
 
 class _ScanHistory extends State<ScanHistory> {
   int _currentIndex = 4;
-  String selectedOption = 'Detections'; // Default selected option
+  String selectedOption = 'All'; // Default selected option
   bool showDropdown = false;
 
   @override
@@ -58,56 +59,38 @@ class _ScanHistory extends State<ScanHistory> {
       body: SingleChildScrollView(
         child: Padding(
             padding: const EdgeInsets.only(left: 15, right: 15, bottom: 15),
-            child: FutureBuilder<Map<String, String>>(
-              future: getUserData(),
+            child: FutureBuilder<Map<String, LichenCheckEntry>>(
+              future: getLichenCheckEntries(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator(
-                    color: primaryforegroundColor,
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: primaryforegroundColor,
+                    ),
                   );
                 } else if (snapshot.hasError) {
                   return Text("Error: ${snapshot.error}");
                 } else {
-                  Map<String, String> userData = snapshot.data ?? {};
+                  Map<String, LichenCheckEntry> lichenCheckData =
+                      snapshot.data ?? {};
 
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () async {
-                              fetchData();
-                              setState(() {
-                                showDropdown = !showDropdown;
-                              });
-                            },
-                            style: ButtonStyle(
-                              padding: MaterialStateProperty.all<EdgeInsets>(
-                                EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 10),
-                              ),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  primaryforegroundColor),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  side: BorderSide(
-                                      color: Colors.white, width: 2.0),
-                                ),
-                              ),
-                            ),
-                            child: Text("Sort Results"),
-                          ),
-                          if (showDropdown)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
                             DropdownButton<String>(
                               value: selectedOption,
                               icon: const Icon(Icons.arrow_downward),
-                              iconSize: 24,
+                              iconSize: 20,
                               elevation: 16,
-                              style: TextStyle(color: primaryforegroundColor),
+                              borderRadius: BorderRadius.circular(10),
+                              focusColor: Colors.black,
+                              style: TextStyle(
+                                  color: primaryforegroundColor, fontSize: 15),
                               underline: Container(
                                 height: 2,
                                 color: primaryforegroundColor,
@@ -118,6 +101,7 @@ class _ScanHistory extends State<ScanHistory> {
                                 });
                               },
                               items: <String>[
+                                'All',
                                 'Detections',
                                 'No Detections'
                               ].map<DropdownMenuItem<String>>((String value) {
@@ -127,47 +111,181 @@ class _ScanHistory extends State<ScanHistory> {
                                 );
                               }).toList(),
                             ),
-                        ],
+                          ],
+                        ),
                       ),
                       SizedBox(height: 20),
-                      Column(
-                        children: [
-                          Row(
-                            children: List.generate(
-                              2, // number of images
-                              (index) => Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Image.network(
-                                    'https://picsum.photos/200',
-                                    fit: BoxFit.cover,
-                                  ),
+                      Center(
+                        child: Text(
+                          '$selectedOption',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+
+                      // Sorting the Scan History; 'All' is the default
+                      if (selectedOption == 'All')
+                        Column(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                              child: Text(
+                                "${lichenCheckData.length} entries found.",
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontStyle: FontStyle.italic,
                                 ),
                               ),
-                            ).fold<List<Widget>>(
-                              [],
-                              (previousValue, element) {
-                                if (previousValue.isEmpty) {
-                                  return [element];
-                                } else {
-                                  previousValue.last is SizedBox
-                                      ? previousValue[
-                                          previousValue.length - 2] = Row(
-                                          children: [
-                                            previousValue[
-                                                previousValue.length - 2],
-                                            element,
-                                          ],
-                                        )
-                                      : previousValue.add(SizedBox(width: 8));
-                                  previousValue.add(element);
-                                  return previousValue;
-                                }
-                              },
                             ),
-                          ),
-                        ],
-                      )
+                            for (var entryKey in lichenCheckData.keys)
+                              InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ScanHistoryDetails(
+                                        lichenCheckEntry:
+                                            lichenCheckData[entryKey],
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: CachedNetworkImage(
+                                          imageUrl:
+                                              "${lichenCheckData[entryKey]?.results['file_image']}",
+                                          fit: BoxFit.cover,
+                                          placeholder: (context, url) =>
+                                              FadeInImage(
+                                            placeholder: AssetImage(
+                                                'assets/imgs/placeholder-image.jpg'), // Your placeholder image asset
+                                            image: NetworkImage(url),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                          ],
+                        )
+
+                      // Sorting; Detected,
+                      else if (selectedOption == 'Detections')
+                        Column(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                              child: Text(
+                                "${lichenCheckData.values.where((entry) => entry.results['detection'] != null).length} entries found.",
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            ),
+                            for (var entryKey in lichenCheckData.keys)
+                              if (lichenCheckData[entryKey]
+                                      ?.results['detection'] !=
+                                  null)
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ScanHistoryDetails(
+                                          lichenCheckEntry:
+                                              lichenCheckData[entryKey],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: CachedNetworkImage(
+                                          imageUrl:
+                                              "${lichenCheckData[entryKey]?.results['file_image']}",
+                                          fit: BoxFit.cover,
+                                          placeholder: (context, url) =>
+                                              FadeInImage(
+                                            placeholder: AssetImage(
+                                                'assets/imgs/placeholder-image.jpg'), // Your placeholder image asset
+                                            image: NetworkImage(url),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                          ],
+                        )
+
+                      // Sorting; No Detections
+                      else if (selectedOption == 'No Detections')
+                        Column(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                              child: Text(
+                                "${lichenCheckData.values.where((entry) => entry.results['detection'] == null).length} entries found.",
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            ),
+                            for (var entryKey in lichenCheckData.keys)
+                              if (lichenCheckData[entryKey]
+                                      ?.results['detection'] ==
+                                  null)
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ScanHistoryDetails(
+                                          lichenCheckEntry:
+                                              lichenCheckData[entryKey],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: CachedNetworkImage(
+                                            imageUrl:
+                                                "${lichenCheckData[entryKey]?.results['file_image']}",
+                                            fit: BoxFit.cover,
+                                            placeholder: (context, url) =>
+                                                FadeInImage(
+                                              placeholder: AssetImage(
+                                                  'assets/imgs/placeholder-image.jpg'), // Your placeholder image asset
+                                              image: NetworkImage(url),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                          ],
+                        )
                     ],
                   );
                 }
@@ -182,6 +300,91 @@ class _ScanHistory extends State<ScanHistory> {
       // Bottom navigation bar
       bottomNavigationBar: _bottomNavBar(context),
     );
+  }
+
+  Future<Map<String, LichenCheckEntry>> getLichenCheckEntries(
+      {bool detections = true}) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      return {};
+    }
+
+    try {
+      final userDocRef =
+          FirebaseFirestore.instance.collection('users').doc(user?.uid);
+      final inputsCollection = userDocRef.collection('LichenCheck_inputs');
+
+      QuerySnapshot querySnapshot;
+      if (detections) {
+        querySnapshot =
+            await inputsCollection.where('results', isNull: false).get();
+      } else {
+        querySnapshot =
+            await inputsCollection.where('results', isNull: true).get();
+      }
+
+      return Map.fromEntries(querySnapshot.docs.map((doc) {
+        return MapEntry(
+          doc.id,
+          LichenCheckEntry(
+            additionalInfo: doc['additional_info'] ?? {},
+            results: doc['results'] ?? {},
+            symptoms: doc['symptoms'] ?? {},
+            documentId: doc.id, // Include the documentId
+          ),
+        );
+      }));
+    } catch (e) {
+      print('Error fetching LichenCheck entries: $e');
+      return {};
+    }
+  }
+
+  Future<void> fetchData() async {
+    Map<String, LichenCheckEntry> lichenCheckEntries =
+        await getLichenCheckEntries(detections: true);
+
+    // Accessing values in the map
+    lichenCheckEntries.forEach((String docId, LichenCheckEntry entry) {
+      print('Document ID: $docId');
+      print('Additional Info: ${entry.additionalInfo}');
+      print('Symptoms: ${entry.symptoms}');
+      print('Results: ${entry.results}');
+      print('------------------------');
+    });
+  }
+
+  Future<Map<String, String>> getUserData() async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      try {
+        DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        if (userSnapshot.exists) {
+          String firstName = userSnapshot.get('first_name') ?? '';
+          String lastName = userSnapshot.get('last_name') ?? '';
+          String email = userSnapshot.get('email') ?? '';
+          return {
+            'firstName': firstName,
+            'lastName': lastName,
+            'email': email,
+          };
+        }
+      } catch (e) {
+        print("Error fetching user data: $e");
+      }
+    }
+
+    return {
+      'firstName': '',
+      'lastName': '',
+      'email': '',
+    };
   }
 
   Container _lichenCheckBtn(BuildContext context) {
@@ -277,102 +480,5 @@ class _ScanHistory extends State<ScanHistory> {
         }
       },
     );
-  }
-
-  void checkCurrentUser() {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-
-    if (user != null) {
-      print(user);
-    } else {
-      print("User is not logged in.");
-    }
-  }
-
-  Future<Map<String, LichenCheckEntry>> getLichenCheckEntries(
-      {bool detections = true}) async {
-    if (user == null) {
-      return {};
-    }
-
-    try {
-      final userDocRef =
-          FirebaseFirestore.instance.collection('users').doc(user?.uid);
-      final inputsCollection = userDocRef.collection('LichenCheck_inputs');
-
-      QuerySnapshot querySnapshot;
-      if (detections) {
-        // Fetch entries with detections
-        querySnapshot =
-            await inputsCollection.where('results', isNull: false).get();
-      } else {
-        // Fetch entries with no detections
-        querySnapshot =
-            await inputsCollection.where('results', isNull: true).get();
-      }
-
-      return Map.fromEntries(querySnapshot.docs.map((doc) {
-        return MapEntry(
-          doc.id,
-          LichenCheckEntry(
-            additionalInfo: doc['additional_info'] ?? {},
-            results: doc['results'] ?? {},
-            symptoms: doc['symptoms'] ?? {},
-          ),
-        );
-      }));
-    } catch (e) {
-      print('Error fetching LichenCheck entries: $e');
-      return {};
-    }
-  }
-
-  Future<void> fetchData() async {
-    Map<String, LichenCheckEntry> lichenCheckEntries =
-        await getLichenCheckEntries(detections: true);
-
-    // Accessing values in the map
-    lichenCheckEntries.forEach((String docId, LichenCheckEntry entry) {
-      print('Document ID: $docId');
-      print('Additional Info: ${entry.additionalInfo}');
-      print('Symptoms: ${entry.symptoms}');
-      print('Results: ${entry.results}');
-      print('------------------------');
-    });
-
-    print(lichenCheckEntries.values);
-  }
-
-  Future<Map<String, String>> getUserData() async {
-    User? user = FirebaseAuth.instance.currentUser;
-
-    if (user != null) {
-      try {
-        DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .get();
-
-        if (userSnapshot.exists) {
-          String firstName = userSnapshot.get('first_name') ?? '';
-          String lastName = userSnapshot.get('last_name') ?? '';
-          String email = userSnapshot.get('email') ?? '';
-          return {
-            'firstName': firstName,
-            'lastName': lastName,
-            'email': email,
-          };
-        }
-      } catch (e) {
-        print("Error fetching user data: $e");
-      }
-    }
-
-    return {
-      'firstName': '',
-      'lastName': '',
-      'email': '',
-    };
   }
 }

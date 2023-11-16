@@ -412,7 +412,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
+                  children: [ 
                     Image.asset(
                       'assets/imgs/hyper1.png',
                     ),

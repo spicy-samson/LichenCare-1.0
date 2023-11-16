@@ -14,8 +14,9 @@ class _LichenPediaArchiveState extends State<LichenPediaArchive> {
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
-    double h = MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
-    double scaleFactor = h/1080 * 0.9;
+    double h =
+        MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
+    double scaleFactor = h / 1080 * 0.9;
     return Scaffold(
       backgroundColor: const Color(0xFFFFF4E9),
       appBar: AppBar(
@@ -38,7 +39,7 @@ class _LichenPediaArchiveState extends State<LichenPediaArchive> {
         child: Center(
           child: Column(
             children: [
-              const SizedBox(height: 20),
+              const SizedBox(height: 5),
               const Text(
                 'Research Archive',
                 style: TextStyle(fontSize: 32, fontWeight: FontWeight.w900),
@@ -51,7 +52,7 @@ class _LichenPediaArchiveState extends State<LichenPediaArchive> {
                   );
                 },
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
+                  padding: const EdgeInsets.only(left: 5.0),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -60,7 +61,7 @@ class _LichenPediaArchiveState extends State<LichenPediaArchive> {
                         width: 150,
                         height: 100,
                       ),
-                       Padding(
+                      Padding(
                         padding: const EdgeInsets.only(
                           left: 10.0,
                         ),
@@ -70,7 +71,7 @@ class _LichenPediaArchiveState extends State<LichenPediaArchive> {
                             Text(
                               'Diagnosis and treatment of lichen planus',
                               style: TextStyle(
-                                fontSize: 18*scaleFactor,
+                                fontSize: 18 * scaleFactor,
                                 fontWeight: FontWeight.w300,
                                 decoration: TextDecoration.underline,
                               ),
@@ -78,42 +79,42 @@ class _LichenPediaArchiveState extends State<LichenPediaArchive> {
                             Text(
                               'RP Usatine, M Tinitigan - American family',
                               style: TextStyle(
-                                fontSize: 18*scaleFactor,
+                                fontSize: 18 * scaleFactor,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
                             Text(
                               'physician ... than 50 percent of women',
                               style: TextStyle(
-                                fontSize: 18*scaleFactor,
+                                fontSize: 18 * scaleFactor,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
                             Text(
                               'with oral lichen planus have undiagnosed',
                               style: TextStyle(
-                                fontSize: 18*scaleFactor,
+                                fontSize: 18 * scaleFactor,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
                             Text(
                               'vulvar lichen planus. ..., widespread oral',
                               style: TextStyle(
-                                fontSize: 18*scaleFactor,
+                                fontSize: 18 * scaleFactor,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
                             Text(
                               'lichen planus and for lichen planus',
                               style: TextStyle(
-                                fontSize: 18*scaleFactor,
+                                fontSize: 18 * scaleFactor,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
                             Text(
                               'involving other mucocutaneous sites. ...',
                               style: TextStyle(
-                                fontSize: 18*scaleFactor,
+                                fontSize: 18 * scaleFactor,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
@@ -131,7 +132,7 @@ class _LichenPediaArchiveState extends State<LichenPediaArchive> {
                       'https://jamanetwork.com/journals/jamadermatology/article-abstract/526872');
                 },
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
+                  padding: const EdgeInsets.only(left: 5.0),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -140,7 +141,7 @@ class _LichenPediaArchiveState extends State<LichenPediaArchive> {
                         width: 150,
                         height: 100,
                       ),
-                       Padding(
+                      Padding(
                         padding: EdgeInsets.only(left: 10.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,7 +149,7 @@ class _LichenPediaArchiveState extends State<LichenPediaArchive> {
                             Text(
                               'The variations and cause of lichen planus',
                               style: TextStyle(
-                                fontSize: 18*scaleFactor,
+                                fontSize: 18 * scaleFactor,
                                 fontWeight: FontWeight.w300,
                                 decoration: TextDecoration.underline,
                               ),
@@ -156,49 +157,49 @@ class _LichenPediaArchiveState extends State<LichenPediaArchive> {
                             Text(
                               'J Altman, HO Perry - Archives of',
                               style: TextStyle(
-                                fontSize: 18*scaleFactor,
+                                fontSize: 18 * scaleFactor,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
                             Text(
                               'Dermatology, 1961... lichen planus and its',
                               style: TextStyle(
-                                fontSize: 18*scaleFactor,
+                                fontSize: 18 * scaleFactor,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
                             Text(
                               'variations. Most of the previous statistical',
                               style: TextStyle(
-                                fontSize: 18*scaleFactor,
+                                fontSize: 18 * scaleFactor,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
                             Text(
                               'studies date back to the American',
                               style: TextStyle(
-                                fontSize: 18*scaleFactor,
+                                fontSize: 18 * scaleFactor,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
                             Text(
                               'Dermatologic Association symposium on',
                               style: TextStyle(
-                                fontSize: 18*scaleFactor,
+                                fontSize: 18 * scaleFactor,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
                             Text(
                               'lichen planus... patients with lichen',
                               style: TextStyle(
-                                fontSize: 18*scaleFactor,
+                                fontSize: 18 * scaleFactor,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
                             Text(
                               'planus. He...',
                               style: TextStyle(
-                                fontSize: 18*scaleFactor,
+                                fontSize: 18 * scaleFactor,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
@@ -216,7 +217,7 @@ class _LichenPediaArchiveState extends State<LichenPediaArchive> {
                       'https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1600-0714.2010.00946.x');
                 },
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
+                  padding: const EdgeInsets.only(left: 5.0),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -225,7 +226,7 @@ class _LichenPediaArchiveState extends State<LichenPediaArchive> {
                         width: 150,
                         height: 100,
                       ),
-                       Padding(
+                      Padding(
                         padding: EdgeInsets.only(left: 10.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -233,7 +234,7 @@ class _LichenPediaArchiveState extends State<LichenPediaArchive> {
                             Text(
                               'Pathogenesis of oral lichen planus - a',
                               style: TextStyle(
-                                fontSize: 18*scaleFactor,
+                                fontSize: 18 * scaleFactor,
                                 fontWeight: FontWeight.w300,
                                 decoration: TextDecoration.underline,
                               ),
@@ -241,7 +242,7 @@ class _LichenPediaArchiveState extends State<LichenPediaArchive> {
                             Text(
                               'review',
                               style: TextStyle(
-                                fontSize: 18*scaleFactor,
+                                fontSize: 18 * scaleFactor,
                                 fontWeight: FontWeight.w300,
                                 decoration: TextDecoration.underline,
                               ),
@@ -249,49 +250,49 @@ class _LichenPediaArchiveState extends State<LichenPediaArchive> {
                             Text(
                               'Mr Roopashree, RV Gondhalekar...',
                               style: TextStyle(
-                                fontSize: 18*scaleFactor,
+                                fontSize: 18 * scaleFactor,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
                             Text(
                               'Journal of Oral... The various hypothesis',
                               style: TextStyle(
-                                fontSize: 18*scaleFactor,
+                                fontSize: 18 * scaleFactor,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
                             Text(
                               'proposed for pathogenesis of oral ',
                               style: TextStyle(
-                                fontSize: 18*scaleFactor,
+                                fontSize: 18 * scaleFactor,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
                             Text(
                               'lichen planus are discussed in...',
                               style: TextStyle(
-                                fontSize: 18*scaleFactor,
+                                fontSize: 18 * scaleFactor,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
                             Text(
                               'defining lichen planus as a true',
                               style: TextStyle(
-                                fontSize: 18*scaleFactor,
+                                fontSize: 18 * scaleFactor,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
                             Text(
                               'autoimmune disease. An early event in',
                               style: TextStyle(
-                                fontSize: 18*scaleFactor,
+                                fontSize: 18 * scaleFactor,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
                             Text(
                               'lichen planus lesion ...',
                               style: TextStyle(
-                                fontSize: 18*scaleFactor,
+                                fontSize: 18 * scaleFactor,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
@@ -303,34 +304,35 @@ class _LichenPediaArchiveState extends State<LichenPediaArchive> {
                 ),
               ),
               const Spacer(),
-               ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 22*scaleFactor),
-                        ),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            const Color(0xFFFF7F50)),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            side: const BorderSide(
-                                color: Colors.white,
-                                width: 2.0), // Add the white border here
-                          ),
-                        ),
-                      ),
-                      child: const Text(
-                        'Go back',
-                        style: TextStyle(
-                          fontSize: 15.0,
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                style: ButtonStyle(
+                  padding: MaterialStateProperty.all<EdgeInsets>(
+                    EdgeInsets.symmetric(
+                        horizontal: 5, vertical: 22 * scaleFactor),
+                  ),
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(const Color(0xFFFF7F50)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      side: const BorderSide(
                           color: Colors.white,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
+                          width: 2.0), // Add the white border here
                     ),
+                  ),
+                ),
+                child: const Text(
+                  'Go back',
+                  style: TextStyle(
+                    fontSize: 15.0,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
               const SizedBox(
                 height: 50,
               ),
@@ -462,7 +464,7 @@ Widget _buildTextWithDivider(String text) {
         child: Text(
           text,
           style: const TextStyle(
-            fontSize: 20,
+            fontSize: 5,
             fontWeight: FontWeight.w400,
           ),
         ),
