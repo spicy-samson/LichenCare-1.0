@@ -7,6 +7,7 @@ import 'package:country_picker/country_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image/image.dart' as img;
@@ -23,8 +24,7 @@ class LichenCheck extends StatefulWidget {
 }
 
 class _LichenCheckState extends State<LichenCheck> {
-  final _currentIndex =
-      2; // Initialize _currentIndex with the desired initial tab index
+  final _currentIndex = 2;
   List<String> ethnicities = [
     "African",
     "Asian (Central)",
@@ -130,6 +130,26 @@ class _LichenCheckState extends State<LichenCheck> {
     currentPIPage = 0;
     patientInformation.reset();
   }
+
+  @override
+  void initState() {
+    // loadDisclaimerStatus();
+    classifier = Classifier();
+    super.initState();
+  }
+
+  // Future<void> loadDisclaimerStatus() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  //   setState(() {
+  //     disclaimerClosed = prefs.getBool('disclaimerClosed') ?? false;
+  //   });
+  // }
+
+  // Future<void> saveDisclaimerStatus(bool closed) async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   prefs.setBool('disclaimerClosed', closed);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -394,7 +414,7 @@ class _LichenCheckState extends State<LichenCheck> {
                 padding: EdgeInsets.only(
                     left: 15.0,
                     right: 15.0,
-                    top: 200.0 * scaleFactor,
+                    top: 150.0 * scaleFactor,
                     bottom: 120.0 * scaleFactor),
                 child: Container(
                   width: double.infinity,
@@ -409,26 +429,17 @@ class _LichenCheckState extends State<LichenCheck> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              top: 20, right: 0, bottom: 25),
-                          child: SvgPicture.asset(
-                            'assets/svgs/#1 - lichencheck.svg',
-                            width: w * 0.02,
-                            height: h * 0.07,
-                          ),
-                        ),
                         RichText(
                             textAlign: TextAlign.center,
                             text: TextSpan(
                                 style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 24 * (scaleFactor),
+                                    fontSize: 23 * (scaleFactor),
                                     fontWeight: FontWeight.bold),
                                 children: const <TextSpan>[
                                   TextSpan(
                                       text:
-                                          'DISCLAIMER: Skin Rash Detection Limitation'),
+                                          'DISCLAIMER FOR USING LICHENCHECK'),
                                 ])),
                         SizedBox(
                           height: 25 * scaleFactor,
@@ -443,7 +454,8 @@ class _LichenCheckState extends State<LichenCheck> {
                                     text: TextSpan(
                                         style: TextStyle(
                                             color: Colors.black,
-                                            fontSize: 22 * scaleFactor),
+                                            fontSize: 20 * scaleFactor,
+                                            fontStyle: FontStyle.italic),
                                         children: const <TextSpan>[
                                           TextSpan(text: "Dear Users,"),
                                         ])),
@@ -451,16 +463,29 @@ class _LichenCheckState extends State<LichenCheck> {
                                   height: 15 * scaleFactor,
                                 ),
                                 RichText(
-                                    textAlign: TextAlign.center,
+                                    textAlign: TextAlign.justify,
                                     text: TextSpan(
                                         style: TextStyle(
                                             color: Colors.black,
-                                            fontSize: 22 * scaleFactor,
+                                            fontSize: 20 * scaleFactor,
                                             height: 1.5),
                                         children: const <TextSpan>[
                                           TextSpan(
                                               text:
-                                                  "Machine Learning's trend is rising, and "),
+                                                  "LichenCheck feature provides broad classifications of Cutaneous Lichen Planus (annular, hypertrophic, linear) for educational purposes only. It does not replace professional medical advice; consult a healthcare professional for accurate diagnosis."),
+                                          TextSpan(
+                                              text: " Lichen",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color(0XFF15D6b4))),
+                                          TextSpan(
+                                              text: "Care",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color(0XFFF0784C))),
+                                          TextSpan(
+                                              text:
+                                                  " is a supportive tool, and not a substitute for expert judgment. Users are responsible for interpreting results and acknowledging technology limitations. False positives or negatives may occur. Use at your own risk. "),
                                           TextSpan(
                                               text: "Lichen",
                                               style: TextStyle(
@@ -473,11 +498,31 @@ class _LichenCheckState extends State<LichenCheck> {
                                                   color: Color(0XFFF0784C))),
                                           TextSpan(
                                               text:
-                                                  " saw this technology as the cornerstone in achieving improved heathcare quality outcomes."),
+                                                  " disclaims any liability for actions based on app information. By proceeding, you agree to these terms. For comprehensive skin health assessments, consult a healthcare professional."),
+                                        ])),
+                                SizedBox(height: 25 * scaleFactor),
+                                RichText(
+                                    textAlign: TextAlign.center,
+                                    text: TextSpan(
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 20 * scaleFactor,
+                                        ),
+                                        children: const <TextSpan>[
                                           TextSpan(
-                                              text:
-                                                  "Have yourself a Lichen Planus detector that can give an additional layer of screening.")
-                                        ]))
+                                              text: "Thank you for choosing "),
+                                          TextSpan(
+                                              text: "Lichen",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color(0XFF15D6b4))),
+                                          TextSpan(
+                                              text: "Care",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color(0XFFF0784C))),
+                                          TextSpan(text: "!")
+                                        ])),
                               ],
                             )),
                         const Spacer(),
@@ -485,7 +530,7 @@ class _LichenCheckState extends State<LichenCheck> {
                           width: double.infinity,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 10.0, vertical: 20.0),
+                                horizontal: 8.0, vertical: 13.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -538,13 +583,6 @@ class _LichenCheckState extends State<LichenCheck> {
               ),
       ],
     );
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    classifier = Classifier();
   }
 
   @override
@@ -1752,49 +1790,49 @@ class Treatments {
 }
 
 String getGenderString(int? gender) {
-    if (gender == 1) {
-      return 'Male';
-    } else if (gender == 2) {
-      return 'Female';
-    } else {
-      return 'Unknown';
-    }
+  if (gender == 1) {
+    return 'Male';
+  } else if (gender == 2) {
+    return 'Female';
+  } else {
+    return 'Unknown';
   }
+}
 
-  String getOnsetString(int? onset) {
-    if (onset == 1) {
-      return 'within a week';
-    } else if (onset == 2) {
-      return 'within a month';
-    } else if (onset == 3) {
-      return 'within a year';
-    } else if (onset == 4) {
-      return 'over a year/congenital';
-    } else {
-      return 'Unknown';
-    }
+String getOnsetString(int? onset) {
+  if (onset == 1) {
+    return 'within a week';
+  } else if (onset == 2) {
+    return 'within a month';
+  } else if (onset == 3) {
+    return 'within a year';
+  } else if (onset == 4) {
+    return 'over a year/congenital';
+  } else {
+    return 'Unknown';
   }
+}
 
-  String getSeverityofItchString(int? itch) {
-    if (itch == 1) {
-      return 'none';
-    } else if (itch == 2) {
-      return 'mild/moderate';
-    } else if (itch == 3) {
-      return 'severe';
-    } else {
-      return 'Unknown';
-    }
+String getSeverityofItchString(int? itch) {
+  if (itch == 1) {
+    return 'none';
+  } else if (itch == 2) {
+    return 'mild/moderate';
+  } else if (itch == 3) {
+    return 'severe';
+  } else {
+    return 'Unknown';
   }
+}
 
-  String getSeverityofPainString(int? pain) {
-    if (pain == 1) {
-      return 'none';
-    } else if (pain == 2) {
-      return 'mild/moderate';
-    } else if (pain == 3) {
-      return 'severe';
-    } else {
-      return 'Unknown';
-    }
+String getSeverityofPainString(int? pain) {
+  if (pain == 1) {
+    return 'none';
+  } else if (pain == 2) {
+    return 'mild/moderate';
+  } else if (pain == 3) {
+    return 'severe';
+  } else {
+    return 'Unknown';
   }
+}

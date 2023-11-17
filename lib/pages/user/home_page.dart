@@ -72,8 +72,7 @@ class HomePage extends StatelessWidget {
                       ),
                       backgroundColor: MaterialStateProperty.all<Color>(
                           const Color(0xFFFF7F50)),
-                      shape:
-                          MaterialStateProperty.all<RoundedRectangleBorder>(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           side: BorderSide(
@@ -246,7 +245,7 @@ class HomePage extends StatelessWidget {
                     // Adjust the padding
                     child: ElevatedButton(
                       onPressed: () {
-                        // Implement your registration logic here
+                        Navigator.of(context).pushNamed('/profile/about_us');
                       },
                       child: Text(
                         'Learn More',
@@ -383,5 +382,4 @@ class HomePage extends StatelessWidget {
       },
     );
   }
-
 }

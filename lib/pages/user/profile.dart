@@ -75,7 +75,7 @@ class _ProfileState extends State<Profile> {
               buildCustomDivider(2, Colors.grey),
               Padding(
                 padding: const EdgeInsets.all(12),
-                child: buildRow('Terms and conditions',
+                child: buildRow('Terms and Conditions',
                     'assets/svgs/profileSection/terms and conditions_icon.svg',
                     () {
                   Navigator.of(context)
@@ -85,7 +85,7 @@ class _ProfileState extends State<Profile> {
               buildCustomDivider(2, Colors.grey),
               Padding(
                 padding: const EdgeInsets.all(12),
-                child: buildRow('Privacy policy',
+                child: buildRow('Privacy Policy',
                     'assets/svgs/profileSection/privacy policy_icon.svg', () {
                   Navigator.of(context).pushNamed('/profile/privacy_policy');
                 }),

@@ -17,7 +17,7 @@ class TermsAndConditions extends StatelessWidget {
         automaticallyImplyLeading: false,
         backgroundColor: Color(0xFFFFF4E9),
         title: Padding(
-          padding: EdgeInsets.only(top: h * 0.04, right: w * 0.45),
+          padding: EdgeInsets.only(top: h * 0.04, right: w * 0.15),
           child: SvgPicture.asset(
             'assets/svgs/profileSection/profileAppBars/terms_and_conditions(copy).svg',
             width: w * 0.1,
@@ -30,7 +30,38 @@ class TermsAndConditions extends StatelessWidget {
 
       // Body
       // Body
-      body: SingleChildScrollView(),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: ListView(
+          children: [
+            Text(
+              'LichenCare Terms of Use',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 10),
+            Text(
+              'Effective as of: November 20, 2023',
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Introduction\n'
+              'Welcome to LichenCare! Please read these Terms of Use (“Terms”) carefully as they govern your use (which includes access to) LichenCare’s personalized services for the classification of the Cutaneous Lichen Planus skin disease, including the in-app features (LichenCheck, Lichenpedia, LichenHub) that incorporate or link to these Terms (collectively, the “LichenCare Service”). LichenCare mobile application and LichenCare external services or APIs use experimental Artificial Intelligence (“AI”) technology to offer general information for general educational purposes (“Services”), subject to your reading, understanding, and agreement with all of these terms and conditions (“Terms”).\n'
+              '\n'
+              'LichenCare may modify these Terms at any time, and such modifications shall be effective immediately upon posting the updated Terms on our app. External entities that use our APIs are wholly responsible for ensuring that our updated Terms are presented and acknowledged by users.\n'
+              '\n'
+              'If you A) do not agree with all the Terms bar none, or if B) you are under the age of fourteen (14), or if C) you have or belong to any of the contraindications as stated below, do not use LichenCare and our Services. Please review all of the Terms carefully before proceeding.',
+            ),
+            SizedBox(height: 20),
+            // Continue adding the rest of your terms and conditions content here
+          ],
+        ),
+      ),
 
       // Floating action button
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -134,49 +165,6 @@ class TermsAndConditions extends StatelessWidget {
         }
       },
     );
-  }
-
-  void checkCurrentUser() {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-
-    if (user != null) {
-      print(user);
-    } else {
-      print("User is not logged in.");
-    }
-  }
-
-  Future<Map<String, String>> getUserData() async {
-    User? user = FirebaseAuth.instance.currentUser;
-
-    if (user != null) {
-      try {
-        DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .get();
-
-        if (userSnapshot.exists) {
-          String firstName = userSnapshot.get('first_name') ?? '';
-          String lastName = userSnapshot.get('last_name') ?? '';
-          String email = userSnapshot.get('email') ?? '';
-          return {
-            'firstName': firstName,
-            'lastName': lastName,
-            'email': email,
-          };
-        }
-      } catch (e) {
-        print("Error fetching user data: $e");
-      }
-    }
-
-    return {
-      'firstName': '',
-      'lastName': '',
-      'email': '',
-    };
   }
 }
 

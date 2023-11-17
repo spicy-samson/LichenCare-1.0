@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -15,6 +16,7 @@ class _UserFeedbackState extends State<UserFeedback> {
   int _currentIndex = 4;
   double _rating = 0;
   TextEditingController _feedbackController = TextEditingController();
+  bool _isSubmitting = false; // Add this variable to track submission status
 
   @override
   Widget build(BuildContext context) {
@@ -92,6 +94,7 @@ class _UserFeedbackState extends State<UserFeedback> {
               ),
               SizedBox(height: 10.0),
               // Blank space text area
+
               Container(
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),
@@ -99,9 +102,15 @@ class _UserFeedbackState extends State<UserFeedback> {
                 ),
                 padding: EdgeInsets.all(10.0),
                 child: TextField(
+                  controller:
+                      _feedbackController, // Link the controller to the TextField
                   maxLines: 10,
                   decoration: InputDecoration.collapsed(
                     hintText: 'Write your feedback here...',
+                    hintStyle: TextStyle(
+                      fontSize: 12.0,
+                      color: Colors.grey,
+                    ),
                   ),
                 ),
               ),
@@ -115,7 +124,6 @@ class _UserFeedbackState extends State<UserFeedback> {
                       onPressed: () {
                         // Send feedback to Firebase
                         submitFeedback();
-                        Navigator.of(context).pop();
                       },
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all<EdgeInsets>(
@@ -134,14 +142,20 @@ class _UserFeedbackState extends State<UserFeedback> {
                           ),
                         ),
                       ),
-                      child: const Text(
-                        'Submit',
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          color: Colors.white,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
+                      child: _isSubmitting
+                          ? CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.white),
+                              strokeWidth: 4.0,
+                            ) // Show a circular progress indicator if submitting
+                          : const Text(
+                              'Submit',
+                              style: TextStyle(
+                                fontSize: 15.0,
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
                     ),
                   ],
                 ),
@@ -168,17 +182,49 @@ class _UserFeedbackState extends State<UserFeedback> {
     }
 
     try {
-      final feedbackCollection =
-          FirebaseFirestore.instance.collection('user_feedback');
-
-      await feedbackCollection.add({
-        'user_id': user.uid,
-        'rating': _rating,
-        'feedback': _feedbackController.text,
-        'timestamp': FieldValue.serverTimestamp(),
+      setState(() {
+        _isSubmitting = true; // Set the flag to true when starting submission
       });
+
+      final userDocRef =
+          FirebaseFirestore.instance.collection('users').doc(user.uid);
+      final userSnapshot = await userDocRef.get();
+
+      if (userSnapshot.exists) {
+        final feedbackCollection = userDocRef.collection('Feedback');
+        await feedbackCollection.add({
+          'rating': _rating,
+          'feedback': _feedbackController.text,
+          'timestamp': FieldValue.serverTimestamp(),
+        });
+
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.success,
+          animType: AnimType.topSlide,
+          title: 'Feedback submitted!',
+          desc:
+              "Thank you for your feedback! We'll surely do our best so that we can satisfy our users' needs! 🤗",
+          descTextStyle: TextStyle(
+            fontSize: 16.0,
+          ),
+          padding: EdgeInsets.all(16.0),
+          btnOkOnPress: () {
+            Navigator.of(context).pop();
+            Navigator.of(context).pushNamedAndRemoveUntil('/profile',
+                (Route<dynamic> route) => false); // Navigate to the login page
+          },
+        ).show();
+        setState(() {
+          _isSubmitting =
+              false; // Set the flag to false after successful submission
+        });
+      }
     } catch (e) {
       print('Error submitting feedback: $e');
+      setState(() {
+        _isSubmitting = false; // Set the flag to false if an error occurs
+      });
       // Handle error as needed
     }
   }

@@ -17,7 +17,7 @@ class PrivacyPolicy extends StatelessWidget {
         automaticallyImplyLeading: false,
         backgroundColor: Color(0xFFFFF4E9),
         title: Padding(
-          padding: EdgeInsets.only(top: h * 0.04, right: w * 0.45),
+          padding: EdgeInsets.only(top: h * 0.04, right: w * 0.35),
           child: SvgPicture.asset(
             'assets/svgs/profileSection/profileAppBars/privacy_policy(copy).svg',
             width: w * 0.1,

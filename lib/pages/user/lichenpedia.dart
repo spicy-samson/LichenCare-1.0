@@ -250,7 +250,7 @@ class _LichenPediaState extends State<LichenPedia> {
                           padding: const EdgeInsets.only(left: 35.0, right: 35),
                           child: richText(
                               'The term Lichen Planus (LP) or pronounced as (like-en play-nes) stems from the Greek word “leichen”, which means “tree moss”, and the Latin word “planus”, which means “flat”, which aptly describes the surface of the cutaneous lesion. Lichen Planus is an uncommon skin disorder that presents as an itchy rash that appears as flat-topped, itchy, purple-colored bumps of the skin. While LP is a non-contagious skin disease, it can affect any part of the body of the person with it and is most commonly found on the wrists, ankles, lower back, and mouth. LP belongs to a group of chronic inflammatory skin conditions with characteristic clinical and histopathologic findings, ranging from common to rare called lichenoid dermatoses. Commonly, the LP presents many variants in morphology and location also exist.',
-                              fontSize: 22 * scaleFactor),
+                              fontSize: 22 * scaleFactor,),
                         ),
                       ),
                       const Spacer(),

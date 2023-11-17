@@ -30,7 +30,7 @@ class ScanHistoryDetails extends StatelessWidget {
         backgroundColor: Color(0xFFFFF4E9),
         title: Padding(
           padding:
-              EdgeInsets.only(top: h * 0.04, right: w * 0.45, left: w * 0.005),
+              EdgeInsets.only(top: h * 0.04, right: w * 0.35, left: w * 0.005),
           child: SvgPicture.asset(
             'assets/svgs/profileSection/profileAppBars/scan_history(copy).svg',
             width: w * 0.1,
@@ -259,7 +259,7 @@ class ScanHistoryDetails extends StatelessWidget {
                                     'Delete',
                                     style: TextStyle(
                                       color: Colors
-                                          .orange, // Change text color to orange
+                                          .red, // Change text color to orange
                                     ),
                                   ),
                                 ),
@@ -313,8 +313,8 @@ class ScanHistoryDetails extends StatelessWidget {
                       EdgeInsets.symmetric(
                           horizontal: 20, vertical: 22 * scaleFactor),
                     ),
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                        const Color(0xFFFF7F50)),
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.red),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),

@@ -44,7 +44,7 @@ class _ScanHistory extends State<ScanHistory> {
         backgroundColor: Color(0xFFFFF4E9),
         title: Padding(
           padding:
-              EdgeInsets.only(top: h * 0.04, right: w * 0.45, left: w * 0.005),
+              EdgeInsets.only(top: h * 0.04, right: w * 0.35, left: w * 0.005),
           child: SvgPicture.asset(
             'assets/svgs/profileSection/profileAppBars/scan_history(copy).svg',
             width: w * 0.1,

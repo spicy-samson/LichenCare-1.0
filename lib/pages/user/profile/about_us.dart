@@ -10,6 +10,7 @@ class AboutUs extends StatelessWidget {
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
+    double scaleFactor = h / 1080;
 
     return Scaffold(
       backgroundColor: Color(0xFFFFF4E9),
@@ -29,8 +30,249 @@ class AboutUs extends StatelessWidget {
       ),
 
       // Body
-      // Body
-      body: SingleChildScrollView(),
+      body: ListView(
+        children: [
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: TextStyle(fontSize: 14, color: Colors.black),
+                      children: [
+                        TextSpan(
+                          text:
+                              "Unlocking dermatological wisdom through information, guiding everyone with clinical decisions.",
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              fontStyle: FontStyle.italic),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 25),
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: TextStyle(fontSize: 14, color: Colors.black),
+                      children: [
+                        TextSpan(
+                          text: "WHO ARE WE?",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 15),
+                  Column(
+                    children: [
+                      Row(
+                        children: [
+                          Image.asset(
+                            'assets/imgs/jb_pic.png',
+                            width: w * 0.3,
+                            height: h * 0.3,
+                            fit: BoxFit.scaleDown,
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 14.0),
+                              child: RichText(
+                                textAlign: TextAlign.left,
+                                text: TextSpan(
+                                  style: TextStyle(
+                                      fontSize: 14, color: Colors.black),
+                                  children: [
+                                    TextSpan(
+                                      text: "John Benidick D. Redondo. \n",
+                                      style: TextStyle(
+                                        fontSize: 20 * scaleFactor,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: "Project Manager. \n",
+                                      style: TextStyle(
+                                        fontSize: 18 * scaleFactor,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: "johnbenidickredondo@gmail.com \n",
+                                      style: TextStyle(
+                                        fontSize: 18 * scaleFactor,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: "+639150734583 \n",
+                                      style: TextStyle(
+                                        fontSize: 18 * scaleFactor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          SvgPicture.asset(
+                            'assets/svgs/AboutUs_image.svg',
+                            width: w * 0.14,
+                            height: h * 0.20,
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 14.0),
+                              child: RichText(
+                                textAlign: TextAlign.left,
+                                text: TextSpan(
+                                  style: TextStyle(
+                                      fontSize: 14, color: Colors.black),
+                                  children: [
+                                    TextSpan(
+                                      text: "John Benidick D. Redondo. \n",
+                                      style: TextStyle(
+                                        fontSize: 20 * scaleFactor,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: "Project Manager. \n",
+                                      style: TextStyle(
+                                        fontSize: 18 * scaleFactor,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: "johnbenidickredondo@gmail.com \n",
+                                      style: TextStyle(
+                                        fontSize: 18 * scaleFactor,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: "+639150734583 \n",
+                                      style: TextStyle(
+                                        fontSize: 18 * scaleFactor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: RichText(
+                      textAlign: TextAlign.justify,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text:
+                                "LichenCare team are Fourth Year Information Technology students that aim to utilize Machine Learning as an indispensable tool in the field of health informatics. They believe that AI must only be used as an aid and should not be intended to replace humans in their respective field.",
+                            style: TextStyle(
+                                fontSize: 20 * scaleFactor,
+                                color: Colors.black,
+                                height: 1.3),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: RichText(
+                      textAlign: TextAlign.justify,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text:
+                                "The LichenCare mobile application is a tool that is meant for everyone especially and gives significant assistance for patients specifically those with Lichen Planus as it allows them to make informed decisions. It is a platform that offers healthcare support and brings everyone together to share their knowledge and experiences with others to make the disease known for everybody.",
+                            style: TextStyle(
+                                fontSize: 20 * scaleFactor,
+                                color: Colors.black,
+                                height: 1.3),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: RichText(
+                      textAlign: TextAlign.justify,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text:
+                                "This healthcare support platform aims to greatly improve the identification and dissemination of medical information with a system application that offers various healthcare features that assist patients in understanding Lichen Planus. Along its way, it is an initiative to inspire developers to explore more with the ever-growing field of Machine Learning and Deep Learning to create an endless variety of concepts.",
+                            style: TextStyle(
+                                fontSize: 20 * scaleFactor,
+                                color: Colors.black,
+                                height: 1.3),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 30),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text:
+                                "For inquiries, concerns and questions you can contact us at bsitcapstoneproject143@gmail.com.",
+                            style: TextStyle(
+                                fontSize: 18 * scaleFactor,
+                                color: Colors.black,
+                                fontStyle: FontStyle.italic),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "LichenCare © 2023. All rights reserved.",
+                            style: TextStyle(
+                              fontSize: 18 * scaleFactor,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 25),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
 
       // Floating action button
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -135,49 +377,4 @@ class AboutUs extends StatelessWidget {
       },
     );
   }
-
-  void checkCurrentUser() {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-
-    if (user != null) {
-      print(user);
-    } else {
-      print("User is not logged in.");
-    }
-  }
-
-  Future<Map<String, String>> getUserData() async {
-    User? user = FirebaseAuth.instance.currentUser;
-
-    if (user != null) {
-      try {
-        DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .get();
-
-        if (userSnapshot.exists) {
-          String firstName = userSnapshot.get('first_name') ?? '';
-          String lastName = userSnapshot.get('last_name') ?? '';
-          String email = userSnapshot.get('email') ?? '';
-          return {
-            'firstName': firstName,
-            'lastName': lastName,
-            'email': email,
-          };
-        }
-      } catch (e) {
-        print("Error fetching user data: $e");
-      }
-    }
-
-    return {
-      'firstName': '',
-      'lastName': '',
-      'email': '',
-    };
-  }
 }
-
-Color primaryforegroundColor = const Color(0xFFFF7F50);
