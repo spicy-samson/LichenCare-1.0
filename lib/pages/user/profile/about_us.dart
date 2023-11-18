@@ -46,10 +46,10 @@ class AboutUs extends StatelessWidget {
                           text:
                               "Unlocking dermatological wisdom through information, guiding everyone with clinical decisions.",
                           style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                              fontStyle: FontStyle.italic,),
-                              
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            fontStyle: FontStyle.italic,
+                          ),
                         ),
                       ],
                     ),
