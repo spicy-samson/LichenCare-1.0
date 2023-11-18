@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TermsAndConditions extends StatelessWidget {
   int _currentIndex = 4;
@@ -9,7 +9,9 @@ class TermsAndConditions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
-    double h = MediaQuery.of(context).size.height;
+    double h =
+        MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
+    double scaleFactor = h / 1080;
 
     return Scaffold(
       backgroundColor: Color(0xFFFFF4E9),
@@ -31,35 +33,126 @@ class TermsAndConditions extends StatelessWidget {
       // Body
       // Body
       body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            Text(
-              'LichenCare Terms of Use',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+        padding: const EdgeInsets.only(left: 45.0, right: 45),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Container(
+            height: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 100 * scaleFactor),
+                Text(
+                  'LichenCare Terms of Use',
+                  style: TextStyle(
+                      fontSize: 22 * scaleFactor, fontWeight: FontWeight.w900),
+                ),
+                Text(
+                  'Effective as of: December 01, 2023',
+                  style: TextStyle(
+                    fontSize: 20 * scaleFactor,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'Introduction',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: EdgeInsets.only(left: 0, right: 0),
+                  child: RichText(
+                    textAlign: TextAlign.justify,
+                    text: TextSpan(
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 20 * scaleFactor,
+                      ),
+                      children: const [
+                        TextSpan(
+                            text:
+                                'Please read these Terms of Use (“Terms”) carefully as they govern your use (which includes access to) LichenCare’s personalized services for classification of the Cutaneous Lichen Planus skin disease, including the in-app features (LichenCheck, Lichenpedia, LichenHub) that incorporate or link to these Terms (collectively, the “LichenCare Service”).'),
+                      ],
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacementNamed('/login');
+                      },
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                          EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 22 * scaleFactor),
+                        ),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          const Color(0xFFFF7F50),
+                        ),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: const BorderSide(
+                              color: Colors.white,
+                              width: 2.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                      child: const Text(
+                        'Go back',
+                        style: TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushReplacementNamed('/profile/privacy_policy');
+                      },
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                          EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 22 * scaleFactor),
+                        ),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          const Color(0xFFFF7F50),
+                        ),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: const BorderSide(
+                              color: Colors.white,
+                              width: 2.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                      child: const Text(
+                        'I accept',
+                        style: TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+              ],
             ),
-            SizedBox(height: 10),
-            Text(
-              'Effective as of: November 20, 2023',
-              style: TextStyle(
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Introduction\n'
-              'Welcome to LichenCare! Please read these Terms of Use (“Terms”) carefully as they govern your use (which includes access to) LichenCare’s personalized services for the classification of the Cutaneous Lichen Planus skin disease, including the in-app features (LichenCheck, Lichenpedia, LichenHub) that incorporate or link to these Terms (collectively, the “LichenCare Service”). LichenCare mobile application and LichenCare external services or APIs use experimental Artificial Intelligence (“AI”) technology to offer general information for general educational purposes (“Services”), subject to your reading, understanding, and agreement with all of these terms and conditions (“Terms”).\n'
-              '\n'
-              'LichenCare may modify these Terms at any time, and such modifications shall be effective immediately upon posting the updated Terms on our app. External entities that use our APIs are wholly responsible for ensuring that our updated Terms are presented and acknowledged by users.\n'
-              '\n'
-              'If you A) do not agree with all the Terms bar none, or if B) you are under the age of fourteen (14), or if C) you have or belong to any of the contraindications as stated below, do not use LichenCare and our Services. Please review all of the Terms carefully before proceeding.',
-            ),
-            SizedBox(height: 20),
-            // Continue adding the rest of your terms and conditions content here
-          ],
+          ),
         ),
       ),
 

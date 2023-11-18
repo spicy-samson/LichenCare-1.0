@@ -1,6 +1,7 @@
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class LichenPediaVariant extends StatefulWidget {
@@ -10,7 +11,7 @@ class LichenPediaVariant extends StatefulWidget {
 
 class _LichenPediaVariantState extends State<LichenPediaVariant> {
   final int _currentIndex = 1;
-  void _onArrowDownPressed( GlobalKey scrollkey) {
+  void _onArrowDownPressed(GlobalKey scrollkey) {
     Scrollable.ensureVisible(scrollkey.currentContext!,
         duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
   }
@@ -22,14 +23,15 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
     "Pigmentosus": GlobalKey(),
     "Eruption": GlobalKey(),
     "Mucosal": GlobalKey(),
-    "List" : GlobalKey(),
+    "List": GlobalKey(),
   };
 
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
-    double h = MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
-    double scaleFactor = h/1080;
+    double h =
+        MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
+    double scaleFactor = h / 1080;
     return Scaffold(
       backgroundColor: const Color(0xFFFFF4E9),
       appBar: AppBar(
@@ -54,211 +56,224 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                height: h - 200,
-                child:Column(children: [
-                  SizedBox(height: 35*scaleFactor,key: scrollKeys["List"],),
-                  const SizedBox(
-                    width: double.infinity,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 40.0),
-                      child: FittedBox(
-                        child: Center(
-                          child: Text(
-                              'Variants of Lichen Planus',
-                              style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
-                              textAlign: TextAlign
-                                  .center, // Center align the text within the Text widget
+                  height: h - 200,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 35 * scaleFactor,
+                        key: scrollKeys["List"],
+                      ),
+                      const SizedBox(
+                        width: double.infinity,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 40.0),
+                          child: FittedBox(
+                            child: Center(
+                              child: Text(
+                                'Variants of Lichen Planus',
+                                style: TextStyle(
+                                    fontSize: 40, fontWeight: FontWeight.w900),
+                                textAlign: TextAlign
+                                    .center, // Center align the text within the Text widget
+                              ),
                             ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  SizedBox(height: 35*scaleFactor),
-                  GestureDetector(
-                    onTap: () {
-                      _onArrowDownPressed(scrollKeys["Cutaneous"]!);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 45, right: 45.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Flexible(
-                            child: Text(
-                              'Cutaneous Lichen Planus',
-                              style: TextStyle(
-                                fontSize: 18,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                          ),
-                          const Icon(Icons.arrow_forward_ios, color: Colors.orange),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 25*scaleFactor,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      _onArrowDownPressed(scrollKeys["Planopilaris"]!);
-                    },
-                    child:  Padding(
-                      padding:const  EdgeInsets.only(left: 45, right: 45.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Flexible(
-                            child: Text(
-                              'Lichen Planopilaris',
-                              style: TextStyle(
-                                fontSize: 18,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                          ),
-                          const Icon(Icons.arrow_forward_ios, color: Colors.orange),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 25*scaleFactor,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      _onArrowDownPressed(scrollKeys["Nails"]!);
-                    },
-                    child:  Padding(
-                      padding: const EdgeInsets.only(left: 45, right: 45.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Flexible(
-                            child: Text(
-                              'Lichen Planus of the Nails',
-                              style: TextStyle(
-                                fontSize: 18,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                          ),
-                          const Icon(Icons.arrow_forward_ios, color: Colors.orange),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 25*scaleFactor),
-                  GestureDetector(
-                    onTap: () {
-                      _onArrowDownPressed(scrollKeys["Pigmentosus"]!);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 45, right: 45.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Flexible(
-                            child: Text(
-                              'Lichen Planus Pigmentosus',
-                              style: TextStyle(
-                                fontSize: 18,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                          ),
-                          const Icon(Icons.arrow_forward_ios, color: Colors.orange),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 25*scaleFactor),
-                  GestureDetector(
-                    onTap: () {
-                      _onArrowDownPressed(scrollKeys["Eruption"]!);
-                    },
-                    child:  Padding(
-                      padding:const EdgeInsets.only(left: 45, right: 45.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Flexible(
-                            child: Text(
-                              'Lichen drug eruption',
-                              style: TextStyle(
-                                fontSize: 18,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                          ),
-                          const Icon(Icons.arrow_forward_ios, color: Colors.orange),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 25*scaleFactor),
-                  GestureDetector(
-                    onTap: () {
-                      _onArrowDownPressed(scrollKeys["Mucosal"]!);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 45, right: 45.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Flexible(
-                            child: Text(
-                              'Mucosal Lichen Planus',
-                              style: TextStyle(
-                                fontSize: 18,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                          ),
-                          const Icon(Icons.arrow_forward_ios, color: Colors.orange),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 45.0, right: 45),
-                    child: Container(
-                      // Adjust the padding
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
+                      SizedBox(height: 35 * scaleFactor),
+                      GestureDetector(
+                        onTap: () {
+                          _onArrowDownPressed(scrollKeys["Cutaneous"]!);
                         },
-                        child: Text(
-                          'Go back',
-                          style: TextStyle(
-                            fontSize: 15.0,
-                            color: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 45, right: 45.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Flexible(
+                                child: Text(
+                                  'Cutaneous Lichen Planus',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ),
+                              const Icon(Icons.arrow_forward_ios,
+                                  color: Colors.orange),
+                            ],
                           ),
-                          textAlign: TextAlign.center,
                         ),
-                        style: ButtonStyle(
-                          padding: MaterialStateProperty.all<EdgeInsets>(
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 22*scaleFactor),
+                      ),
+                      SizedBox(
+                        height: 25 * scaleFactor,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          _onArrowDownPressed(scrollKeys["Planopilaris"]!);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 45, right: 45.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Flexible(
+                                child: Text(
+                                  'Lichen Planopilaris',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ),
+                              const Icon(Icons.arrow_forward_ios,
+                                  color: Colors.orange),
+                            ],
                           ),
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              const Color(0xFFFF7F50)),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              side: BorderSide(
-                                  color: Colors.white,
-                                  width: 2.0), // Add the white border here
+                        ),
+                      ),
+                      SizedBox(
+                        height: 25 * scaleFactor,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          _onArrowDownPressed(scrollKeys["Nails"]!);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 45, right: 45.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Flexible(
+                                child: Text(
+                                  'Lichen Planus of the Nails',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ),
+                              const Icon(Icons.arrow_forward_ios,
+                                  color: Colors.orange),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 25 * scaleFactor),
+                      GestureDetector(
+                        onTap: () {
+                          _onArrowDownPressed(scrollKeys["Pigmentosus"]!);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 45, right: 45.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Flexible(
+                                child: Text(
+                                  'Lichen Planus Pigmentosus',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ),
+                              const Icon(Icons.arrow_forward_ios,
+                                  color: Colors.orange),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 25 * scaleFactor),
+                      GestureDetector(
+                        onTap: () {
+                          _onArrowDownPressed(scrollKeys["Eruption"]!);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 45, right: 45.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Flexible(
+                                child: Text(
+                                  'Lichen drug eruption',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ),
+                              const Icon(Icons.arrow_forward_ios,
+                                  color: Colors.orange),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 25 * scaleFactor),
+                      GestureDetector(
+                        onTap: () {
+                          _onArrowDownPressed(scrollKeys["Mucosal"]!);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 45, right: 45.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Flexible(
+                                child: Text(
+                                  'Mucosal Lichen Planus',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ),
+                              const Icon(Icons.arrow_forward_ios,
+                                  color: Colors.orange),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 45.0, right: 45),
+                        child: Container(
+                          // Adjust the padding
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              'Go back',
+                              style: TextStyle(
+                                fontSize: 15.0,
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 22 * scaleFactor),
+                              ),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  const Color(0xFFFF7F50)),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  side: BorderSide(
+                                      color: Colors.white,
+                                      width: 2.0), // Add the white border here
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                ],)
-              ),
-              SizedBox(height: 45*scaleFactor),
+                    ],
+                  )),
+              SizedBox(height: 45 * scaleFactor),
               SizedBox(
                 height: 25,
                 key: scrollKeys["Cutaneous"],
@@ -271,14 +286,15 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     child: FittedBox(
                       child: Text(
                         'Cutaneous Lichen Planus',
-                        style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
+                        style: TextStyle(
+                            fontSize: 40, fontWeight: FontWeight.w900),
                         textAlign: TextAlign.center,
                       ),
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 50*scaleFactor),
+              SizedBox(height: 50 * scaleFactor),
               const Padding(
                 padding: EdgeInsets.only(left: 45, right: 45.0),
                 child: Column(
@@ -292,7 +308,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                   ],
                 ),
               ),
-              SizedBox(height: 25*scaleFactor),
+              SizedBox(height: 25 * scaleFactor),
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
@@ -372,17 +388,40 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
               ),
               const SizedBox(height: 15),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Image.asset(
-                      'assets/imgs/annular1.png',
-                    ),
-                    Image.asset(
-                      'assets/imgs/annular2.png',
-                    ),
-                  ],
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    height: 200 * scaleFactor,
+                    enlargeCenterPage: true,
+                    enableInfiniteScroll: true,
+                    autoPlay: true,
+                    autoPlayInterval: Duration(seconds: 3),
+                    autoPlayAnimationDuration: Duration(milliseconds: 800),
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    scrollDirection: Axis.horizontal,
+                  ),
+                  items: [
+                    ['assets/imgs/annular1.png', 'assets/imgs/annular2.png'],
+                    ['assets/imgs/annular2.png', 'assets/imgs/annular1.png'],
+                    // Add more items for additional slides
+                  ].map((itemList) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: itemList.map((item) {
+                            return SizedBox(
+                              width: 190 * scaleFactor,
+                              child: Image.asset(
+                                item,
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          }).toList(),
+                        );
+                      },
+                    );
+                  }).toList(),
                 ),
               ),
               const SizedBox(height: 25),
@@ -409,17 +448,40 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
               ),
               const SizedBox(height: 15),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [ 
-                    Image.asset(
-                      'assets/imgs/hyper1.png',
-                    ),
-                    Image.asset(
-                      'assets/imgs/hyper2.png',
-                    ),
-                  ],
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    height: 200 * scaleFactor,
+                    enlargeCenterPage: true,
+                    enableInfiniteScroll: true,
+                    autoPlay: true,
+                    autoPlayInterval: Duration(seconds: 3),
+                    autoPlayAnimationDuration: Duration(milliseconds: 800),
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    scrollDirection: Axis.horizontal,
+                  ),
+                  items: [
+                    ['assets/imgs/hyper1.png', 'assets/imgs/hyper2.png'],
+                    ['assets/imgs/hyper2.png', 'assets/imgs/hyper1.png'],
+                    // Add more items for additional slides
+                  ].map((itemList) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: itemList.map((item) {
+                            return SizedBox(
+                              width: 190 * scaleFactor,
+                              child: Image.asset(
+                                item,
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          }).toList(),
+                        );
+                      },
+                    );
+                  }).toList(),
                 ),
               ),
               const SizedBox(height: 45),
@@ -435,7 +497,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     child: FittedBox(
                       child: Text(
                         'Lichen Planopilaris',
-                        style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
+                        style: TextStyle(
+                            fontSize: 40, fontWeight: FontWeight.w900),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -491,17 +554,40 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
               ),
               const SizedBox(height: 15),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Image.asset(
-                      'assets/imgs/plano1.png',
-                    ),
-                    Image.asset(
-                      'assets/imgs/plano2.png',
-                    ),
-                  ],
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    height: 200 * scaleFactor,
+                    enlargeCenterPage: true,
+                    enableInfiniteScroll: true,
+                    autoPlay: true,
+                    autoPlayInterval: Duration(seconds: 3),
+                    autoPlayAnimationDuration: Duration(milliseconds: 800),
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    scrollDirection: Axis.horizontal,
+                  ),
+                  items: [
+                    ['assets/imgs/plano1.png', 'assets/imgs/plano2.png'],
+                    ['assets/imgs/plano2.png', 'assets/imgs/plano1.png'],
+                    // Add more items for additional slides
+                  ].map((itemList) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: itemList.map((item) {
+                            return SizedBox(
+                              width: 190 * scaleFactor,
+                              child: Image.asset(
+                                item,
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          }).toList(),
+                        );
+                      },
+                    );
+                  }).toList(),
                 ),
               ),
               const SizedBox(height: 25),
@@ -528,17 +614,40 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
               ),
               const SizedBox(height: 15),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Image.asset(
-                      'assets/imgs/graham1.png',
-                    ),
-                    Image.asset(
-                      'assets/imgs/graham2.png',
-                    ),
-                  ],
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    height: 200 * scaleFactor,
+                    enlargeCenterPage: true,
+                    enableInfiniteScroll: true,
+                    autoPlay: true,
+                    autoPlayInterval: Duration(seconds: 3),
+                    autoPlayAnimationDuration: Duration(milliseconds: 800),
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    scrollDirection: Axis.horizontal,
+                  ),
+                  items: [
+                    ['assets/imgs/graham1.png', 'assets/imgs/graham2.png'],
+                    ['assets/imgs/graham2.png', 'assets/imgs/graham1.png'],
+                    // Add more items for additional slides
+                  ].map((itemList) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: itemList.map((item) {
+                            return SizedBox(
+                              width: 190 * scaleFactor,
+                              child: Image.asset(
+                                item,
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          }).toList(),
+                        );
+                      },
+                    );
+                  }).toList(),
                 ),
               ),
               const SizedBox(height: 45),
@@ -572,17 +681,40 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
               ),
               const SizedBox(height: 15),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Image.asset(
-                      'assets/imgs/nails1.png',
-                    ),
-                    Image.asset(
-                      'assets/imgs/nails2.png',
-                    ),
-                  ],
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    height: 200 * scaleFactor,
+                    enlargeCenterPage: true,
+                    enableInfiniteScroll: true,
+                    autoPlay: true,
+                    autoPlayInterval: Duration(seconds: 3),
+                    autoPlayAnimationDuration: Duration(milliseconds: 800),
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    scrollDirection: Axis.horizontal,
+                  ),
+                  items: [
+                    ['assets/imgs/nails1.png', 'assets/imgs/nails2.png'],
+                    ['assets/imgs/nails2.png', 'assets/imgs/nails1.png'],
+                    // Add more items for additional slides
+                  ].map((itemList) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: itemList.map((item) {
+                            return SizedBox(
+                              width: 190 * scaleFactor,
+                              child: Image.asset(
+                                item,
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          }).toList(),
+                        );
+                      },
+                    );
+                  }).toList(),
                 ),
               ),
               const SizedBox(height: 40),
@@ -616,17 +748,40 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
               ),
               const SizedBox(height: 15),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Image.asset(
-                      'assets/imgs/pigmen1.png',
-                    ),
-                    Image.asset(
-                      'assets/imgs/pigmen2.png',
-                    ),
-                  ],
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    height: 200 * scaleFactor,
+                    enlargeCenterPage: true,
+                    enableInfiniteScroll: true,
+                    autoPlay: true,
+                    autoPlayInterval: Duration(seconds: 3),
+                    autoPlayAnimationDuration: Duration(milliseconds: 800),
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    scrollDirection: Axis.horizontal,
+                  ),
+                  items: [
+                    ['assets/imgs/pigmen1.png', 'assets/imgs/pigmen2.png'],
+                    ['assets/imgs/pigmen2.png', 'assets/imgs/pigmen1.png'],
+                    // Add more items for additional slides
+                  ].map((itemList) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: itemList.map((item) {
+                            return SizedBox(
+                              width: 190 * scaleFactor,
+                              child: Image.asset(
+                                item,
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          }).toList(),
+                        );
+                      },
+                    );
+                  }).toList(),
                 ),
               ),
               const SizedBox(height: 45),
@@ -660,17 +815,40 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
               ),
               const SizedBox(height: 15),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Image.asset(
-                      'assets/imgs/drugs1.png',
-                    ),
-                    Image.asset(
-                      'assets/imgs/drugs2.png',
-                    ),
-                  ],
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    height: 200 * scaleFactor,
+                    enlargeCenterPage: true,
+                    enableInfiniteScroll: true,
+                    autoPlay: true,
+                    autoPlayInterval: Duration(seconds: 3),
+                    autoPlayAnimationDuration: Duration(milliseconds: 800),
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    scrollDirection: Axis.horizontal,
+                  ),
+                  items: [
+                    ['assets/imgs/drugs1.png', 'assets/imgs/drugs2.png'],
+                    ['assets/imgs/drugs2.png', 'assets/imgs/drugs1.png'],
+                    // Add more items for additional slides
+                  ].map((itemList) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: itemList.map((item) {
+                            return SizedBox(
+                              width: 190 * scaleFactor,
+                              child: Image.asset(
+                                item,
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          }).toList(),
+                        );
+                      },
+                    );
+                  }).toList(),
                 ),
               ),
               const SizedBox(height: 65),
@@ -704,17 +882,40 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
               ),
               const SizedBox(height: 15),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Image.asset(
-                      'assets/imgs/mucosal1.png',
-                    ),
-                    Image.asset(
-                      'assets/imgs/mucosal2.png',
-                    ),
-                  ],
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    height: 200 * scaleFactor,
+                    enlargeCenterPage: true,
+                    enableInfiniteScroll: true,
+                    autoPlay: true,
+                    autoPlayInterval: Duration(seconds: 3),
+                    autoPlayAnimationDuration: Duration(milliseconds: 800),
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    scrollDirection: Axis.horizontal,
+                  ),
+                  items: [
+                    ['assets/imgs/mucosal1.png', 'assets/imgs/mucosal2.png'],
+                    ['assets/imgs/mucosal2.png', 'assets/imgs/mucosal1.png'],
+                    // Add more items for additional slides
+                  ].map((itemList) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: itemList.map((item) {
+                            return SizedBox(
+                              width: 190 * scaleFactor,
+                              child: Image.asset(
+                                item,
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          }).toList(),
+                        );
+                      },
+                    );
+                  }).toList(),
                 ),
               ),
               const SizedBox(height: 40),
@@ -724,7 +925,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                   // Adjust the padding
                   child: ElevatedButton(
                     onPressed: () {
-                     _onArrowDownPressed(scrollKeys["List"]!);
+                      _onArrowDownPressed(scrollKeys["List"]!);
                     },
                     child: Text(
                       'Go back to the list',

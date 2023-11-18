@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PrivacyPolicy extends StatelessWidget {
   int _currentIndex = 4;
@@ -9,7 +9,9 @@ class PrivacyPolicy extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
-    double h = MediaQuery.of(context).size.height;
+    double h =
+        MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
+    double scaleFactor = h / 1080;
 
     return Scaffold(
       backgroundColor: Color(0xFFFFF4E9),
@@ -30,7 +32,129 @@ class PrivacyPolicy extends StatelessWidget {
 
       // Body
       // Body
-      body: SingleChildScrollView(),
+      body: Padding(
+        padding: const EdgeInsets.only(left: 45.0, right: 45),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Container(
+            height: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 100 * scaleFactor),
+                Text(
+                  'LichenCare Privacy Policy',
+                  style: TextStyle(
+                      fontSize: 22 * scaleFactor, fontWeight: FontWeight.w900),
+                ),
+                Text(
+                  'Effective as of: November 20, 2023',
+                  style: TextStyle(
+                    fontSize: 20 * scaleFactor,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'Introduction',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: EdgeInsets.only(left: 0, right: 0),
+                  child: RichText(
+                    textAlign: TextAlign.justify,
+                    text: TextSpan(
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 20 * scaleFactor,
+                      ),
+                      children: const [
+                        TextSpan(
+                            text:
+                                'Hello there! We at LichenCare are about your privacy. We are fully committed to protecting and safeguarding the personal data you share with us when you use our services. In this Privacy Policy, we explain what kind of data we use, and how we use it.'),
+                      ],
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacementNamed(
+                            '/profile/terms_and_conditions');
+                      },
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                          EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 22 * scaleFactor),
+                        ),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          const Color(0xFFFF7F50),
+                        ),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: const BorderSide(
+                              color: Colors.white,
+                              width: 2.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                      child: const Text(
+                        'Go back',
+                        style: TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacementNamed('/home');
+                      },
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                          EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 22 * scaleFactor),
+                        ),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          const Color(0xFFFF7F50),
+                        ),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: const BorderSide(
+                              color: Colors.white,
+                              width: 2.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                      child: const Text(
+                        'I accept',
+                        style: TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
 
       // Floating action button
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
