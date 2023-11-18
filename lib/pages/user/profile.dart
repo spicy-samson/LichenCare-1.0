@@ -75,16 +75,17 @@ class _ProfileState extends State<Profile> {
               buildCustomDivider(2, Colors.grey),
               Padding(
                 padding: const EdgeInsets.all(12),
-                child: buildRow('Terms and conditions',
+                child: buildRow('Terms and Conditions',
                     'assets/svgs/profileSection/terms and conditions_icon.svg',
                     () {
-                  Navigator.of(context).pushNamed('/profile/terms_and_conditions');
+                  Navigator.of(context)
+                      .pushNamed('/profile/terms_and_conditions');
                 }),
               ),
               buildCustomDivider(2, Colors.grey),
               Padding(
                 padding: const EdgeInsets.all(12),
-                child: buildRow('Privacy policy',
+                child: buildRow('Privacy Policy',
                     'assets/svgs/profileSection/privacy policy_icon.svg', () {
                   Navigator.of(context).pushNamed('/profile/privacy_policy');
                 }),
@@ -272,14 +273,6 @@ class _ProfileState extends State<Profile> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  "Logout",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color:
-                        const Color(0xFFFF7F50), // Set the text color to orange
-                  ),
-                ),
                 SizedBox(height: 16),
                 Text(
                   "Are you sure you want to log out?",
@@ -289,7 +282,7 @@ class _ProfileState extends State<Profile> {
                 ),
                 SizedBox(height: 16),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     TextButton(
                       onPressed: () {
@@ -298,8 +291,7 @@ class _ProfileState extends State<Profile> {
                       child: Text(
                         "Cancel",
                         style: TextStyle(
-                          color: const Color(
-                              0xFFFF7F50), // Set the text color to orange
+                          color: Colors.black, // Set the text color to orange
                         ),
                       ),
                     ),

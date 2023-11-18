@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:lichen_care/pages/user/profile/scan_history.dart'
     as ScanHistoryPage;
 
@@ -29,7 +30,7 @@ class ScanHistoryDetails extends StatelessWidget {
         backgroundColor: Color(0xFFFFF4E9),
         title: Padding(
           padding:
-              EdgeInsets.only(top: h * 0.04, right: w * 0.45, left: w * 0.005),
+              EdgeInsets.only(top: h * 0.04, right: w * 0.35, left: w * 0.005),
           child: SvgPicture.asset(
             'assets/svgs/profileSection/profileAppBars/scan_history(copy).svg',
             width: w * 0.1,
@@ -224,24 +225,87 @@ class ScanHistoryDetails extends StatelessWidget {
                 //DELETE BUTTON w/ FUNCTION
                 ElevatedButton(
                   onPressed: () async {
-                    try {
-                      User? user = FirebaseAuth.instance.currentUser;
+                    bool confirmDelete = await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Confirm Deletion'),
+                          content: Text(
+                              'Are you sure you want to delete this document?'),
+                          actionsPadding: EdgeInsets.zero,
+                          actions: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .pop(false); // Return false if canceled
+                                  },
+                                  child: Text(
+                                    'Cancel',
+                                    style: TextStyle(
+                                      color: Colors
+                                          .black, // Change text color to orange
+                                    ),
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .pop(true); // Return true if confirmed
+                                  },
+                                  child: Text(
+                                    'Delete',
+                                    style: TextStyle(
+                                      color: Colors
+                                          .red, // Change text color to orange
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                      },
+                    );
 
-                      if (user != null) {
-                        final userDocRef = FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(user.uid);
-                        final lichenCheckDocRef = userDocRef
-                            .collection('LichenCheck_inputs')
-                            .doc('${lichenCheckEntry?.documentId}');
+                    if (confirmDelete ?? false) {
+                      try {
+                        User? user = FirebaseAuth.instance.currentUser;
 
-                        await lichenCheckDocRef.delete();
+                        if (user != null && lichenCheckEntry != null) {
+                          final userDocRef = FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(user.uid);
+                          final lichenCheckDocRef = userDocRef
+                              .collection('LichenCheck_inputs')
+                              .doc('${lichenCheckEntry!.documentId}');
 
-                        // Document deleted successfully, now pop to the previous page
-                        Navigator.of(context).pop();
+                          // Get the image URL from the lichenCheckEntry
+                          String? imageUrl =
+                              lichenCheckEntry!.results['file_image'];
+
+                          // Delete document from Cloud Firestore
+                          await lichenCheckDocRef.delete();
+
+                          // Delete image from Firebase Storage if URL exists
+                          if (imageUrl != null && imageUrl.isNotEmpty) {
+                            // Get a reference to the image in Firebase Storage
+                            Reference imageRef =
+                                FirebaseStorage.instance.refFromURL(imageUrl);
+
+                            // Delete the image
+                            await imageRef.delete();
+                          }
+
+                          // Document and image deleted successfully, now navigate to the updated page
+                          Navigator.of(context)
+                              .pushNamed('/profile/scan_history');
+                        }
+                      } catch (e) {
+                        print('Error deleting document and/or image: $e');
                       }
-                    } catch (e) {
-                      print('Error deleting document: $e');
                     }
                   },
                   style: ButtonStyle(
@@ -249,8 +313,8 @@ class ScanHistoryDetails extends StatelessWidget {
                       EdgeInsets.symmetric(
                           horizontal: 20, vertical: 22 * scaleFactor),
                     ),
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                        const Color(0xFFFF7F50)),
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.red),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),

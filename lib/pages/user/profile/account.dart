@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -23,7 +24,10 @@ class _AccountState extends State<Account> {
         automaticallyImplyLeading: false,
         backgroundColor: Color(0xFFFFF4E9),
         title: Padding(
-          padding: EdgeInsets.only(top: h * 0.04, right: w * 0.45),
+          padding: EdgeInsets.only(
+            top: h * 0.04,
+            right: w * 0.45,
+          ),
           child: SvgPicture.asset(
             'assets/svgs/profileSection/profileAppBars/account(copy).svg',
             width: w * 0.1,
@@ -34,7 +38,6 @@ class _AccountState extends State<Account> {
         toolbarHeight: 80.0,
       ),
 
-      // Body
       // Body
       body: SingleChildScrollView(
         child: Padding(
@@ -88,8 +91,8 @@ class _AccountState extends State<Account> {
                               EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 10),
                             ),
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                primaryforegroundColor),
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.red),
                             shape: MaterialStateProperty.all<
                                 RoundedRectangleBorder>(
                               RoundedRectangleBorder(
@@ -264,17 +267,6 @@ class _AccountState extends State<Account> {
     );
   }
 
-  void checkCurrentUser() {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-
-    if (user != null) {
-      print(user);
-    } else {
-      print("User is not logged in.");
-    }
-  }
-
   Future<Map<String, String>> getUserData() async {
     User? user = FirebaseAuth.instance.currentUser;
 
@@ -307,81 +299,145 @@ class _AccountState extends State<Account> {
     };
   }
 
-  // Function to log out the user
-  Future<void> _signOut() async {
-    try {
-      await FirebaseAuth.instance.signOut();
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
-    } catch (e) {
-      print("Error while signing out: $e");
-    }
-  }
-
   void _showDeleteAccConfirmationDialog() {
+    String password = ''; // State to store the entered password
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
+        return AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
+            borderRadius: BorderRadius.circular(16),
           ),
-          child: Container(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  "Delete Account",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color:
-                        const Color(0xFFFF7F50), // Set the text color to orange
-                  ),
-                ),
-                SizedBox(height: 16),
-                Text(
-                  "Are you sure you want to delete your account?",
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                ),
-                SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop(); // Close the dialog
-                      },
-                      child: Text(
-                        "Cancel",
-                        style: TextStyle(
-                          color: const Color(
-                              0xFFFF7F50), // Set the text color to orange
-                        ),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop(); // Close the dialog
-                        _signOut(); // Call your logout function
-                      },
-                      child: Text(
-                        "Delete",
-                        style: TextStyle(
-                          color: const Color(
-                              0xFFFF7F50), // Set the text color to orange
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+          title: Text(
+            "Delete Account",
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.red,
             ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "Are you sure you want to delete your account?",
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+              SizedBox(height: 15),
+              Text(
+                "THIS ACTION IS IRREVERSIBLE!",
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+              SizedBox(height: 15),
+              TextFormField(
+                onChanged: (value) {
+                  password = value;
+                },
+                obscureText: true, // Hide the entered text for security
+                decoration: InputDecoration(
+                  labelText: 'Enter your password',
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(
+                      color: Color(0xFFFF7F50),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Close the dialog
+                    },
+                    child: Text(
+                      "Cancel",
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Close the dialog
+                      DeleteAccount(password);
+                    },
+                    child: Text(
+                      "Delete",
+                      style: TextStyle(
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         );
       },
     );
+  }
+
+  // Function to DELETE the user's acc
+  Future<void> DeleteAccount(String password) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      // User not signed in
+      return;
+    }
+
+    try {
+      // Create credentials with the entered password
+      AuthCredential credential = EmailAuthProvider.credential(
+        email: user.email!,
+        password: password,
+      );
+
+      // Re-authenticate the user
+      await user.reauthenticateWithCredential(credential);
+
+      // Delete in Firebase Auth
+      await user.delete();
+
+      final userDocRef =
+          FirebaseFirestore.instance.collection('users').doc(user.uid);
+
+      // Delete the specific document in Firestore
+      await userDocRef.delete();
+
+      // Delete user's folder in Firebase Storage - TO FIX
+      // final storageRef = FirebaseStorage.instance
+      //     .ref()
+      //     .child('lichencheck_images/${user.uid}');
+
+      // await storageRef.delete();
+
+      AwesomeDialog(
+        context: context,
+        dialogType: DialogType.success,
+        animType: AnimType.topSlide,
+        title: 'Account deleted.',
+        desc:
+            "Thank you for your using our App! Hopefully you'll come back soon! 🤗",
+        descTextStyle: TextStyle(
+          fontSize: 16.0,
+        ),
+        padding: EdgeInsets.all(16.0),
+        btnOkOnPress: () {
+          Navigator.of(context).pushNamed('/login');
+          ; // Navigate to the login page
+        },
+      ).show();
+
+      print("Account deleted successfully");
+    } catch (e) {
+      print("Error during reauthentication or account deletion: $e");
+    }
   }
 }

@@ -44,7 +44,7 @@ class _ScanHistory extends State<ScanHistory> {
         backgroundColor: Color(0xFFFFF4E9),
         title: Padding(
           padding:
-              EdgeInsets.only(top: h * 0.04, right: w * 0.45, left: w * 0.005),
+              EdgeInsets.only(top: h * 0.04, right: w * 0.35, left: w * 0.005),
           child: SvgPicture.asset(
             'assets/svgs/profileSection/profileAppBars/scan_history(copy).svg',
             width: w * 0.1,
@@ -211,16 +211,19 @@ class _ScanHistory extends State<ScanHistory> {
                                   child: Row(
                                     children: [
                                       Expanded(
-                                        child: CachedNetworkImage(
-                                          imageUrl:
-                                              "${lichenCheckData[entryKey]?.results['file_image']}",
-                                          fit: BoxFit.cover,
-                                          placeholder: (context, url) =>
-                                              FadeInImage(
-                                            placeholder: AssetImage(
-                                                'assets/imgs/placeholder-image.jpg'), // Your placeholder image asset
-                                            image: NetworkImage(url),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: CachedNetworkImage(
+                                            imageUrl:
+                                                "${lichenCheckData[entryKey]?.results['file_image']}",
                                             fit: BoxFit.cover,
+                                            placeholder: (context, url) =>
+                                                FadeInImage(
+                                              placeholder: AssetImage(
+                                                  'assets/imgs/placeholder-image.jpg'), // Your placeholder image asset
+                                              image: NetworkImage(url),
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
                                         ),
                                       ),
