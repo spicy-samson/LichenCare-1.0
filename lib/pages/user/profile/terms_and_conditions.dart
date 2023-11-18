@@ -10,6 +10,7 @@ class TermsAndConditions extends StatelessWidget {
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
+    double scaleFactor = h / 1080;
 
     return Scaffold(
       backgroundColor: Color(0xFFFFF4E9),
@@ -37,14 +38,15 @@ class TermsAndConditions extends StatelessWidget {
             Text(
               'LichenCare Terms of Use',
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 22 * scaleFactor,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 5),
             Text(
               'Effective as of: November 20, 2023',
               style: TextStyle(
+                fontSize: 20 * scaleFactor,
                 fontStyle: FontStyle.italic,
               ),
             ),

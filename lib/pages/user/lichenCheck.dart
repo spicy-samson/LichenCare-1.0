@@ -438,11 +438,10 @@ class _LichenCheckState extends State<LichenCheck> {
                                     fontWeight: FontWeight.bold),
                                 children: const <TextSpan>[
                                   TextSpan(
-                                      text:
-                                          'DISCLAIMER FOR USING LICHENCHECK'),
+                                      text: 'DISCLAIMER IN USING LICHENCHECK'),
                                 ])),
                         SizedBox(
-                          height: 25 * scaleFactor,
+                          height: 33 * scaleFactor,
                         ),
                         SizedBox(
                             width: double.infinity,
