@@ -39,8 +39,7 @@ class _LichenHubState extends State<LichenHub> {
         "Other"
       ];
   GlobalKey reportField = GlobalKey();
-  TextEditingController contentController = TextEditingController();
-  QuillController parser = QuillController.basic();
+  QuillController contentController = QuillController.basic();
   TextEditingController reportFieldController = TextEditingController();
   TextEditingController titleController = TextEditingController();
   bool titleOnFocus = false;
@@ -56,12 +55,16 @@ class _LichenHubState extends State<LichenHub> {
 
 
   Future loadPosts() async{
-    List<Post> storedPosts = [];
     // insert all the posts from database
     // do loop here
+    var content = QuillController.basic(); 
+    // store here content from database
+    String jsonContent = "[{\"insert\":\"Hi, All\\nI'm new to the group and hoping to get some answers. My toddler (almost 2) us itchy all over;, mostly lower back, stomach and scalph. We thought it was caused by dustmite allergy but it can't be that alone.\\nIs this LP?\\n\"}]";
+    content.document =  Document.fromJson(jsonDecode(jsonContent));
+    List<Post> storedPosts = [];
     // create post instance
     var post = Post(id: "1", userID: "1", user: "Anonymous User", datetime: DateTime.now(), title: "", 
-        content: "Hi, All\nI'm new to the group and hoping to get some answers. My toddler (almost 2) us itchy all over, mostly lower back, stomach and scalph. We thought it was caused by dustmite allergy but it can't be that alone.\nIs this LP?\n",
+        content: content ,
         embeddedImage: "https://drive.google.com/uc?export=view&id=13jg-JY7jRQhbtMjcpsVmVPhBUjKjcIBT",
         likes: 2, isLiked: true,  comments: []);
     
@@ -83,15 +86,21 @@ class _LichenHubState extends State<LichenHub> {
   Future newPost() async{
     // create entry
     // titleController.text is title 
-    // contentController.text is the content
+    // jsonEncode(contentController.document.toDelta().toJson()) is the content
     // postImage is the to be image uploaded by user, check if null
-
-    loadPosts();
+    QuillController newController = QuillController.basic();
+    newController.document =Document.fromDelta(contentController.document.toDelta());
+    posts.add(Post(id: "1", userID: "1", user: "Kenneth James Belga", datetime: DateTime.now(), title: titleController.text, content: newController, isLiked: false, likes: 0, comments: []));
+    setState(() {
+      
+    });
+    // loadPosts();
   }
 
   Future editPost(Post post) async{
     // edit entry (post.id)
     // titleController.text is title 
+    // jsonEncode(contentController.document.toDelta().toJson()) is the content
     // concernController.text is content
     loadPosts();
   }
@@ -107,6 +116,7 @@ class _LichenHubState extends State<LichenHub> {
     
     // update widget
     setState(() {
+      post.content.dispose();
       posts.remove(post);
     });
   }
@@ -145,7 +155,7 @@ class _LichenHubState extends State<LichenHub> {
   }
 
   void copyPostContent(Post post)async{
-    await Clipboard.setData(ClipboardData(text:post.content));
+    await Clipboard.setData(ClipboardData(text:post.content.document.toPlainText()));
     Navigator.of(context).pop();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       duration: Duration(milliseconds: 1000),
@@ -160,7 +170,7 @@ class _LichenHubState extends State<LichenHub> {
     setState(() {});
     if(post!=null ){
       titleController.text = post.title;
-      contentController.text = post.content;
+      contentController.document = post.content.document;
       Navigator.of(context).pop();
     }
     showModalBottomSheet(context: context, 
@@ -260,42 +270,42 @@ class _LichenHubState extends State<LichenHub> {
                                   height: 380*scaleFactor,
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                                    child: TextFormField(
-                                        controller: contentController,
-                                        maxLines: 150,
-                                        style:const TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.black87
-                                          ),
-                                        decoration: const  InputDecoration(
-                                          isDense: true,
-                                          border: InputBorder.none,
-                                          hintText: "Start a new conversation",
-                                          hintStyle: TextStyle(
-                                            fontSize: 16,
-                                          )
-                                        ),
-                                      ),
-                                    // child:  QuillProvider(
-                                    //           configurations: QuillConfigurations(
-                                    //             controller: contentController,
-                                    //             sharedConfigurations: const QuillSharedConfigurations(
-                                    //               locale: Locale("de")
-                                    //             ),
-                                    //           ),
-                                    //           child: Column(
-                                    //             children: [
-                                    //               Expanded(
-                                    //                 child: QuillEditor.basic(
-                                    //                   configurations: const QuillEditorConfigurations(
-                                    //                     placeholder: "Start a new conversation",
-                                    //                     readOnly: false,
-                                    //                   ),
-                                    //                 ),
-                                    //               )
-                                    //             ],
-                                    //           ),
-                                    //         )
+                                    // child: TextFormField(
+                                    //     controller: contentController,
+                                    //     maxLines: 150,
+                                    //     style:const TextStyle(
+                                    //         fontSize: 16,
+                                    //         color: Colors.black87
+                                    //       ),
+                                    //     decoration: const  InputDecoration(
+                                    //       isDense: true,
+                                    //       border: InputBorder.none,
+                                    //       hintText: "Start a new conversation",
+                                    //       hintStyle: TextStyle(
+                                    //         fontSize: 16,
+                                    //       )
+                                    //     ),
+                                    //   ),
+                                    child:  QuillProvider(
+                                              configurations: QuillConfigurations(
+                                                controller: contentController,
+                                                sharedConfigurations: const QuillSharedConfigurations(
+                                                  locale: Locale("de")
+                                                ),
+                                              ),
+                                              child: Column(
+                                                children: [
+                                                  Expanded(
+                                                    child: QuillEditor.basic(
+                                                      configurations: const QuillEditorConfigurations(
+                                                        placeholder: "Start a new conversation",
+                                                        readOnly: false,
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            )
                                   ),
                                 ),
                                 (postImage==null) ?
@@ -366,10 +376,10 @@ class _LichenHubState extends State<LichenHub> {
                                     onTap: (){
                                       if(toolbar["bold"]!){
                                         toolbar["bold"] = false;
-                                        // contentController.formatSelection(Attribute("bold", AttributeScope.INLINE, null));
+                                        contentController.formatSelection(Attribute("bold", AttributeScope.INLINE, null));
                                       }else{
                                         toolbar["bold"] = true;
-                                        // contentController.formatSelection(Attribute("bold", AttributeScope.INLINE, true));
+                                        contentController.formatSelection(Attribute("bold", AttributeScope.INLINE, true));
                                       }
                                       setState(() {});
                                     },
@@ -385,10 +395,10 @@ class _LichenHubState extends State<LichenHub> {
                                     onTap: (){
                                       if(toolbar["italic"]!){
                                         toolbar["italic"] = false;
-                                        // contentController.formatSelection(Attribute("italic", AttributeScope.INLINE, null));
+                                        contentController.formatSelection(Attribute("italic", AttributeScope.INLINE, null));
                                       }else{
                                         toolbar["italic"] = true;
-                                        // contentController.formatSelection(Attribute("italic", AttributeScope.INLINE, true));
+                                        contentController.formatSelection(Attribute("italic", AttributeScope.INLINE, true));
                                       }
                                       setState(() {});
                                     },
@@ -404,10 +414,10 @@ class _LichenHubState extends State<LichenHub> {
                                     onTap: (){
                                       if(toolbar["underline"]!){
                                         toolbar["underline"] = false;
-                                        // contentController.formatSelection(Attribute("underline", AttributeScope.INLINE, null));
+                                        contentController.formatSelection(Attribute("underline", AttributeScope.INLINE, null));
                                       }else{
                                         toolbar["underline"] = true;
-                                        // contentController.formatSelection(Attribute("underline", AttributeScope.INLINE, true));
+                                        contentController.formatSelection(Attribute("underline", AttributeScope.INLINE, true));
                                       }
                                       setState(() {});
                                     },
@@ -438,7 +448,7 @@ class _LichenHubState extends State<LichenHub> {
                                                 ElevatedButton(
                                                   child: const Text('Got it'),
                                                   onPressed: () {
-                                                    // contentController.formatSelection(Attribute("color", AttributeScope.INLINE, "#${currentColor.value.toRadixString(16).toUpperCase()}"));
+                                                    contentController.formatSelection(Attribute("color", AttributeScope.INLINE, "#${currentColor.value.toRadixString(16).toUpperCase()}"));
                                                     Navigator.of(context).pop();
                                                   },
                                                 ),
@@ -982,7 +992,7 @@ class PostBox extends StatelessWidget {
       padding:  EdgeInsets.only(left: 20.0*scaleFactor,right: 20.0*scaleFactor ,top: 20),
       child: Container(
          constraints: BoxConstraints(
-                minHeight: 500*scaleFactor, minWidth: double.infinity),
+                minHeight: 430*scaleFactor, minWidth: double.infinity),
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(15.0)),
           color: Color.fromARGB(255, 206, 206, 221),
@@ -1090,11 +1100,37 @@ class PostBox extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 5.0, left: 15.0, right: 15.0),
                 child: Text(post.title, style: TextStyle(fontSize: 22*scaleFactor, fontWeight:FontWeight.bold)),
               ),
-              Padding(
-                padding:  const EdgeInsets.only(top: 8.0, left: 15.0, right: 15.0),
-                child: Text(post.content,style: TextStyle(fontSize: 18*scaleFactor)),
+              Container(
+                width: double.infinity,
+                  height: 220*scaleFactor,
+                child: Padding(
+                  padding:  const EdgeInsets.only(top: 8.0, left: 15.0, right: 15.0),
+                  child:  QuillProvider(
+                        configurations: QuillConfigurations(
+                          controller: post.content,
+                          sharedConfigurations: const QuillSharedConfigurations(
+                            locale: Locale("de")
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: QuillEditor.basic(
+                                configurations: QuillEditorConfigurations(
+                                  expands: true,
+                                  customStyles: DefaultStyles(
+                                    paragraph: DefaultTextBlockStyle(TextStyle(fontSize: 20*scaleFactor,color: Colors.black87), VerticalSpacing(1, 1), VerticalSpacing(1, 1),BoxDecoration())  
+                                  ),
+                                  readOnly: true,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                ),
               ),
-              Padding(
+              (post.embeddedImage==null)? const SizedBox():Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
                   width: double.infinity,
@@ -1118,7 +1154,7 @@ class PostBox extends StatelessWidget {
                     ))),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 12.0, bottom: 8.0),
+                padding: const EdgeInsets.only(left: 12.0, bottom: 8.0, top: 8.0),
                 child: InkWell(
                   onTap: (){
                     onLike!();
@@ -1136,7 +1172,7 @@ class PostBox extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Icon(Icons.favorite, size: 15, color: Colors.red,),
-                          (post.likes == 0) ? SizedBox() :Text(post.likes.toString(), style: TextStyle(fontSize: 12, color: Colors.red),)
+                          (post.likes == 0) ? const SizedBox() :Text(post.likes.toString(), style: TextStyle(fontSize: 12, color: Colors.red),)
                       ],),
                     ),
                   ),
@@ -1144,7 +1180,7 @@ class PostBox extends StatelessWidget {
               ),
               (onReply==null) ? SizedBox() : const Divider(thickness: 1, height: 3, color: Colors.black12,),
               (onReply==null) ? SizedBox() : Padding(
-                padding: const EdgeInsets.only(left: 10.0),
+                padding: const EdgeInsets.only(left: 10.0, top: 5, bottom: 5),
                 child: SizedBox(
                   width: 100,
                   child: InkWell(
@@ -1177,7 +1213,7 @@ class Post{
   String? userProfile;
   DateTime datetime;
   String title;
-  String content;
+  QuillController content;
   String? embeddedImage;
   int likes;
   bool isLiked;
