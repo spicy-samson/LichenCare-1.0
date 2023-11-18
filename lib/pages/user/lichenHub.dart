@@ -56,18 +56,23 @@ class _LichenHubState extends State<LichenHub> {
   Future loadPosts() async{
     List<Post> storedPosts = [];
     // insert all the posts from database
-    // using
-    storedPosts.add(
-       Post(id: "1", userID: "1", user: "Anonymous User", datetime: DateTime.now(), title: "", 
+    // do loop here
+    // create post instance
+    var post = Post(id: "1", userID: "1", user: "Anonymous User", datetime: DateTime.now(), title: "", 
         content: "Hi, All\nI'm new to the group and hoping to get some answers. My toddler (almost 2) us itchy all over, mostly lower back, stomach and scalph. We thought it was caused by dustmite allergy but it can't be that alone.\nIs this LP?\n",
         embeddedImage: "https://drive.google.com/uc?export=view&id=13jg-JY7jRQhbtMjcpsVmVPhBUjKjcIBT",
-        likes: 2, isLiked: true,  comments: [
-          // also the comments using
-          Comment(id: "1", sender: "Anonymous User", reply: "This is a comment."),
-          Comment(id: "1", sender: "Anonymous User", reply: "This is another comment."),
-          Comment(id: "1", sender: "Anonymous User", reply: "This is another another comment.")
-      ])
-    );
+        likes: 2, isLiked: true,  comments: []);
+    
+    // create comment 
+    var comment = Comment(id: "1", sender: "Anonymous User", reply: "This is a comment.");
+    // store comment into comment list of post
+    post.comments.add(comment);
+    post.comments.add(Comment(id: "1", sender: "Anonymous User", reply: "This is another comment."));
+    post.comments.add(Comment(id: "1", sender: "Anonymous User", reply: "This is another another comment."));
+    
+    // finally store post into list
+    storedPosts.add(post);
+    
     setState(() {
       posts = storedPosts;
     });
