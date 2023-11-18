@@ -1,7 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TermsAndConditions extends StatelessWidget {
   int _currentIndex = 4;
@@ -10,7 +13,7 @@ class TermsAndConditions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
-    double h = MediaQuery.of(context).size.height;
+    double h = MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
     double scaleFactor = h / 1080;
 
     return Scaffold(
@@ -32,10 +35,13 @@ class TermsAndConditions extends StatelessWidget {
 
       // Body
       body: Padding(
-        padding: EdgeInsets.all(24.0),
-        child: ListView(
-          children: [
-            Column(
+        padding: const EdgeInsets.only(left: 45.0, right: 45),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Container(
+            height: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 RichText(
                   textAlign: TextAlign.justify,
@@ -592,443 +598,92 @@ class TermsAndConditions extends StatelessWidget {
                     text: TextSpan(
                       style: TextStyle(
                         fontSize: 20 * scaleFactor,
-                        color: Colors.black,
                       ),
-                      children: [
+                      children: const [
                         TextSpan(
-                          text: 'GENERAL DISCLAIMER',
-                          style: TextStyle(
-                            fontSize: 18 * scaleFactor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                            text:
+                                'Please read these Terms of Use (“Terms”) carefully as they govern your use (which includes access to) LichenCare’s personalized services for classification of the Cutaneous Lichen Planus skin disease, including the in-app features (LichenCheck, Lichenpedia, LichenHub) that incorporate or link to these Terms (collectively, the “LichenCare Service”).'),
                       ],
                     ),
                   ),
                 ),
-                SizedBox(height: 5),
-
-                //General Disclaimer items (a,b,c,d,e)
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: RichText(
-                      textAlign: TextAlign.justify,
-                      text: TextSpan(
+                const Spacer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacementNamed('/login');
+                      },
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                          EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 22 * scaleFactor),
+                        ),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          const Color(0xFFFF7F50),
+                        ),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: const BorderSide(
+                              color: Colors.white,
+                              width: 2.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                      child: const Text(
+                        'Go back',
                         style: TextStyle(
-                          fontSize: 18 * scaleFactor,
-                          color: Colors.black,
+                          fontSize: 15.0,
+                          color: Colors.white,
                         ),
-                        children: [
-                          TextSpan(
-                            text: ' ',
-                          ),
-                          TextSpan(
-                            text:
-                                'a.	Our services are offered free of charge for general information for general educational purposes only. The analysis, results, and content provided are not to be used or relied on for any diagnostic or treatment purposes and they do not replace a visit to the doctor. Any reliance by you is at your own discretion and risk.',
-                            style: TextStyle(
-                              fontSize: 18 * scaleFactor,
-                            ),
-                          ),
-                          TextSpan(
-                            text:
-                                'a.	Our services are offered free of charge for general information for general educational purposes only. The analysis, results, and content provided are not to be used or relied on for any diagnostic or treatment purposes and they do not replace a visit to the doctor. ',
-                            style: TextStyle(
-                              fontSize: 18 * scaleFactor,
-                            ),
-                          ),
-                          TextSpan(
-                            text:
-                                'Any reliance by you is at your own discretion and risk.',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          TextSpan(
-                            text: '\n',
-                          ),
-                          TextSpan(
-                            text:
-                                '\nb.	You must always seek the advice of a qualified human medical professional for any questions related to your disease, disease symptoms, and appropriate therapeutic treatments. If you have or suspect that you have a medical problem or condition, please contact a qualified healthcare professional immediately.',
-                            style: TextStyle(
-                              fontSize: 18 * scaleFactor,
-                            ),
-                          ),
-                          TextSpan(
-                            text: '\n',
-                          ),
-                          TextSpan(
-                            text:
-                                '\nc.	You should never disregard medical advice or delay in seeking it because of content you have read or been offered on or from our services.',
-                            style: TextStyle(
-                              fontSize: 18 * scaleFactor,
-                            ),
-                          ),
-                          TextSpan(
-                            text: '\n',
-                          ),
-                          TextSpan(
-                            text:
-                                '\nd.	LichenCare is just a healthcare support platform, it does not offer clinical decision support as it only provides second-opinion and aid for information about Lichen Planus. The application does not provide medical screening or diagnostic services.',
-                            style: TextStyle(
-                              fontSize: 18 * scaleFactor,
-                            ),
-                          ),
-                          TextSpan(
-                            text: '\n',
-                          ),
-                          TextSpan(
-                            text:
-                                '\ne.	You must be 14 years old and above to use this application\n',
-                            style: TextStyle(
-                              fontSize: 18 * scaleFactor,
-                            ),
-                          ),
-                        ],
+                        textAlign: TextAlign.center,
                       ),
                     ),
-                  ),
-                ),
-                SizedBox(height: 5),
-
-                //CONTRADICTIONS
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: RichText(
-                    textAlign: TextAlign.justify,
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 20 * scaleFactor,
-                        color: Colors.black,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: 'CONTRADICTIONS',
-                          style: TextStyle(
-                            fontSize: 18 * scaleFactor,
-                            fontWeight: FontWeight.bold,
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushReplacementNamed('/profile/privacy_policy');
+                      },
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                          EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 22 * scaleFactor),
+                        ),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          const Color(0xFFFF7F50),
+                        ),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: const BorderSide(
+                              color: Colors.white,
+                              width: 2.0,
+                            ),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: 5),
-
-                //CONTRADICTIONS ITEMS (a,b,c,d,e,f,g)
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: RichText(
-                      textAlign: TextAlign.justify,
-                      text: TextSpan(
+                      ),
+                      child: const Text(
+                        'I accept',
                         style: TextStyle(
-                          fontSize: 18 * scaleFactor,
-                          color: Colors.black,
+                          fontSize: 15.0,
+                          color: Colors.white,
                         ),
-                        children: [
-                          TextSpan(
-                            text: ' ',
-                          ),
-                          TextSpan(
-                            text:
-                                'a.	You cannot use our services as a point of referral to a qualified medical professional or use it as evidence to support or go against a healthcare professional',
-                            style: TextStyle(
-                              fontSize: 18 * scaleFactor,
-                            ),
-                          ),
-                          TextSpan(
-                            text: '\n',
-                          ),
-                          TextSpan(
-                            text:
-                                '\nb.	You cannot use our services for emergency situations. LichenCare is not your local emergency services',
-                            style: TextStyle(
-                              fontSize: 18 * scaleFactor,
-                            ),
-                          ),
-                          TextSpan(
-                            text: '\n',
-                          ),
-                          TextSpan(
-                            text:
-                                '\nc.	You cannot use it as a basis to disregard medical advice or delay in seeking it',
-                            style: TextStyle(
-                              fontSize: 18 * scaleFactor,
-                            ),
-                          ),
-                          TextSpan(
-                            text: '\n',
-                          ),
-                          TextSpan(
-                            text:
-                                '\nd.	You cannot use our services as a replacement for consultation with a qualified human medical professional',
-                            style: TextStyle(
-                              fontSize: 18 * scaleFactor,
-                            ),
-                          ),
-                          TextSpan(
-                            text: '\n',
-                          ),
-                          TextSpan(
-                            text:
-                                '\ne.	You cannot use our services as a basis for self-diagnosis or treatment',
-                            style: TextStyle(
-                              fontSize: 18 * scaleFactor,
-                            ),
-                          ),
-                          TextSpan(
-                            text: '\n',
-                          ),
-                          TextSpan(
-                            text:
-                                '\nf.	You cannot use our services if you are below 14 years of age',
-                            style: TextStyle(
-                              fontSize: 18 * scaleFactor,
-                            ),
-                          ),
-                          TextSpan(
-                            text: '\n',
-                          ),
-                          TextSpan(
-                            text:
-                                '\ng.	In addition to the above contraindications, you cannot use our services if you are in any of the following situations: ',
-                            style: TextStyle(
-                              fontSize: 18 * scaleFactor,
-                            ),
-                          ),
-                          TextSpan(
-                            text:
-                                'you are pregnant, suspect you are pregnant or planning to be pregnant; you are in subacute or acute trauma/injury or any emergency situations; you are using it for accidents or work-related purposes; you are using it to form a basis for legal recourse or for financial claims or for other purposes; you are using it for drug or allergy reactions; you cannot use it if you have cancer (active and treated); if you have any terminal illnesses; if you have any electrolyte or bleeding disorders; skin disease involving more than 5% Body Surface Area (BSA); burns (chemical, thermal or biological); blood sepsis; infection (including STD/contagious diseases); blood disorders; psychiatric conditions; rare disorders; familial conditions; terminal disorders; Graft-vs-Host or Transplant related disorders; organ failure of any nature; history of systemic skin conditions not limited to Toxic Epidermal Necrolysis, Stevens Johnson Disease and if you have suicidal ideation or active or past history of self-harm.',
-                            style: TextStyle(
-                              fontSize: 18 * scaleFactor,
-                              fontStyle: FontStyle.italic,
-                            ),
-                          ),
-                          TextSpan(
-                            text:
-                                'We do not discriminate against individuals in the above situations. Rather, we do not think our technology can adequately care for them and hence they should seek help from qualified medical professionals.\n',
-                            style: TextStyle(
-                              fontSize: 18 * scaleFactor,
-                            ),
-                          ),
-                        ],
+                        textAlign: TextAlign.center,
                       ),
                     ),
-                  ),
+                  ],
                 ),
-                SizedBox(height: 15),
-
-                //NO UNLAWFUL USE
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: RichText(
-                    textAlign: TextAlign.justify,
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 20 * scaleFactor,
-                        color: Colors.black,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: 'NO UNLAWFUL USE',
-                          style: TextStyle(
-                            fontSize: 18 * scaleFactor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: 5),
-                //  NO UNLAWFUL USE STATEMENT
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: RichText(
-                    textAlign: TextAlign.justify,
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 20 * scaleFactor,
-                        color: Colors.black,
-                      ),
-                      children: [
-                        TextSpan(
-                          text:
-                              'You agree not to use LichenCare for any purpose that is unlawful or prohibited by these terms, or the terms of your country, jurisdiction, or advisory from your health authority, if applicable. You may not use our services in any manner that could damage, disable, overburden, or impair our network, server, and AI capabilities. You may not attempt to gain unauthorized access to any portion of LichenCare, computer systems, AI capabilities, or content connected to any LichenCare server, through hacking, password or data mining, or any other means. You may not obtain or attempt to obtain any materials or information through any means not intentionally made available to you on LichenCare.\n',
-                          style: TextStyle(
-                            fontSize: 18 * scaleFactor,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: 15),
-
-                //DISCONTINUANCE OF SERVICES AND MODIFICATIONS
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: RichText(
-                    textAlign: TextAlign.justify,
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 20 * scaleFactor,
-                        color: Colors.black,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: 'DISCONTINUANCE OF SERVICES AND MODIFICATIONS',
-                          style: TextStyle(
-                            fontSize: 18 * scaleFactor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: 5),
-                //  DISCONTINUANCE OF SERVICES AND MODIFICATIONS STATEMENT
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: RichText(
-                    textAlign: TextAlign.justify,
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 20 * scaleFactor,
-                        color: Colors.black,
-                      ),
-                      children: [
-                        TextSpan(
-                          text:
-                              'We reserve the right to modify, discontinue, temporarily, or permanently this mobile application at any time, with or without notice. In addition, your access to the site may be discontinued at any time if you violate the Terms of this agreement or if we determine, for any other reason, that it is no longer appropriate for you to have access to the site.\n',
-                          style: TextStyle(
-                            fontSize: 18 * scaleFactor,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: 15),
-
-                //INDEMNIFICATION
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: RichText(
-                    textAlign: TextAlign.justify,
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 20 * scaleFactor,
-                        color: Colors.black,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: 'INDEMNIFICATION',
-                          style: TextStyle(
-                            fontSize: 18 * scaleFactor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: 5),
-                //  INDEMNIFICATION STATEMENT
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: RichText(
-                    textAlign: TextAlign.justify,
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 20 * scaleFactor,
-                        color: Colors.black,
-                      ),
-                      children: [
-                        TextSpan(
-                          text:
-                              "You agree to defend, indemnify, and hold harmless LichenCare from all liabilities, claims, and expenses, including attorneys' fees, that arise from your use of our services. LichenCare reserves the right, at its own expense, to assume the exclusive defense and control of any matter otherwise subject to indemnification by you, in which event you will cooperate with LichenCare in asserting any available defenses. If you live in a jurisdiction that does not allow such indemnifications, please do not use our services or access LichenCare.\n",
-                          style: TextStyle(
-                            fontSize: 18 * scaleFactor,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: 15),
-
-                //And hence...
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: RichText(
-                    textAlign: TextAlign.justify,
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 20 * scaleFactor,
-                        color: Colors.black,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: 'And hence..',
-                          style: TextStyle(
-                            fontSize: 18 * scaleFactor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: 5),
-                //  And hence.. STATEMENT
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: RichText(
-                    textAlign: TextAlign.justify,
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 20 * scaleFactor,
-                        color: Colors.black,
-                      ),
-                      children: [
-                        TextSpan(
-                          text:
-                              "Given the experimental and unpredictable nature of LichenCare, the content provided will change from time to time. LichenCare and/or the AI technology may revise and update the content provided and/or Terms of Use at any time. Your continued usage of the LichenCare will mean you accept those changes.",
-                          style: TextStyle(
-                            fontSize: 18 * scaleFactor,
-                          ),
-                        ),
-                        TextSpan(text: '\n'),
-                        TextSpan(text: '\n'),
-                        TextSpan(
-                          text:
-                              "If at any time you have concerns, please stop using our services immediately and contact us. If you are unable to accept these terms, please stop using our services.",
-                          style: TextStyle(
-                            fontSize: 18 * scaleFactor,
-                          ),
-                        ),
-                        TextSpan(text: '\n'),
-                        TextSpan(text: '\n'),
-                        TextSpan(
-                          text: "Last updated: 17 November 2023. \n",
-                          style: TextStyle(
-                            fontSize: 18 * scaleFactor,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                const SizedBox(
+                  height: 50,
                 ),
               ],
             ),
-            SizedBox(height: 15),
-          ],
+          ),
         ),
       ),
 

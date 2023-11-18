@@ -169,6 +169,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.6"
+<<<<<<< HEAD
+=======
   device_info_plus:
     dependency: transitive
     description:
@@ -201,6 +203,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.5"
+>>>>>>> 178efef66ac2061eec7fd49af99158d8f70449b3
   fake_async:
     dependency: transitive
     description:
@@ -358,6 +361,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.1"
+<<<<<<< HEAD
+=======
   flutter_colorpicker:
     dependency: "direct main"
     description:
@@ -414,6 +419,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+>>>>>>> 178efef66ac2061eec7fd49af99158d8f70449b3
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -430,6 +436,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.17"
+<<<<<<< HEAD
+=======
   flutter_quill:
     dependency: "direct main"
     description:
@@ -438,6 +446,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.10.2"
+>>>>>>> 178efef66ac2061eec7fd49af99158d8f70449b3
   flutter_rating_bar:
     dependency: "direct main"
     description:
