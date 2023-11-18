@@ -159,7 +159,7 @@ class _ScanHistory extends State<ScanHistory> {
                                         child: CachedNetworkImage(
                                           imageUrl:
                                               "${lichenCheckData[entryKey]?.results['file_image']}",
-                                          fit: BoxFit.cover,
+                                          fit: BoxFit.cover,  
                                           placeholder: (context, url) =>
                                               FadeInImage(
                                             placeholder: AssetImage(
