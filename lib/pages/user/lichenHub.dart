@@ -1,11 +1,16 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_quill/flutter_quill.dart' as quill;
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lichen_care/pages/guest/login.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 
 Color primaryBackgroundColor = const Color(0xFFFFF4E9);
 Color primaryforegroundColor = const Color(0xFFFF7F50);
@@ -32,35 +37,61 @@ class _LichenHubState extends State<LichenHub> {
         "Other"
       ];
   GlobalKey reportField = GlobalKey();
+  TextEditingController contentController = TextEditingController();
+  QuillController parser = QuillController.basic();
   TextEditingController reportFieldController = TextEditingController();
   TextEditingController titleController = TextEditingController();
+  bool titleOnFocus = false;
+  Color currentColor = Colors.black87;
   List<int> reportFlags = [];
+  File? postImage;
+  Map<String,bool> toolbar = {
+    "bold" : false,
+    "italic" : false,
+    "underline" : true,
+  };
+  List<Post> posts = [];
 
-  List<Post> posts = [
-     Post(id: "1", userID: "1", user: "Anonymous User", datetime: DateTime.now(), title: "", 
-        content: "Hi, All\nI'm new to the group and hoping to get some answers. My toddler (almost 2) us itchy all over, mostly lower back, stomach and scalph. We thought it was caused by dustmite allergy but it can't be that alone.\nIs this LP?", 
+
+  Future loadPosts() async{
+    List<Post> storedPosts = [];
+    // insert all the posts from database
+    // using
+    storedPosts.add(
+       Post(id: "1", userID: "1", user: "Anonymous User", datetime: DateTime.now(), title: "", 
+        content: "Hi, All\nI'm new to the group and hoping to get some answers. My toddler (almost 2) us itchy all over, mostly lower back, stomach and scalph. We thought it was caused by dustmite allergy but it can't be that alone.\nIs this LP?\n",
         embeddedImage: "https://drive.google.com/uc?export=view&id=13jg-JY7jRQhbtMjcpsVmVPhBUjKjcIBT",
         likes: 2, isLiked: true,  comments: [
+          // also the comments using
           Comment(id: "1", sender: "Anonymous User", reply: "This is a comment."),
           Comment(id: "1", sender: "Anonymous User", reply: "This is another comment."),
           Comment(id: "1", sender: "Anonymous User", reply: "This is another another comment.")
-        ] )
-  ];
+      ])
+    );
+    setState(() {
+      posts = storedPosts;
+    });
+  }
 
   Future newPost() async{
     // create entry
     // titleController.text is title 
-    // concernController.text is content
+    // contentController.text is the content
+    // postImage is the to be image uploaded by user, check if null
+
+    loadPosts();
   }
 
   Future editPost(Post post) async{
     // edit entry (post.id)
     // titleController.text is title 
     // concernController.text is content
+    loadPosts();
   }
 
   Future replyPost(Post post) async{
     // post comment connected to post.id
+    loadPosts();
   }
 
   Future deletePost(Post post) async{
@@ -97,6 +128,10 @@ class _LichenHubState extends State<LichenHub> {
     }
   }
 
+  Future reportPost(Post post) async{
+    // report post using post.id and reportFlags
+  }
+
   bool isPostFromUser(Post post){
     // check if the post userID matches the current user
     return (post.userID == "1");
@@ -112,11 +147,15 @@ class _LichenHubState extends State<LichenHub> {
   
 
   // WIDGET BUILDERS
-
   dynamic composePost(double scaleFactor, {Post? post}){
+    toolbar["bold"] = false;
+    toolbar["italic"] = false;
+    toolbar["underline"] = false;
+    postImage = null;
+    setState(() {});
     if(post!=null ){
       titleController.text = post.title;
-      // contentController.text = post.content;
+      contentController.text = post.content;
       Navigator.of(context).pop();
     }
     showModalBottomSheet(context: context, 
@@ -124,169 +163,305 @@ class _LichenHubState extends State<LichenHub> {
                   backgroundColor: Colors.transparent,
                   barrierColor: Colors.transparent,
                   builder: (context){
-                    return Container(
-                      clipBehavior: Clip.antiAlias,
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 206, 206, 221),
-                        borderRadius: BorderRadius.only(
-                          topLeft:Radius.circular(15.0),
-                          topRight: Radius.circular(15.0)
-                        )
-                      ),
-                      height: MediaQuery.of(context).size.height*0.98,
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(children: [
-                        Container(
-                          width: double.infinity,
-                          height: 75,
-                          decoration: BoxDecoration(
-                            color: termaryForegroundColor,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black26,
-                                offset: Offset(1, 1),
-                                blurRadius: 2,
-                                spreadRadius: 2
-                              )
-                            ]
+                    return StatefulBuilder(builder: (context, setState){
+                      return Container(
+                          clipBehavior: Clip.antiAlias,
+                          decoration: const BoxDecoration(
+                            color: Color.fromARGB(255, 206, 206, 221),
+                            borderRadius: BorderRadius.only(
+                              topLeft:Radius.circular(15.0),
+                              topRight: Radius.circular(15.0)
+                            )
                           ),
-                          child: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left:20, right:20 ,top :10),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                InkWell(
-                                  onTap: (){
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Icon(Icons.close_sharp, size: 28, color: primaryforegroundColor)),
-                                Expanded(child: Center(child: Text( (post==null) ?  "New post" : "Edit post", style: TextStyle(fontSize: 22),))),
-                                InkWell(
-                                  onTap: () async {
-                                    if(post==null){
-                                      await newPost();
-                                    }else{
-                                      await editPost(post);
-                                    }
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Transform.rotate(
-                                    angle: -3.14/5,
-                                    child: Icon(Icons.send, size: 24, color: primaryforegroundColor,)),
-                                ),
-                              ],),
-                            ),
-                          ),
-                        ),
-                        Expanded(child: SingleChildScrollView(
+                          height: MediaQuery.of(context).size.height*0.98,
+                          width: MediaQuery.of(context).size.width,
                           child: Column(children: [
-                            SizedBox(height: 10,),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                              child: TextFormField(
-                                controller: titleController,
-                                textInputAction: TextInputAction.go,
-                                style:const TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black87
-                                  ),
-                                decoration: const  InputDecoration(
-                                  isDense: true,
-                                  border: InputBorder.none,
-                                  hintText: "Add a title",
-                                  hintStyle: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w600,
+                            Container(
+                              width: double.infinity,
+                              height: 75,
+                              decoration: BoxDecoration(
+                                color: termaryForegroundColor,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black26,
+                                    offset: Offset(1, 1),
+                                    blurRadius: 2,
+                                    spreadRadius: 2
                                   )
+                                ]
+                              ),
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left:20, right:20 ,top :10),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                    InkWell(
+                                      onTap: (){
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Icon(Icons.close_sharp, size: 28, color: primaryforegroundColor)),
+                                    Expanded(child: Center(child: Text( (post==null) ?  "New post" : "Edit post", style: TextStyle(fontSize: 22),))),
+                                    InkWell(
+                                      onTap: () async {
+                                        if(post==null){
+                                          await newPost();
+                                        }else{
+                                          await editPost(post);
+                                        }
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Transform.rotate(
+                                        angle: -3.14/5,
+                                        child: Icon(Icons.send, size: 24, color: primaryforegroundColor,)),
+                                    ),
+                                  ],),
                                 ),
                               ),
                             ),
+                            Expanded(child: SingleChildScrollView(
+                              child: Column(children: [
+                                SizedBox(height: 10,),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                  child: FocusScope(
+                                    onFocusChange: (focus){
+                                      setState((){
+                                        titleOnFocus = focus;
+                                      });
+                                    },
+                                    child: TextFormField(
+                                      controller: titleController,
+                                      style:const TextStyle(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black87
+                                        ),
+                                      decoration: const  InputDecoration(
+                                        isDense: true,
+                                        border: InputBorder.none,
+                                        hintText: "Add a title",
+                                        hintStyle: TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w600,
+                                        )
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: 380*scaleFactor,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                    child: TextFormField(
+                                        controller: contentController,
+                                        maxLines: 150,
+                                        style:const TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.black87
+                                          ),
+                                        decoration: const  InputDecoration(
+                                          isDense: true,
+                                          border: InputBorder.none,
+                                          hintText: "Start a new conversation",
+                                          hintStyle: TextStyle(
+                                            fontSize: 16,
+                                          )
+                                        ),
+                                      ),
+                                    // child:  QuillProvider(
+                                    //           configurations: QuillConfigurations(
+                                    //             controller: contentController,
+                                    //             sharedConfigurations: const QuillSharedConfigurations(
+                                    //               locale: Locale("de")
+                                    //             ),
+                                    //           ),
+                                    //           child: Column(
+                                    //             children: [
+                                    //               Expanded(
+                                    //                 child: QuillEditor.basic(
+                                    //                   configurations: const QuillEditorConfigurations(
+                                    //                     placeholder: "Start a new conversation",
+                                    //                     readOnly: false,
+                                    //                   ),
+                                    //                 ),
+                                    //               )
+                                    //             ],
+                                    //           ),
+                                    //         )
+                                  ),
+                                ),
+                                (postImage==null) ?
+                                (post!=null) ? 
+                                 Padding(
+                                   padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 10.0),
+                                   child: Container(
+                                     width: double.infinity,
+                                      height: 300,
+                                      clipBehavior: Clip.antiAlias,
+                                      decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                                     child: FittedBox(
+                                      fit: BoxFit.cover,
+                                      child: Image.network(post.embeddedImage!,
+                                        loadingBuilder: (BuildContext context, Widget child,ImageChunkEvent? loadingProgress) {
+                                          if (loadingProgress == null) return child;
+                                          return FadeInImage(
+                                            placeholder: AssetImage(
+                                                'assets/imgs/placeholder-image.jpg'), // Your placeholder image asset
+                                            image: NetworkImage(post.embeddedImage!),
+                                            fit: BoxFit.cover,
+                                          );
+                                        },
+                                      ),
+                                                                   ),
+                                   ),
+                                 ):
+                                const SizedBox(): Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 10.0),
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 300,
+                                    clipBehavior: Clip.antiAlias,
+                                    decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                                    child: FittedBox(
+                                      fit: BoxFit.cover,
+                                      child: Image.file(postImage!)),
+                                  ),
+                                )
+                              ]),
+                            )),
+                          
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                              child: SizedBox()
+                              padding: const EdgeInsets.only(top: 8.0, left: 15.0, right: 15.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  InkWell(
+                                    onTap: ()async{
+                                        final take = await ImagePicker()
+                                              .pickImage(source: ImageSource.gallery, maxHeight: 720, maxWidth: 480);
+                                          if (take == null) {
+                                            return;
+                                          }
+                                          setState((){
+                                            postImage = File(take.path);
+                                          });
+                                    },
+                                    child: Container(width: 60*scaleFactor,height: 60*scaleFactor,
+                                      decoration: BoxDecoration(
+                                        color: Colors.black12.withOpacity(0.05),
+                                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                                      ),
+                                      child: Icon(Icons.photo, color: primaryforegroundColor, size: 40*scaleFactor,),
+                                    ),
+                                  ),
+                                  (MediaQuery.of(context).viewInsets.bottom == 0 || titleOnFocus) ? const SizedBox() :InkWell(
+                                    onTap: (){
+                                      if(toolbar["bold"]!){
+                                        toolbar["bold"] = false;
+                                        // contentController.formatSelection(Attribute("bold", AttributeScope.INLINE, null));
+                                      }else{
+                                        toolbar["bold"] = true;
+                                        // contentController.formatSelection(Attribute("bold", AttributeScope.INLINE, true));
+                                      }
+                                      setState(() {});
+                                    },
+                                    child: Container(width: 60*scaleFactor,height: 60*scaleFactor,
+                                      decoration: BoxDecoration(
+                                        color:  (toolbar["bold"]!) ? primaryforegroundColor : Colors.black12.withOpacity(0.05),
+                                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                                      ),
+                                      child: Center(child: Text("B", style:TextStyle( color: (toolbar["bold"]!) ? termaryForegroundColor : primaryforegroundColor, fontSize: 36*scaleFactor, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic))),
+                                    ),
+                                  ),
+                                  (MediaQuery.of(context).viewInsets.bottom == 0 || titleOnFocus) ? const SizedBox() :InkWell(
+                                    onTap: (){
+                                      if(toolbar["italic"]!){
+                                        toolbar["italic"] = false;
+                                        // contentController.formatSelection(Attribute("italic", AttributeScope.INLINE, null));
+                                      }else{
+                                        toolbar["italic"] = true;
+                                        // contentController.formatSelection(Attribute("italic", AttributeScope.INLINE, true));
+                                      }
+                                      setState(() {});
+                                    },
+                                    child: Container(width: 60*scaleFactor,height: 60*scaleFactor,
+                                      decoration: BoxDecoration(
+                                        color:  (toolbar["italic"]!) ? primaryforegroundColor : Colors.black12.withOpacity(0.05),
+                                        borderRadius: BorderRadius.all(Radius.circular(15.0*scaleFactor)),
+                                      ),
+                                      child: Center(child: Text("I", style:TextStyle( color:  (toolbar["italic"]!) ? termaryForegroundColor : primaryforegroundColor, fontSize: 36*scaleFactor,  fontStyle: FontStyle.italic))),
+                                    ),
+                                  ),
+                                  (MediaQuery.of(context).viewInsets.bottom == 0 || titleOnFocus) ? const SizedBox() :InkWell(
+                                    onTap: (){
+                                      if(toolbar["underline"]!){
+                                        toolbar["underline"] = false;
+                                        // contentController.formatSelection(Attribute("underline", AttributeScope.INLINE, null));
+                                      }else{
+                                        toolbar["underline"] = true;
+                                        // contentController.formatSelection(Attribute("underline", AttributeScope.INLINE, true));
+                                      }
+                                      setState(() {});
+                                    },
+                                    child: Container(width: 60*scaleFactor,height: 60*scaleFactor,
+                                      decoration: BoxDecoration(
+                                        color: (toolbar["underline"]!) ? primaryforegroundColor : Colors.black12.withOpacity(0.05),
+                                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                                      ),
+                                      child: Center(child: Text("U", style:TextStyle( color:  (toolbar["underline"]!) ? termaryForegroundColor : primaryforegroundColor, decoration: TextDecoration.underline,fontSize: 36*scaleFactor))),
+                                    ),
+                                  ),(MediaQuery.of(context).viewInsets.bottom == 0 || titleOnFocus) ? const SizedBox() :InkWell(
+                                    onTap: (){
+                                      showDialog(
+                                            context: context,
+                                            builder : (context)=> AlertDialog(
+                                              title: const Text('Pick a color!'),
+                                              content: SingleChildScrollView(
+                                                child: ColorPicker(
+                                                  pickerColor: Colors.black87,
+                                                  onColorChanged: (color){
+                                                    setState((){
+                                                      currentColor = color;
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                              actions: <Widget>[
+                                                ElevatedButton(
+                                                  child: const Text('Got it'),
+                                                  onPressed: () {
+                                                    // contentController.formatSelection(Attribute("color", AttributeScope.INLINE, "#${currentColor.value.toRadixString(16).toUpperCase()}"));
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                    },
+                                    child: Container(width: 60*scaleFactor,height: 60*scaleFactor,
+                                      decoration: BoxDecoration(
+                                        color: Colors.black12.withOpacity(0.05),
+                                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                                      ),
+                                      child: Icon(Icons.palette, color: currentColor, size: 40*scaleFactor,),
+                                    ),
+                                  ),
+                                   (MediaQuery.of(context).viewInsets.bottom == 0 || titleOnFocus) ?  const Spacer() : const SizedBox(),
+                                ]),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).viewInsets.bottom+15,
                             )
                           ]),
-                        )),
-                      
-                         Padding(
-                           padding: const EdgeInsets.only(top: 8.0, left: 15.0, right: 15.0),
-                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              InkWell(
-                                onTap: (){},
-                                child: Container(width: 45*scaleFactor,height: 45*scaleFactor,
-                                  decoration: BoxDecoration(
-                                    color: Colors.black12.withOpacity(0.05),
-                                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                                  ),
-                                  child: Icon(Icons.photo, color: primaryforegroundColor, size: 40*scaleFactor,),
-                                ),
-                              ),
-                              InkWell(
-                                onTap: (){},
-                                child: Container(width: 45*scaleFactor,height: 45*scaleFactor,
-                                  decoration: BoxDecoration(
-                                    color: Colors.black12.withOpacity(0.05),
-                                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                                  ),
-                                  child: Center(child: Text("B", style:TextStyle( color: primaryforegroundColor, fontSize: 36*scaleFactor, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic))),
-                                ),
-                              ),
-                              InkWell(
-                                onTap: (){},
-                                child: Container(width: 45*scaleFactor,height: 45*scaleFactor,
-                                  decoration: BoxDecoration(
-                                    color: Colors.black12.withOpacity(0.05),
-                                    borderRadius: BorderRadius.all(Radius.circular(15.0*scaleFactor)),
-                                  ),
-                                  child: Center(child: Text("I", style:TextStyle( color: primaryforegroundColor, fontSize: 36*scaleFactor,  fontStyle: FontStyle.italic))),
-                                ),
-                              ),
-                              InkWell(
-                                onTap: (){},
-                                child: Container(width: 45*scaleFactor,height: 45*scaleFactor,
-                                  decoration: BoxDecoration(
-                                    color: Colors.black12.withOpacity(0.05),
-                                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                                  ),
-                                  child: Center(child: Text("U", style:TextStyle( color: primaryforegroundColor, decoration: TextDecoration.underline,fontSize: 36*scaleFactor))),
-                                ),
-                              ),InkWell(
-                                onTap: (){},
-                                child: Container(width: 45*scaleFactor,height: 45*scaleFactor,
-                                  decoration: BoxDecoration(
-                                    color: Colors.black12.withOpacity(0.05),
-                                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                                  ),
-                                  child: Icon(Icons.edit, color: primaryforegroundColor, size: 40*scaleFactor,),
-                                ),
-                              )
-                              ,InkWell(
-                                onTap: (){},
-                                child: Container(width: 45*scaleFactor,height: 45*scaleFactor,
-                                  decoration: BoxDecoration(
-                                    color: Colors.black12.withOpacity(0.05),
-                                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                                  ),
-                                  child:  Center(child: Text("A", style:TextStyle( color: primaryforegroundColor, decoration: TextDecoration.underline,fontSize: 36*scaleFactor))),
-                                ),
-                              )
-
-                            ]),
-                         ),
-                        SizedBox(
-                          height: MediaQuery.of(context).viewInsets.bottom+15,
-                        )
-                      ]),
-                    );
+                        );
+                    });
                   });
   }
 
-  dynamic reportPost(Post post){
+  dynamic reportScreen(Post post){
     Navigator.of(context).pop();
     setState(() {
       reportFlags = [];
@@ -345,7 +520,7 @@ class _LichenHubState extends State<LichenHub> {
                                       alignment: Alignment.centerRight,
                                       child: InkWell(
                                       onTap: () async {
-                                                          
+                                        reportPost(post);
                                         Navigator.of(context).pop();
                                       },
                                       child: Transform.rotate(
@@ -426,10 +601,15 @@ class _LichenHubState extends State<LichenHub> {
   }
 
   @override
+  void initState(){
+    super.initState();
+    loadPosts();
+  }
+  @override
   void dispose(){
     super.dispose();
     titleController.dispose();
-    // contentController.dispose();
+    contentController.dispose();
     reportFieldController.dispose();
   }
 
@@ -487,7 +667,7 @@ class _LichenHubState extends State<LichenHub> {
                 deletePost(posts[index]);
                 Navigator.of(context).pop();
               },
-              onReport:()=>reportPost(posts[index]),
+              onReport:()=>reportScreen(posts[index]),
               onEdit: ()=>composePost(scaleFactor,post: posts[index]),
               onReply: (){
                  showModalBottomSheet(context: context, 
@@ -552,7 +732,7 @@ class _LichenHubState extends State<LichenHub> {
                                   setState((){});
                                 },
                                 fromUser: (isPostFromUser(posts[index])),
-                                onReport: ()=>reportPost(posts[index]), 
+                                onReport: ()=>reportScreen(posts[index]), 
                                 onEdit: ()=>composePost(scaleFactor,post: posts[index]),
                                 ),
                                 Column(children: List.generate(posts[index].comments.length, (i){
@@ -638,6 +818,7 @@ class _LichenHubState extends State<LichenHub> {
                 onTap: (){
                   setState(() {
                     titleController.text = '';
+                    contentController.clear();
                   });
                   composePost(scaleFactor);
                 },
@@ -936,7 +1117,7 @@ class PostBox extends StatelessWidget {
                   ),
                 ),
               ),
-              (onReply==null) ? SizedBox() : const Divider(height: 3, color: Colors.black87,),
+              (onReply==null) ? SizedBox() : const Divider(thickness: 1, height: 3, color: Colors.black12,),
               (onReply==null) ? SizedBox() : Padding(
                 padding: const EdgeInsets.only(left: 10.0),
                 child: SizedBox(
