@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TermsAndConditions extends StatelessWidget {
   int _currentIndex = 4;
@@ -10,7 +10,12 @@ class TermsAndConditions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
+<<<<<<< HEAD
+    double h =
+        MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
+=======
     double h = MediaQuery.of(context).size.height;
+>>>>>>> 178efef66ac2061eec7fd49af99158d8f70449b3
     double scaleFactor = h / 1080;
 
     return Scaffold(
@@ -32,6 +37,36 @@ class TermsAndConditions extends StatelessWidget {
 
       // Body
       body: Padding(
+<<<<<<< HEAD
+        padding: const EdgeInsets.only(left: 45.0, right: 45),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Container(
+            height: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 100 * scaleFactor),
+                Text(
+                  'LichenCare Terms of Use',
+                  style: TextStyle(
+                      fontSize: 22 * scaleFactor, fontWeight: FontWeight.w900),
+                ),
+                Text(
+                  'Effective as of: December 01, 2023',
+                  style: TextStyle(
+                    fontSize: 20 * scaleFactor,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'Introduction',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: EdgeInsets.only(left: 0, right: 0),
+=======
         padding: EdgeInsets.all(24.0),
         child: ListView(
           children: [
@@ -587,10 +622,20 @@ class TermsAndConditions extends StatelessWidget {
                 //General Disclaimer
                 Align(
                   alignment: Alignment.centerLeft,
+>>>>>>> 178efef66ac2061eec7fd49af99158d8f70449b3
                   child: RichText(
                     textAlign: TextAlign.justify,
                     text: TextSpan(
                       style: TextStyle(
+<<<<<<< HEAD
+                        color: Colors.black87,
+                        fontSize: 20 * scaleFactor,
+                      ),
+                      children: const [
+                        TextSpan(
+                            text:
+                                'Please read these Terms of Use (“Terms”) carefully as they govern your use (which includes access to) LichenCare’s personalized services for classification of the Cutaneous Lichen Planus skin disease, including the in-app features (LichenCheck, Lichenpedia, LichenHub) that incorporate or link to these Terms (collectively, the “LichenCare Service”).'),
+=======
                         fontSize: 20 * scaleFactor,
                         color: Colors.black,
                       ),
@@ -602,10 +647,90 @@ class TermsAndConditions extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+>>>>>>> 178efef66ac2061eec7fd49af99158d8f70449b3
                       ],
                     ),
                   ),
                 ),
+<<<<<<< HEAD
+                const Spacer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacementNamed('/login');
+                      },
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                          EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 22 * scaleFactor),
+                        ),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          const Color(0xFFFF7F50),
+                        ),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: const BorderSide(
+                              color: Colors.white,
+                              width: 2.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                      child: const Text(
+                        'Go back',
+                        style: TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushReplacementNamed('/profile/privacy_policy');
+                      },
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                          EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 22 * scaleFactor),
+                        ),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          const Color(0xFFFF7F50),
+                        ),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: const BorderSide(
+                              color: Colors.white,
+                              width: 2.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                      child: const Text(
+                        'I accept',
+                        style: TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+              ],
+            ),
+          ),
+=======
                 SizedBox(height: 5),
 
                 //General Disclaimer items (a,b,c,d,e)
@@ -1029,6 +1154,7 @@ class TermsAndConditions extends StatelessWidget {
             ),
             SizedBox(height: 15),
           ],
+>>>>>>> 178efef66ac2061eec7fd49af99158d8f70449b3
         ),
       ),
 
