@@ -301,7 +301,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 ),
               ),
             )
-          : Center(
+          : const Center(
               child: CircularProgressIndicator(),
             ),
     );

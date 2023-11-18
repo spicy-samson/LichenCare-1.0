@@ -35,11 +35,11 @@ class _LichenPediaState extends State<LichenPedia> {
         automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFFFFF4E9),
         title: Padding(
-          padding: EdgeInsets.only(top: h * 0.05, right: w * 0.5),
+          padding: EdgeInsets.only(top: h * 0.06, right: w * 0.42),
           child: SvgPicture.asset(
             'assets/svgs/#2 - lichenpedia.svg',
             width: w * 0.1,
-            height: h * 0.047,
+            height: h * 0.6,
           ),
         ),
         elevation: 0,
@@ -80,10 +80,10 @@ class _LichenPediaState extends State<LichenPedia> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                          padding: const EdgeInsets.only(left: 35.0, right: 35),
+                          padding:  EdgeInsets.only(left: 35.0*scaleFactor, right: 35*scaleFactor),
                           child: richText(
                             'Welcome to Lichenpedia, your passport to Lichen Planus knowledge. Here, you\'ll find a treasure trove of educational resources, carefully curated to help you understand and navigate the complexities of this unique skin condition, Lichenpedia is your go-to-destination!',
-                            fontSize: 22 * (scaleFactor),
+                            fontSize: 20 * (scaleFactor),
                             fontWeight: FontWeight.w400,
                             fontStyle: FontStyle.italic,
                           )),
@@ -231,13 +231,13 @@ class _LichenPediaState extends State<LichenPedia> {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 15,
+                      SizedBox(
+                        height: 15*scaleFactor,
                       ),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                            padding: EdgeInsets.only(left: 35.0),
+                            padding:EdgeInsets.only(left: 35.0*scaleFactor, right: 35*scaleFactor),
                             child: richText('What is Lichen Planus?',
                                 fontSize: 22 * scaleFactor,
                                 fontWeight: FontWeight.w600,
@@ -247,10 +247,10 @@ class _LichenPediaState extends State<LichenPedia> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 35.0, right: 35),
+                          padding: EdgeInsets.only(left: 35.0*scaleFactor, right: 35*scaleFactor),
                           child: richText(
                               'The term Lichen Planus (LP) or pronounced as (like-en play-nes) stems from the Greek word “leichen”, which means “tree moss”, and the Latin word “planus”, which means “flat”, which aptly describes the surface of the cutaneous lesion. Lichen Planus is an uncommon skin disorder that presents as an itchy rash that appears as flat-topped, itchy, purple-colored bumps of the skin. While LP is a non-contagious skin disease, it can affect any part of the body of the person with it and is most commonly found on the wrists, ankles, lower back, and mouth. LP belongs to a group of chronic inflammatory skin conditions with characteristic clinical and histopathologic findings, ranging from common to rare called lichenoid dermatoses. Commonly, the LP presents many variants in morphology and location also exist.',
-                              fontSize: 22 * scaleFactor,),
+                              fontSize: 20 * scaleFactor,),
                         ),
                       ),
                       const Spacer(),
@@ -326,11 +326,11 @@ class _LichenPediaState extends State<LichenPedia> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20 * scaleFactor),
+                    SizedBox(height: 15 * scaleFactor),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                        padding: EdgeInsets.only(left: 35.0, right: 35),
+                        padding: EdgeInsets.only(left: 35.0*scaleFactor, right: 35*scaleFactor),
                         child: Text(
                           'How does Lichen Planus affect my body?',
                           style: TextStyle(
@@ -344,16 +344,18 @@ class _LichenPediaState extends State<LichenPedia> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                        padding: EdgeInsets.only(left: 35.0, right: 35),
-                        child: Text(
-                          'Lichen Planus commonly affects the skin around a person’s wrists and elbows (flexor surfaces), the back of your hands (dorsal surfaces), and the fronts of your lower legs. About half of all people who have lichen planus develop oral lichen planus, which affects the skin inside of your mouth and your tongue. The lesions on the body of a person with lichen planus usually start as tiny, raised dots (papules) that are about the size of the tip of a pin (0.4 millimeters [mm]). They may grow up to the width of a pencil (1 centimeter [cm]).',
-                          style: TextStyle(
-                            fontSize: 20 * scaleFactor,
-                          ),
+                        padding: EdgeInsets.only(left: 35.0*scaleFactor, right: 35*scaleFactor),
+                        child: Column(
+                          children: [
+                            richText(
+                              'Lichen Planus commonly affects the skin around a person’s wrists and elbows (flexor surfaces), the back of your hands (dorsal surfaces), and the fronts of your lower legs. About half of all people who have lichen planus develop oral lichen planus, which affects the skin inside of your mouth and your tongue. The lesions on the body of a person with lichen planus usually start as tiny, raised dots (papules) that are about the size of the tip of a pin (0.4 millimeters [mm]). They may grow up to the width of a pencil (1 centimeter [cm]).',
+                              fontSize: 20 * scaleFactor,                            
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    SizedBox(height: 15 * scaleFactor),
+                    SizedBox(height: 10 * scaleFactor),
                     const Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
@@ -367,7 +369,7 @@ class _LichenPediaState extends State<LichenPedia> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 15 * scaleFactor),
+                    SizedBox(height: 5 * scaleFactor),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25),
                       child: Row(
@@ -390,6 +392,7 @@ class _LichenPediaState extends State<LichenPedia> {
                         ],
                       ),
                     ),
+                    SizedBox(height: 5 * scaleFactor),
                     const Spacer(),
                     Center(
                       child: GestureDetector(
@@ -466,11 +469,11 @@ class _LichenPediaState extends State<LichenPedia> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 15),
+                      SizedBox(height: 15*scaleFactor),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                          padding: EdgeInsets.only(left: 35.0, right: 35),
+                          padding: EdgeInsets.only(left: 35.0*scaleFactor, right: 35*scaleFactor),
                           child: Text(
                             'Causes of Lichen Planus',
                             style: TextStyle(
@@ -483,12 +486,10 @@ class _LichenPediaState extends State<LichenPedia> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                          padding: EdgeInsets.only(left: 35.0, right: 35),
-                          child: Text(
+                          padding: EdgeInsets.only(left: 35.0*scaleFactor, right: 35*scaleFactor),
+                          child: richText(
                             'The exact cause of Lichen Planus is not known, but the following are the possible causes that can contribute to the occurrence of the skin condition:',
-                            style: TextStyle(
                               fontSize: 20 * scaleFactor,
-                            ),
                           ),
                         ),
                       ),
@@ -496,7 +497,7 @@ class _LichenPediaState extends State<LichenPedia> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                            padding: EdgeInsets.only(left: 35.0, right: 35),
+                            padding: EdgeInsets.only(left: 35.0*scaleFactor, right: 35*scaleFactor),
                             child: richText('Systemic Viral Infection',
                                 fontSize: 21 * scaleFactor,
                                 fontWeight: FontWeight.w600,
@@ -506,12 +507,12 @@ class _LichenPediaState extends State<LichenPedia> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                          padding: EdgeInsets.only(left: 35.0, right: 35),
-                          child: Text(
+                          padding: EdgeInsets.only(left: 35.0*scaleFactor, right: 35*scaleFactor),
+                          child: richText(
                             'While having Hepatitis C is not fully associated with having Lichen Planus, some studies have been done to understand the exact mechanism and the relationship between the two conditions. Hepatitis C infection can lead to immune system dysregulation where it becomes overactive resulting in various autoimmune reactions modifying self-antigens on the surface of basal keratinocytes.',
-                            style: TextStyle(
+                          
                               fontSize: 20 * scaleFactor,
-                            ),
+                      
                           ),
                         ),
                       ),
@@ -519,7 +520,7 @@ class _LichenPediaState extends State<LichenPedia> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                            padding: EdgeInsets.only(left: 35.0, right: 35),
+                            padding: EdgeInsets.only(left: 35.0*scaleFactor, right: 35*scaleFactor),
                             child: richText("Genetic Predisposition",
                                 fontSize: 21 * scaleFactor,
                                 fontWeight: FontWeight.w600,
@@ -529,12 +530,12 @@ class _LichenPediaState extends State<LichenPedia> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                          padding: EdgeInsets.only(left: 35.0, right: 35),
-                          child: Text(
+                          padding: EdgeInsets.only(left: 35.0*scaleFactor, right: 35*scaleFactor),
+                          child: richText(
                             'A person’s genetic makeup can be a possible reason, as it can sometimes run in families because certain genetic factors may make individuals more susceptible to developing the skin condition.',
-                            style: TextStyle(
+                          
                               fontSize: 20 * scaleFactor,
-                            ),
+                           
                           ),
                         ),
                       ),
@@ -617,11 +618,11 @@ class _LichenPediaState extends State<LichenPedia> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
-                            padding: EdgeInsets.only(left: 35.0, right: 35),
+                            padding: EdgeInsets.only(left: 35.0*scaleFactor, right: 35*scaleFactor),
                             child: Text(
                               'Symptoms of Lichen Planus',
                               style: TextStyle(
-                                  fontSize: 26 * scaleFactor,
+                                  fontSize: 24 * scaleFactor,
                                   fontWeight: FontWeight.w900),
                             ),
                           ),
@@ -630,15 +631,15 @@ class _LichenPediaState extends State<LichenPedia> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
-                            padding: EdgeInsets.only(left: 35, right: 35),
+                            padding: EdgeInsets.only(left: 35.0*scaleFactor, right: 35*scaleFactor),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(
+                                richText(
                                   'A variety of symptoms of lichen planus can be seen depending on the parts of an individual\'s body affected and its specificity. The following are the common symptoms of Lichen Planus from different parts of the body:',
-                                  style: TextStyle(
+                              
                                     fontSize: 20 * scaleFactor,
-                                  ),
+                                  
                                 ),
                                 SizedBox(height: 15 * scaleFactor),
                                 richText("Skin",
@@ -646,11 +647,11 @@ class _LichenPediaState extends State<LichenPedia> {
                                     fontWeight: FontWeight.w600,
                                     fontStyle: FontStyle.italic),
                                 SizedBox(height: 10 * scaleFactor),
-                                Text(
+                                richText(
                                   'The primary symptoms often involve the presence of shiny, red or purple raised bumps on the skin. These bumps are typically solid and can vary in their level of itchiness, ranging from mild to intense. An individual may experience a few or numerous of theses bumps. Additionally, there is a noticeable fine white lines or scales accompanying the bumps. While they can appear on various parts of the body, they are most frequently found on the wrists, arms, back and ankles.',
-                                  style: TextStyle(
+                                 
                                     fontSize: 20 * scaleFactor,
-                                  ),
+                                  
                                 ),
                               ],
                             ),
@@ -731,7 +732,7 @@ class _LichenPediaState extends State<LichenPedia> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 35.0),
+                        padding: EdgeInsets.only(left: 35.0*scaleFactor, right: 35*scaleFactor),
                         child: Text('Treatments of Lichen Planus',
                             style: TextStyle(
                                 fontSize: 26 * scaleFactor,
@@ -742,7 +743,7 @@ class _LichenPediaState extends State<LichenPedia> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                          padding: EdgeInsets.only(left: 35.0),
+                          padding: EdgeInsets.only(left: 35.0*scaleFactor, right: 35*scaleFactor),
                           child: richText("General Measures",
                               fontSize: 21 * scaleFactor,
                               fontWeight: FontWeight.w600,
@@ -752,7 +753,7 @@ class _LichenPediaState extends State<LichenPedia> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                        padding: EdgeInsets.only(left: 55.0, right: 35),
+                        padding: EdgeInsets.only(left: 45.0*scaleFactor, right: 35*scaleFactor),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -782,7 +783,7 @@ class _LichenPediaState extends State<LichenPedia> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                          padding: EdgeInsets.only(left: 35.0, right: 35),
+                          padding: EdgeInsets.only(left: 35.0*scaleFactor, right: 35*scaleFactor),
                           child: richText(
                               "Specific Measures (Topical Treatments)",
                               fontSize: 21 * scaleFactor,
@@ -793,7 +794,7 @@ class _LichenPediaState extends State<LichenPedia> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                        padding: EdgeInsets.only(left: 55.0, right: 35),
+                        padding: EdgeInsets.only(left: 45.0*scaleFactor, right: 35*scaleFactor),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -823,7 +824,7 @@ class _LichenPediaState extends State<LichenPedia> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                          padding: EdgeInsets.only(left: 35.0, right: 35),
+                          padding: EdgeInsets.only(left: 35.0*scaleFactor, right: 35*scaleFactor),
                           child: richText(
                               "Specific Measures (Systematic Treatments)",
                               fontSize: 21 * scaleFactor,
@@ -834,7 +835,7 @@ class _LichenPediaState extends State<LichenPedia> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                        padding: EdgeInsets.only(left: 55.0, right: 45),
+                        padding: EdgeInsets.only(left: 35.0, right: 35),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -925,7 +926,7 @@ class _LichenPediaState extends State<LichenPedia> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 35.0),
+                        padding: EdgeInsets.only(left: 35.0*scaleFactor, right: 35*scaleFactor),
                         child: Text(
                           'Diagnosis of Lichen Planus',
                           style: TextStyle(
@@ -938,7 +939,7 @@ class _LichenPediaState extends State<LichenPedia> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                          padding: EdgeInsets.only(left: 35.0, right: 35),
+                          padding: EdgeInsets.only(left: 35.0*scaleFactor, right: 35*scaleFactor),
                           child: richText('How is Lichen Planus diagnosed?',
                               fontSize: 22 * scaleFactor,
                               fontWeight: FontWeight.w600,
@@ -948,12 +949,12 @@ class _LichenPediaState extends State<LichenPedia> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                        padding: EdgeInsets.only(left: 35.0, right: 35),
-                        child: Text(
+                        padding: EdgeInsets.only(left: 35.0*scaleFactor, right: 35*scaleFactor),
+                        child: richText(
                           'Lichen planus is usually diagnosed by your healthcare provider through a symptom assessment and physical examination. They\'ll often search for key features, referred to as the "Six Ps," to confirm the diagnosis:',
-                          style: TextStyle(
+                          
                             fontSize: 20 * scaleFactor,
-                          ),
+                          
                         ),
                       ),
                     ),
@@ -961,7 +962,7 @@ class _LichenPediaState extends State<LichenPedia> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                        padding: EdgeInsets.only(left: 55.0, right: 45),
+                        padding:EdgeInsets.only(left: 55.0*scaleFactor, right: 45*scaleFactor),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -1009,25 +1010,25 @@ class _LichenPediaState extends State<LichenPedia> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                        padding: EdgeInsets.only(left: 35.0, right: 35),
-                        child: Text(
+                        padding: EdgeInsets.only(left: 35.0*scaleFactor, right: 35*scaleFactor),
+                        child: richText(
                           'If there\'s any doubt, your healtcare provider may perform the following tests:',
-                          style: TextStyle(
+                         
                             fontSize: 22 * scaleFactor,
                           ),
-                        ),
+                        
                       ),
                     ),
                     SizedBox(height: 15 * scaleFactor),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                        padding: EdgeInsets.only(left: 35.0, right: 35),
-                        child: Text(
+                        padding: EdgeInsets.only(left: 35.0*scaleFactor, right: 35*scaleFactor),
+                        child: richText(
                           'Allergy test. An allergy test can determine if you have an allergy that\'s causing your lichen planus flare-up',
-                          style: TextStyle(
+                    
                             fontSize: 22 * scaleFactor,
-                          ),
+                          
                         ),
                       ),
                     ),
@@ -1076,22 +1077,22 @@ class _LichenPediaState extends State<LichenPedia> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 35.0, right: 35),
+                    padding: EdgeInsets.only(left: 35.0*scaleFactor, right: 35*scaleFactor),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(
+                        richText(
                           '· For oral lichen planus, stop smoking, avoid alcohol, maintain good oral hygiene, and avoid any foods that seem to irritate your mouth.',
-                          style: TextStyle(
+                        
                             fontSize: 20 * scaleFactor,
-                          ),
+                        
                         ),
                         SizedBox(height: 15 * scaleFactor),
-                        Text(
+                        richText(
                           'Lichen Planus is not a dangerous disease, and it usually goes away on its own. However, in some people, it may come back.',
-                          style: TextStyle(
+                      
                             fontSize: 20 * scaleFactor,
-                          ),
+                        
                         ),
                       ],
                     ),
