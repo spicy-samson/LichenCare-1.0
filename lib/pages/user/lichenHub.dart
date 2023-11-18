@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lichen_care/helpers/helpers.dart';
 import 'package:lichen_care/pages/guest/login.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
@@ -149,8 +151,6 @@ class _LichenHubState extends State<LichenHub> {
       duration: Duration(milliseconds: 1000),
       content: Text("Content copied to clipboard.")));
   }
-  
-
   // WIDGET BUILDERS
   dynamic composePost(double scaleFactor, {Post? post}){
     toolbar["bold"] = false;
@@ -525,12 +525,32 @@ class _LichenHubState extends State<LichenHub> {
                                       alignment: Alignment.centerRight,
                                       child: InkWell(
                                       onTap: () async {
+                                        if(reportFlags.isEmpty){
+                                          return;
+                                        }
                                         reportPost(post);
-                                        Navigator.of(context).pop();
+                                        AwesomeDialog(
+                                          context: context,
+                                          dialogType: DialogType.warning,
+                                          animType: AnimType.topSlide,
+                                          title: 'Thank you for reportiing',
+                                          desc:
+                                              "We take your safety seriously and are investigating your submission in accordance with our Code of Conduct.",
+                                          descTextStyle: TextStyle(
+                                            fontSize: 16.0,
+                                          ),
+                                          padding: EdgeInsets.all(16.0),
+                                          btnCancelText: "Close",
+                                          btnCancelOnPress: (){
+                                            Navigator.of(context).pop();
+                                          },
+                                        ).show();
+                                        // Navigator.of(context).pop();
+                                     
                                       },
                                       child: Transform.rotate(
                                         angle: -3.14/5,
-                                        child: Icon(Icons.send, size: 24, color: primaryforegroundColor,)),
+                                        child: Icon(Icons.send, size: 24, color: (reportFlags.isEmpty)? Colors.grey : primaryforegroundColor,)),
                                                               ),
                                     ),
                                   ),
@@ -978,7 +998,7 @@ class PostBox extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                    Text(post.user,style: TextStyle(fontSize: 28*scaleFactor),),
+                    Text(makeAnonymous(post.user),style: TextStyle(fontSize: 28*scaleFactor),),
                     Text(DateFormat('yMMMd').add_jm().format(DateTime.now()), style: TextStyle(fontSize: 20*scaleFactor)),
                   ],),
                   Spacer(),
