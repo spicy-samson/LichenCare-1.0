@@ -8,7 +8,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   firebase_auth
   firebase_core
   firebase_storage
-  tflite_flutter_helper
+  pasteboard
   url_launcher_windows
 )
 

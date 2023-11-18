@@ -19,3 +19,17 @@ Widget richText(String text,
     ),
   );
 }
+
+
+String makeAnonymous(String name){
+    String anonymous = "";
+    String firstName = name.split(" ")[0];
+    for (int i = 0; i < firstName.length; i++){
+      if(i==0){
+        anonymous+=firstName[i];
+      }else{
+        anonymous+="*";
+      }
+    }
+    return anonymous;
+  }

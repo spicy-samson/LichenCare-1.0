@@ -412,9 +412,9 @@ class _LichenCheckState extends State<LichenCheck> {
             ? const SizedBox()
             : Padding(
                 padding: EdgeInsets.only(
-                    left: 15.0,
-                    right: 15.0,
-                    top: 150.0 * scaleFactor,
+                    left: 20.0*scaleFactor,
+                    right: 20.0*scaleFactor,
+                    top: 130.0 * scaleFactor,
                     bottom: 120.0 * scaleFactor),
                 child: Container(
                   width: double.infinity,
@@ -438,8 +438,7 @@ class _LichenCheckState extends State<LichenCheck> {
                                     fontWeight: FontWeight.bold),
                                 children: const <TextSpan>[
                                   TextSpan(
-                                      text:
-                                          'DISCLAIMER FOR USING LICHENCHECK'),
+                                      text: 'DISCLAIMER IN USING LICHENCHECK'),
                                 ])),
                         SizedBox(
                           height: 25 * scaleFactor,
@@ -469,10 +468,11 @@ class _LichenCheckState extends State<LichenCheck> {
                                             color: Colors.black,
                                             fontSize: 20 * scaleFactor,
                                             height: 1.5),
-                                        children: const <TextSpan>[
+                                        children: const[
+                                          WidgetSpan(child: SizedBox(width: 25,)),
                                           TextSpan(
                                               text:
-                                                  "     LichenCheck feature provides broad classifications of Cutaneous Lichen Planus (annular, hypertrophic, linear) for educational purposes only. It does not replace professional medical advice; consult a healthcare professional for accurate diagnosis."),
+                                                  "LichenCheck feature provides broad classifications of Cutaneous Lichen Planus (annular, hypertrophic, linear) for educational purposes only. It does not replace professional medical advice; consult a healthcare professional for accurate diagnosis."),
                                           TextSpan(
                                               text: " Lichen",
                                               style: TextStyle(

@@ -46,9 +46,10 @@ class AboutUs extends StatelessWidget {
                           text:
                               "Unlocking dermatological wisdom through information, guiding everyone with clinical decisions.",
                           style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                              fontStyle: FontStyle.italic),
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            fontStyle: FontStyle.italic,
+                          ),
                         ),
                       ],
                     ),
@@ -67,127 +68,211 @@ class AboutUs extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(height: 15),
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          Image.asset(
-                            'assets/imgs/jb_pic.png',
-                            width: w * 0.3,
-                            height: h * 0.3,
-                            fit: BoxFit.scaleDown,
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 14.0),
-                              child: RichText(
-                                textAlign: TextAlign.left,
-                                text: TextSpan(
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.black),
-                                  children: [
-                                    TextSpan(
-                                      text: "John Benidick D. Redondo. \n",
-                                      style: TextStyle(
-                                        fontSize: 20 * scaleFactor,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: "Project Manager. \n",
-                                      style: TextStyle(
-                                        fontSize: 18 * scaleFactor,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: "johnbenidickredondo@gmail.com \n",
-                                      style: TextStyle(
-                                        fontSize: 18 * scaleFactor,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: "+639150734583 \n",
-                                      style: TextStyle(
-                                        fontSize: 18 * scaleFactor,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          SvgPicture.asset(
-                            'assets/svgs/AboutUs_image.svg',
-                            width: w * 0.14,
-                            height: h * 0.20,
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 14.0),
-                              child: RichText(
-                                textAlign: TextAlign.left,
-                                text: TextSpan(
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.black),
-                                  children: [
-                                    TextSpan(
-                                      text: "John Benidick D. Redondo. \n",
-                                      style: TextStyle(
-                                        fontSize: 20 * scaleFactor,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: "Project Manager. \n",
-                                      style: TextStyle(
-                                        fontSize: 18 * scaleFactor,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: "johnbenidickredondo@gmail.com \n",
-                                      style: TextStyle(
-                                        fontSize: 18 * scaleFactor,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: "+639150734583 \n",
-                                      style: TextStyle(
-                                        fontSize: 18 * scaleFactor,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 16),
+                  SizedBox(height: 25),
+
+                  // Team members
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: RichText(
-                      textAlign: TextAlign.justify,
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text:
-                                "LichenCare team are Fourth Year Information Technology students that aim to utilize Machine Learning as an indispensable tool in the field of health informatics. They believe that AI must only be used as an aid and should not be intended to replace humans in their respective field.",
-                            style: TextStyle(
-                                fontSize: 20 * scaleFactor,
-                                color: Colors.black,
-                                height: 1.3),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            SizedBox(
+                              height: 162 * scaleFactor,
+                              width: 162 * scaleFactor,
+                              child: Image.asset(
+                                'assets/imgs/jb_pic.png', // replace with your image path
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12.0),
+                                child: RichText(
+                                  textAlign: TextAlign.start,
+                                  text: TextSpan(
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.black),
+                                    children: [
+                                      TextSpan(
+                                        text: "John Benidick D. Redondo\n",
+                                        style: TextStyle(
+                                          fontSize: 20 * scaleFactor,
+                                          fontWeight: FontWeight.w900,
+                                          height: 1.5,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: "Project Manager\n",
+                                        style: TextStyle(
+                                          fontSize: 18 * scaleFactor,
+                                          fontWeight: FontWeight.w700,
+                                          height: 1.3,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: "johnbenidickredondo@gmail.com\n",
+                                        style: TextStyle(
+                                          fontSize: 18 * scaleFactor,
+                                          height: 1.3,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: "+639150734583\n",
+                                        style: TextStyle(
+                                          fontSize: 18 * scaleFactor,
+                                          height: 1.3,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 13),
+                        Row(
+                          children: [
+                            SizedBox(
+                              height: 160 * scaleFactor,
+                              width: 160 * scaleFactor,
+                              child: Image.asset(
+                                'assets/imgs/third.JPG', // replace with your image path
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12.0),
+                                child: RichText(
+                                  textAlign: TextAlign.start,
+                                  text: TextSpan(
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.black),
+                                    children: [
+                                      TextSpan(
+                                        text: "Paulino Edsel G. Samson\n",
+                                        style: TextStyle(
+                                          fontSize: 20 * scaleFactor,
+                                          fontWeight: FontWeight.w900,
+                                          height: 1.5,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: "Fullstack Developer\n",
+                                        style: TextStyle(
+                                          fontSize: 18 * scaleFactor,
+                                          fontWeight: FontWeight.w700,
+                                          height: 1.3,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: "iamzedthird@gmail.com\n",
+                                        style: TextStyle(
+                                          fontSize: 18 * scaleFactor,
+                                          height: 1.3,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: "+639453313393\n",
+                                        style: TextStyle(
+                                          fontSize: 18 * scaleFactor,
+                                          height: 1.3,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 13),
+                        Row(
+                          children: [
+                            SizedBox(
+                              height: 160 * scaleFactor,
+                              width: 160 * scaleFactor,
+                              child: Image.asset(
+                                'assets/imgs/hannah.jpg', // replace with your image path
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12.0),
+                                child: RichText(
+                                  textAlign: TextAlign.start,
+                                  text: TextSpan(
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.black),
+                                    children: [
+                                      TextSpan(
+                                        text: "Hyasmin Hannah R. Barcelona\n",
+                                        style: TextStyle(
+                                          fontSize: 20 * scaleFactor,
+                                          fontWeight: FontWeight.w900,
+                                          height: 1.5,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: "UI/UX Manager\n",
+                                        style: TextStyle(
+                                          fontSize: 18 * scaleFactor,
+                                          fontWeight: FontWeight.w700,
+                                          height: 1.3,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: "hyasminbarcelona@gmail.com\n",
+                                        style: TextStyle(
+                                          fontSize: 18 * scaleFactor,
+                                          height: 1.3,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: "+639478200314\n",
+                                        style: TextStyle(
+                                          fontSize: 18 * scaleFactor,
+                                          height: 1.3,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 16),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: RichText(
+                            textAlign: TextAlign.justify,
+                            text: TextSpan(
+                               style: TextStyle(
+                                      fontSize: 20 * scaleFactor,
+                                      color: Colors.black,
+                                      height: 1.3),
+                              children: const [
+                                WidgetSpan(child: SizedBox(width: 20.0)),
+                                TextSpan(
+                                  text:
+                                      "The LichenCare team are Fourth Year Information Technology students that aim to utilize Machine Learning as an indispensable tool in the field of health informatics. They believe that AI must only be used as an aid and should not be intended to replace humans in their respective field.",
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(height: 16),
@@ -197,6 +282,7 @@ class AboutUs extends StatelessWidget {
                       textAlign: TextAlign.justify,
                       text: TextSpan(
                         children: [
+                          const WidgetSpan(child: SizedBox(width: 20.0)),
                           TextSpan(
                             text:
                                 "The LichenCare mobile application is a tool that is meant for everyone especially and gives significant assistance for patients specifically those with Lichen Planus as it allows them to make informed decisions. It is a platform that offers healthcare support and brings everyone together to share their knowledge and experiences with others to make the disease known for everybody.",
@@ -216,6 +302,7 @@ class AboutUs extends StatelessWidget {
                       textAlign: TextAlign.justify,
                       text: TextSpan(
                         children: [
+                          const WidgetSpan(child: SizedBox(width: 20.0)),
                           TextSpan(
                             text:
                                 "This healthcare support platform aims to greatly improve the identification and dissemination of medical information with a system application that offers various healthcare features that assist patients in understanding Lichen Planus. Along its way, it is an initiative to inspire developers to explore more with the ever-growing field of Machine Learning and Deep Learning to create an endless variety of concepts.",
