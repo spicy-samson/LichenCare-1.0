@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lichen_care/helpers/helpers.dart';
 import 'package:lichen_care/pages/guest/login.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
@@ -149,8 +150,6 @@ class _LichenHubState extends State<LichenHub> {
       duration: Duration(milliseconds: 1000),
       content: Text("Content copied to clipboard.")));
   }
-  
-
   // WIDGET BUILDERS
   dynamic composePost(double scaleFactor, {Post? post}){
     toolbar["bold"] = false;
@@ -978,7 +977,7 @@ class PostBox extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                    Text(post.user,style: TextStyle(fontSize: 28*scaleFactor),),
+                    Text(makeAnonymous(post.user),style: TextStyle(fontSize: 28*scaleFactor),),
                     Text(DateFormat('yMMMd').add_jm().format(DateTime.now()), style: TextStyle(fontSize: 20*scaleFactor)),
                   ],),
                   Spacer(),
