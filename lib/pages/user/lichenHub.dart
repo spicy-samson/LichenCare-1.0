@@ -679,7 +679,9 @@ class _LichenHubState extends State<LichenHub> {
                 child: InkWell(
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
-                  onTap: (){},
+                  onTap: (){
+                    Navigator.pushReplacementNamed(context, "/lichenNotif");
+                  },
                   child: Icon(Icons.notifications,color: primaryforegroundColor ,),
                 ),
               ),

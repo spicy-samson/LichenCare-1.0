@@ -1,11 +1,4 @@
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/routes/default_transitions.dart';
-import 'package:lichen_care/pages/user/profile/about_us.dart';
-import 'package:lichen_care/pages/user/profile/account.dart';
-import 'package:lichen_care/pages/user/profile/user_feedback.dart';
-import 'package:lichen_care/pages/user/profile/privacy_policy.dart';
-import 'package:lichen_care/pages/user/profile/scan_history.dart';
-import 'package:lichen_care/pages/user/profile/terms_and_conditions.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -13,10 +6,18 @@ import 'package:lichen_care/pages/guest/login.dart';
 import 'package:lichen_care/pages/user/profile.dart';
 import 'package:lichen_care/pages/user/home_page.dart';
 import 'package:lichen_care/pages/user/lichenHub.dart';
+import 'package:lichen_care/pages/user/lichenNotif.dart';
 import 'package:lichen_care/pages/user/lichenpedia.dart';
 import 'package:lichen_care/pages/user/lichenCheck.dart';
 import 'package:lichen_care/pages/guest/home_sliders.dart';
 import 'package:lichen_care/pages/guest/registration.dart';
+import 'package:lichen_care/pages/user/profile/account.dart';
+import 'package:lichen_care/pages/user/profile/about_us.dart';
+import 'package:lichen_care/pages/user/profile/scan_history.dart';
+import 'package:lichen_care/pages/user/profile/user_feedback.dart';
+import 'package:lichen_care/pages/user/profile/privacy_policy.dart';
+import 'package:get/get_navigation/src/routes/default_transitions.dart';
+import 'package:lichen_care/pages/user/profile/terms_and_conditions.dart';
 import 'package:lichen_care/pages/user/lichenpedia/lichenpedia_vault.dart';
 import 'package:lichen_care/pages/user/lichenpedia/lichenpedia_archives.dart';
 import 'package:lichen_care/pages/user/lichenpedia/lichenpedia_variants.dart';
@@ -66,6 +67,8 @@ class MyApp extends StatelessWidget {
             return pageRoute(route, LichenPediaReferences(), 0);
           case '/lichenHub':
             return pageRoute(route, LichenHub(), 0);
+          case '/lichenNotif':
+            return pageRoute(route, LichenNotif(), 0);
           case '/lichenCheck':
             return pageRoute(route, LichenCheck(), 100);
           case '/profile':
@@ -82,6 +85,10 @@ class MyApp extends StatelessWidget {
             return pageRoute(route, TermsAndConditions(), 0);
           case '/profile/privacy_policy':
             return pageRoute(route, PrivacyPolicy(), 0);
+          case '/profile/terms_and_conditions-boot':
+            return pageRoute(route, TermsAndConditions(onBoot: true,), 0);
+          case '/profile/privacy_policy-boot':
+            return pageRoute(route, PrivacyPolicy(onBoot: true), 0);
         }
       },
     );
