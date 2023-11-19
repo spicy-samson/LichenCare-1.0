@@ -131,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
                                     }
                                     // If the login is successful and email is verified, navigate to the home page using the named route.
                                     Navigator.of(context).pushReplacementNamed(
-                                        '/profile/terms_and_conditions');
+                                        '/profile/terms_and_conditions-boot');
                                   } else if (userCredential.user != null &&
                                       !userCredential.user!.emailVerified) {
                                     // User is logged in but email is not verified

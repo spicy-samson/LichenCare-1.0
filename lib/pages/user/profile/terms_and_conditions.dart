@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+
 class TermsAndConditions extends StatelessWidget {
-  int _currentIndex = 4;
-  Color secondaryForegroundColor = Color.fromARGB(255, 110, 189, 183);
+  final _currentIndex = 4;
+  final secondaryForegroundColor = const Color.fromARGB(255, 110, 189, 183);
+  final bool onBoot;
+  const TermsAndConditions({super.key, this.onBoot = false});
 
   @override
   Widget build(BuildContext context) {
@@ -1027,6 +1030,76 @@ class TermsAndConditions extends StatelessWidget {
                 ),
               ],
             ),
+            (onBoot) ? Row(
+               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacementNamed('/login');
+                      },
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                          EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 22 * scaleFactor),
+                        ),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          const Color(0xFFFF7F50),
+                        ),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: const BorderSide(
+                              color: Colors.white,
+                              width: 2.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                      child: const Text(
+                        'Go back',
+                        style: TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushReplacementNamed('/profile/privacy_policy-boot');
+                      },
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                          EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 22 * scaleFactor),
+                        ),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          const Color(0xFFFF7F50),
+                        ),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: const BorderSide(
+                              color: Colors.white,
+                              width: 2.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                      child: const Text(
+                        'I accept',
+                        style: TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+            ) : const SizedBox(),
             SizedBox(height: 15),
           ],
         ),
@@ -1034,10 +1107,10 @@ class TermsAndConditions extends StatelessWidget {
 
       // Floating action button
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: _lichenCheckBtn(context),
+      floatingActionButton: (!onBoot) ? _lichenCheckBtn(context):null,
 
       // Bottom navigation bar
-      bottomNavigationBar: _bottomNavBar(context),
+      bottomNavigationBar: (!onBoot)?  _bottomNavBar(context) : null,
     );
   }
 

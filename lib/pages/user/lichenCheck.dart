@@ -412,8 +412,8 @@ class _LichenCheckState extends State<LichenCheck> {
             ? const SizedBox()
             : Padding(
                 padding: EdgeInsets.only(
-                    left: 20.0*scaleFactor,
-                    right: 20.0*scaleFactor,
+                    left: 20.0 * scaleFactor,
+                    right: 20.0 * scaleFactor,
                     top: 130.0 * scaleFactor,
                     bottom: 120.0 * scaleFactor),
                 child: Container(
@@ -468,8 +468,11 @@ class _LichenCheckState extends State<LichenCheck> {
                                             color: Colors.black,
                                             fontSize: 20 * scaleFactor,
                                             height: 1.5),
-                                        children: const[
-                                          WidgetSpan(child: SizedBox(width: 25,)),
+                                        children: const [
+                                          WidgetSpan(
+                                              child: SizedBox(
+                                            width: 25,
+                                          )),
                                           TextSpan(
                                               text:
                                                   "LichenCheck feature provides broad classifications of Cutaneous Lichen Planus (annular, hypertrophic, linear) for educational purposes only. It does not replace professional medical advice; consult a healthcare professional for accurate diagnosis."),
@@ -536,7 +539,8 @@ class _LichenCheckState extends State<LichenCheck> {
                               children: [
                                 ElevatedButton(
                                   onPressed: () {
-                                    Navigator.pushReplacementNamed(context, '/home');
+                                    Navigator.pushReplacementNamed(
+                                        context, '/home');
                                   },
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.symmetric(
@@ -1050,7 +1054,7 @@ class _LichenCheckState extends State<LichenCheck> {
                                                     patientInformation
                                                             .selectedEthnicity =
                                                         ethnicities[index];
-                                                    Navigator.pushReplacementNamed(context, '/home'); 
+                                                    Navigator.of(context).pop();
                                                   });
                                                 },
                                                 child: Padding(

@@ -85,6 +85,10 @@ class MyApp extends StatelessWidget {
             return pageRoute(route, TermsAndConditions(), 0);
           case '/profile/privacy_policy':
             return pageRoute(route, PrivacyPolicy(), 0);
+          case '/profile/terms_and_conditions-boot':
+            return pageRoute(route, TermsAndConditions(onBoot: true,), 0);
+          case '/profile/privacy_policy-boot':
+            return pageRoute(route, PrivacyPolicy(onBoot: true), 0);
         }
       },
     );
