@@ -90,11 +90,11 @@ class _LichenHubState extends State<LichenHub> {
     // postImage is the to be image uploaded by user, check if null
     QuillController newController = QuillController.basic();
     newController.document =Document.fromDelta(contentController.document.toDelta());
-    // posts.add(Post(id: "1", userID: "1", user: "Kenneth James Belga", datetime: DateTime.now(), title: titleController.text, content: newController, isLiked: false, likes: 0, comments: []));
+    posts.add(Post(id: "1", userID: "1", user: "Kenneth James Belga", datetime: DateTime.now(), title: titleController.text, content: newController, isLiked: false, likes: 0, comments: []));
     setState(() {
       
     });
-    loadPosts();
+    // loadPosts();
   }
 
   Future editPost(Post post) async{
@@ -220,6 +220,9 @@ class _LichenHubState extends State<LichenHub> {
                                     Expanded(child: Center(child: Text( (post==null) ?  "New post" : "Edit post", style: TextStyle(fontSize: 22),))),
                                     InkWell(
                                       onTap: () async {
+                                        if(contentController.document.toPlainText().trim()==""){
+                                          return;
+                                        }
                                         if(post==null){
                                           await newPost();
                                         }else{
@@ -229,7 +232,7 @@ class _LichenHubState extends State<LichenHub> {
                                       },
                                       child: Transform.rotate(
                                         angle: -3.14/5,
-                                        child: Icon(Icons.send, size: 24, color: primaryforegroundColor,)),
+                                        child: Icon(Icons.send, size: 24, color: (contentController.document.toPlainText().trim()=="")? Colors.grey : primaryforegroundColor,)),
                                     ),
                                   ],),
                                 ),
