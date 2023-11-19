@@ -9,12 +9,7 @@ class PrivacyPolicy extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
-<<<<<<< HEAD
-    double h =
-        MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
-=======
     double h = MediaQuery.of(context).size.height;
->>>>>>> 178efef66ac2061eec7fd49af99158d8f70449b3
     double scaleFactor = h / 1080;
 
     return Scaffold(
@@ -35,38 +30,6 @@ class PrivacyPolicy extends StatelessWidget {
       ),
 
       // Body
-<<<<<<< HEAD
-      // Body
-      body: Padding(
-        padding: const EdgeInsets.only(left: 45.0, right: 45),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Container(
-            height: double.infinity,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 100 * scaleFactor),
-                Text(
-                  'LichenCare Privacy Policy',
-                  style: TextStyle(
-                      fontSize: 22 * scaleFactor, fontWeight: FontWeight.w900),
-                ),
-                Text(
-                  'Effective as of: November 20, 2023',
-                  style: TextStyle(
-                    fontSize: 20 * scaleFactor,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  'Introduction',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 20),
-                Padding(
-                  padding: EdgeInsets.only(left: 0, right: 0),
-=======
       body: Padding(
         padding: EdgeInsets.all(24.0),
         child: ListView(
@@ -133,20 +96,10 @@ class PrivacyPolicy extends StatelessWidget {
                 //What data do we collect?
                 Align(
                   alignment: Alignment.centerLeft,
->>>>>>> 178efef66ac2061eec7fd49af99158d8f70449b3
                   child: RichText(
                     textAlign: TextAlign.justify,
                     text: TextSpan(
                       style: TextStyle(
-<<<<<<< HEAD
-                        color: Colors.black87,
-                        fontSize: 20 * scaleFactor,
-                      ),
-                      children: const [
-                        TextSpan(
-                            text:
-                                'Hello there! We at LichenCare are about your privacy. We are fully committed to protecting and safeguarding the personal data you share with us when you use our services. In this Privacy Policy, we explain what kind of data we use, and how we use it.'),
-=======
                         fontSize: 20 * scaleFactor,
                         color: Colors.black,
                       ),
@@ -158,80 +111,10 @@ class PrivacyPolicy extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
->>>>>>> 178efef66ac2061eec7fd49af99158d8f70449b3
                       ],
                     ),
                   ),
                 ),
-<<<<<<< HEAD
-                const Spacer(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pushReplacementNamed(
-                            '/profile/terms_and_conditions');
-                      },
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 22 * scaleFactor),
-                        ),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          const Color(0xFFFF7F50),
-                        ),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            side: const BorderSide(
-                              color: Colors.white,
-                              width: 2.0,
-                            ),
-                          ),
-                        ),
-                      ),
-                      child: const Text(
-                        'Go back',
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          color: Colors.white,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pushReplacementNamed('/home');
-                      },
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 22 * scaleFactor),
-                        ),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          const Color(0xFFFF7F50),
-                        ),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            side: const BorderSide(
-                              color: Colors.white,
-                              width: 2.0,
-                            ),
-                          ),
-                        ),
-                      ),
-                      child: const Text(
-                        'I accept',
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          color: Colors.white,
-                        ),
-                        textAlign: TextAlign.center,
-=======
                 SizedBox(height: 5),
                 //  What data do we collect?.. STATEMENT
                 Align(
@@ -537,19 +420,10 @@ class PrivacyPolicy extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 18 * scaleFactor,
                         fontWeight: FontWeight.bold,
->>>>>>> 178efef66ac2061eec7fd49af99158d8f70449b3
                       ),
                     ),
                   ],
                 ),
-<<<<<<< HEAD
-                const SizedBox(
-                  height: 50,
-                ),
-              ],
-            ),
-          ),
-=======
               ),
             ),
             SizedBox(height: 5),
@@ -594,7 +468,6 @@ class PrivacyPolicy extends StatelessWidget {
               ),
             ),
           ],
->>>>>>> 178efef66ac2061eec7fd49af99158d8f70449b3
         ),
       ),
 

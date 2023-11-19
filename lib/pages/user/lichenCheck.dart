@@ -1050,7 +1050,7 @@ class _LichenCheckState extends State<LichenCheck> {
                                                     patientInformation
                                                             .selectedEthnicity =
                                                         ethnicities[index];
-                                                    Navigator.pushReplacementNamed(context, '/home');
+                                                    Navigator.pushReplacementNamed(context, '/home'); 
                                                   });
                                                 },
                                                 child: Padding(
