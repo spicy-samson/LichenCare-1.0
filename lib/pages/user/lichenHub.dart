@@ -40,6 +40,7 @@ class _LichenHubState extends State<LichenHub> {
       ];
   GlobalKey reportField = GlobalKey();
   QuillController contentController = QuillController.basic();
+  FocusNode editorFocusNode = FocusNode();
   TextEditingController reportFieldController = TextEditingController();
   TextEditingController titleController = TextEditingController();
   bool titleOnFocus = false;
@@ -268,48 +269,71 @@ class _LichenHubState extends State<LichenHub> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
-                                  width: double.infinity,
-                                  height: 380*scaleFactor,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                                    // child: TextFormField(
-                                    //     controller: contentController,
-                                    //     maxLines: 150,
-                                    //     style:const TextStyle(
-                                    //         fontSize: 16,
-                                    //         color: Colors.black87
-                                    //       ),
-                                    //     decoration: const  InputDecoration(
-                                    //       isDense: true,
-                                    //       border: InputBorder.none,
-                                    //       hintText: "Start a new conversation",
-                                    //       hintStyle: TextStyle(
-                                    //         fontSize: 16,
-                                    //       )
-                                    //     ),
-                                    //   ),
-                                    child:  QuillProvider(
-                                              configurations: QuillConfigurations(
-                                                controller: contentController,
-                                                sharedConfigurations: const QuillSharedConfigurations(
-                                                  locale: Locale("de")
-                                                ),
-                                              ),
-                                              child: Column(
-                                                children: [
-                                                  Expanded(
-                                                    child: QuillEditor.basic(
-                                                      configurations: const QuillEditorConfigurations(
-                                                        placeholder: "Start a new conversation",
-                                                        readOnly: false,
-                                                      ),
+                                Stack(
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height: 380*scaleFactor,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                        child:  QuillProvider(
+                                                  configurations: QuillConfigurations(
+                                                    controller: contentController,
+                                                    sharedConfigurations: const QuillSharedConfigurations(
                                                     ),
-                                                  )
-                                                ],
-                                              ),
-                                            )
-                                  ),
+                                                  ),
+                                                  child: Column(
+                                                    children: [
+                                                      Expanded(
+                                                        child: QuillEditor.basic(
+                                                          focusNode: editorFocusNode,
+                                                          configurations: const QuillEditorConfigurations(
+                                                            placeholder: "Start a new conversation",
+                                                            readOnly: false,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                )
+                                      ),
+                                    ),
+                                     GestureDetector(
+                                      onTap: ()async{
+                                        await Future.delayed(const Duration(milliseconds: 100));
+                                        final currentStyle = contentController.getSelectionStyle();
+                                        if(currentStyle.containsKey('bold')){
+                                          toolbar['bold']= true;
+                                        }else{
+                                          toolbar['bold']= false;
+                                        }
+
+                                        if(currentStyle.containsKey('italic')){
+                                          toolbar['italic']= true;
+                                        }else{
+                                          toolbar['italic']= false;
+                                        }
+
+                                        if(currentStyle.containsKey('underline')){
+                                          toolbar['underline']= true;
+                                        }else{
+                                          toolbar['underline']= false;
+                                        }
+
+                                        if(currentStyle.containsKey('color')){
+                                          currentColor = Color(int.parse(currentStyle.attributes['color']!.value.toString().replaceAll("#", ""), radix: 16));
+                                        }else{
+                                          currentColor = Colors.black87;
+                                        }
+
+                                        setState((){});
+                                      },
+                                      behavior: HitTestBehavior.translucent,
+                                       child: SizedBox(
+                                        width: double.infinity,
+                                        height: 380*scaleFactor,),
+                                     ),
+                                  ],
                                 ),
                                 (postImage==null) ?
                                 (post!=null) ? 
@@ -680,7 +704,7 @@ class _LichenHubState extends State<LichenHub> {
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   onTap: (){
-                    Navigator.pushReplacementNamed(context, "/lichenNotif");
+                    Navigator.pushNamed(context, "/lichenNotif");
                   },
                   child: Icon(Icons.notifications,color: primaryforegroundColor ,),
                 ),

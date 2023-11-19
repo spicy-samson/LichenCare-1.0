@@ -474,7 +474,7 @@ class PrivacyPolicy extends StatelessWidget {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pushReplacementNamed('/login');
+                        Navigator.of(context).pushReplacementNamed('/profile/terms_and_conditions-boot');
                       },
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all<EdgeInsets>(
