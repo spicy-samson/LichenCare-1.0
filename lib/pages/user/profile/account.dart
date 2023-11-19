@@ -61,8 +61,92 @@ class _AccountState extends State<Account> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ElevatedButton(
-                          onPressed: () {
-                            // Add functionality for Edit Profile button
+                          onPressed: () async {
+                            // Fetch the current user data
+                            Map<String, String> userData = await getUserData();
+
+                            // Show a dialog to edit the first name and last name
+                            await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                String newFirstName =
+                                    userData['firstName'] ?? '';
+                                String newLastName = userData['lastName'] ?? '';
+
+                                return AlertDialog(
+                                  title: Text('Edit Profile'),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TextFormField(
+                                        initialValue: newFirstName,
+                                        onChanged: (value) {
+                                          newFirstName = value;
+                                        },
+                                        decoration: InputDecoration(
+                                          labelText: 'First Name',
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            borderSide: BorderSide(
+                                              color: Color(0xFFFF7F50),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 10),
+                                      TextFormField(
+                                        initialValue: newLastName,
+                                        onChanged: (value) {
+                                          newLastName = value;
+                                        },
+                                        decoration: InputDecoration(
+                                          labelText: 'Last Name',
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            borderSide: BorderSide(
+                                              color: Color(0xFFFF7F50),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  actions: [
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        // Close the dialog and update the profile
+                                        Navigator.of(context).pop();
+                                        updateProfile(
+                                            newFirstName, newLastName);
+                                      },
+                                      style: ButtonStyle(
+                                        padding: MaterialStateProperty.all<
+                                            EdgeInsets>(
+                                          EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 10),
+                                        ),
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                primaryforegroundColor),
+                                        shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            side: BorderSide(
+                                                color: Colors.white,
+                                                width: 2.0),
+                                          ),
+                                        ),
+                                      ),
+                                      child: Text('Save'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
                           },
                           style: ButtonStyle(
                             padding: MaterialStateProperty.all<EdgeInsets>(
@@ -381,6 +465,33 @@ class _AccountState extends State<Account> {
         );
       },
     );
+  }
+
+  Future<void> updateProfile(String firstName, String lastName) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      try {
+        final userDocRef =
+            FirebaseFirestore.instance.collection('users').doc(user.uid);
+
+        await userDocRef.update({
+          'first_name': firstName,
+          'last_name': lastName,
+        });
+
+        // Reload user to reflect the changes
+        await user.reload();
+        user = FirebaseAuth.instance.currentUser;
+
+        // Update the display name
+        await user?.updateDisplayName('$firstName $lastName');
+
+        print('Profile updated successfully');
+      } catch (e) {
+        print('Error updating profile: $e');
+      }
+    }
   }
 
   // Function to DELETE the user's acc
