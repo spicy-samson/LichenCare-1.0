@@ -17,7 +17,7 @@ for i in range(3):
     generateIOS(40,i+1)
 for i in range(2):
     generateIOS(60,i+2)
-for i in range(3):
+for i in range(2):
     generateIOS(76,i+1)  
 generateIOS(83.5,2)  
 generateIOS(1024,1)  
