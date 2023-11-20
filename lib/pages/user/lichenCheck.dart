@@ -1525,6 +1525,8 @@ class _LichenCheckState extends State<LichenCheck> {
     classifier!.putImage(reduced);
     // 5707.89ms
     List<Recognition> recognitions = await classifier!.predict();
+    // dispose image
+    classifier!.disposeImage();
     if (recognitions.isNotEmpty) {
       double score = recognitions[0].score;
       var value = (score * 100);

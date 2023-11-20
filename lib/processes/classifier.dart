@@ -157,6 +157,11 @@ class Classifier {
     this.image = image;
   }
 
+  // dispose image from the classifier
+  void disposeImage(){
+    image = null;
+  }
+
   /// Runs obect detection on the input image
   Future predict() async{
     loadRPNModel();
@@ -175,20 +180,15 @@ class Classifier {
     List<double> imageAsList = List<double>.filled(
         inputImage.shape[1] * inputImage.shape[2] * inputImage.shape[3], 0.0);
     List<double> imgchannelmean = [103.939, 116.779, 123.68];
-    // check average color of image
-    List<double> averageColor = [0, 0, 0];
+
     // iterate to all pixels
     int index = 0;
     for (int i = 0; i < data.length; i += 4) {
       for (int j = 0; j < 3; j++) {
-        // averageColor[j] += data[i + j].toDouble();
         imageAsList[index] = data[i + j].toDouble() - imgchannelmean[j];
         index++;
       }
     }
-    averageColor[0] /= inputImage.shape[1] * inputImage.shape[2];
-    averageColor[1] /= inputImage.shape[1] * inputImage.shape[2];
-    averageColor[2] /= inputImage.shape[1] * inputImage.shape[2];
 
     inputImage.loadBuffer(Float32List.fromList(imageAsList).buffer);
     // Use [TensorImage.buffer] or [TensorBuffer.buffer] to pass by reference
@@ -453,9 +453,32 @@ class Classifier {
         double x2 = result[0][i][2];
         double y1 = result[0][i][1];
         double y2 = result[0][i][3];
-        recognitions.add(
-          Recognition(i, key, result[1][i], Rect.fromLTRB(x1, y1, x2, y2)),
-        );
+        // pad out of bounds coordinates
+        x1 = (x1 < 0)? 0 : x1;
+        y1 = (y1 < 0)? 0 : y1;
+        x2 = (x2 > image!.width) ? image!.width.toDouble(): x2;
+        y2 = (y2 > image!.height) ? image!.height.toDouble(): y2;
+        // detect average color in bounding box and check if it is a skin
+        List<int> averageColor = [0, 0, 0];
+        int boxSize = 0;
+        for(int y = y1.round(); y < y2.round(); y ++){
+          for(int x = x1.round(); x < x2.round(); x++){
+            boxSize += 1;
+            for(int rgb = 0; rgb < 3; rgb++){
+              averageColor[rgb] += (data[((x + (y * image!.width-1))* 4) + rgb]).round();
+            }
+          }
+        }
+        averageColor[0] = ((averageColor[0] / boxSize)).round();
+        averageColor[1] = ((averageColor[1] / boxSize)).round();
+        averageColor[2] = ((averageColor[2] / boxSize)).round();
+        int r = averageColor[0]; int g = averageColor[1]; int b = averageColor[2]; 
+        if(r > 60 && g > 40 && b > 20 && r > g &&
+         r - g > 10 && r - b > 10){
+          recognitions.add(
+            Recognition(i, key, result[1][i], Rect.fromLTRB(x1, y1, x2, y2)),
+          );
+         }        
       }
     });
     if(recognitions.isNotEmpty) {
@@ -465,8 +488,8 @@ class Classifier {
   }
 
   /// Gets the interpreter instance
-  // Interpreter get rpnInterpreter => _rpnInterpreter!;
-  // Interpreter get clsInterpreter => _clsInterpreter!;
+  Interpreter get rpnInterpreter => _rpnInterpreter!;
+  Interpreter get clsInterpreter => _clsInterpreter!;
 
 }
 
