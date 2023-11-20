@@ -171,7 +171,7 @@ class _LichenHubState extends State<LichenHub> {
     setState(() {});
     if(post!=null ){
       titleController.text = post.title;
-      contentController.document = post.content.document;
+      contentController.document = Document.fromDelta(post.content.document.toDelta());
       Navigator.of(context).pop();
     }
     showModalBottomSheet(context: context, 
@@ -197,7 +197,7 @@ class _LichenHubState extends State<LichenHub> {
                               height: 75,
                               decoration: BoxDecoration(
                                 color: termaryForegroundColor,
-                                boxShadow: [
+                                boxShadow: const [
                                   BoxShadow(
                                     color: Colors.black26,
                                     offset: Offset(1, 1),
@@ -1147,7 +1147,8 @@ class PostBox extends StatelessWidget {
                             Expanded(
                               child: QuillEditor.basic(
                                 configurations: QuillEditorConfigurations(
-                                  expands: true,
+                                  showCursor: false,
+                                  enableInteractiveSelection: false,
                                   customStyles: DefaultStyles(
                                     paragraph: DefaultTextBlockStyle(TextStyle(fontSize: 20*scaleFactor,color: Colors.black87), VerticalSpacing(1, 1), VerticalSpacing(1, 1),BoxDecoration())  
                                   ),
