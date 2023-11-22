@@ -9,6 +9,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   int _currentIndex = 4;
+  User? user;
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -253,6 +254,12 @@ class _ProfileState extends State<Profile> {
   Future<void> _signOut() async {
     try {
       await FirebaseAuth.instance.signOut();
+
+      // Set the local user variable to null after signing out
+      setState(() {
+        user = null;
+      });
+
       Navigator.of(context)
           .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
     } catch (e) {

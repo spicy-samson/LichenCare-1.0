@@ -123,7 +123,7 @@ class _LichenHubState extends State<LichenHub> {
             id: doc.id,
             userID: postDoc['userID'] ?? '',
             user: postDoc['uploader_name'] ?? '',
-            datetime: postDoc['date_uploaded']?.toDate() ?? DateTime.now(),
+            datetime: postDoc['date_uploaded']?.toDate(),
             title: postDoc['title'] ?? '',
             content: QuillController.basic()
               ..document.insert(0, postDoc['content'] ?? ''),
@@ -230,31 +230,50 @@ class _LichenHubState extends State<LichenHub> {
     }
   }
 
-  Future commentOnPost(Post post, String sender, String reply) async {
+  Future<void> commentOnPost(Post post, String reply, DateTime time) async {
+    var user = auth.currentUser;
+
+    if (user == null) {
+      return; 
+    }
+
     try {
-      final newCommentDocRef = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(post.userID)
-          .collection('LichenHub_posts')
-          .doc(post.id) // Ensure that post.id is not empty or null
-          .collection('comments')
-          .add({
-        'sender': sender,
-        'reply': reply,
-        'timestamp': DateTime.now(),
-      });
+      // Get the commentor's details
+      final userDocRef =
+          FirebaseFirestore.instance.collection('users').doc(user.uid);
+      final senderSnapshot = await userDocRef.get();
+      final firstName = senderSnapshot.get('first_name') ?? '';
 
-      // Create a new Comment object
-      Comment newComment = Comment(
-        id: newCommentDocRef.id,
-        sender: sender,
-        reply: reply,
-      );
+      // Get the post owner's details
+      final postOwnerDocRef =
+          FirebaseFirestore.instance.collection('users').doc(post.userID);
+      final userSnapshot = await postOwnerDocRef.get();
 
-      // Update the local list with the new comment
-      setState(() {
-        post.comments = [newComment, ...post.comments];
-      });
+      if (userSnapshot.exists) {
+        final postsCollection = postOwnerDocRef.collection('LichenHub_posts');
+
+        final postDocRef = postsCollection.doc(post.id);
+
+        final newCommentDocRef = await postDocRef.collection('comments').add({
+          'sender': makeAnonymous(firstName),
+          'reply': reply,
+          'timestamp': time,
+        });
+
+        // Create a new Comment object
+        Comment newComment = Comment(
+          id: newCommentDocRef.id,
+          sender: makeAnonymous(firstName),
+          reply: reply,
+        );
+
+        // Update the local list with the new comment
+        setState(() {
+          post.comments = [newComment, ...post.comments];
+        });
+      } else {
+        print('User document does not exist in Firestore');
+      }
     } catch (e) {
       print('Error adding comment: $e');
     }
@@ -1282,8 +1301,8 @@ class _LichenHubState extends State<LichenHub> {
                                                 onTap: () {
                                                   commentOnPost(
                                                       posts[index],
-                                                      'Anonymous Name',
-                                                      replyController.text);
+                                                      replyController.text,
+                                                      DateTime.now());
                                                   Navigator.of(context).pop();
                                                 },
                                                 child: Container(
@@ -1513,7 +1532,7 @@ class PostBox extends StatelessWidget {
                       makeAnonymous(post.user),
                       style: TextStyle(fontSize: 28 * scaleFactor),
                     ),
-                    Text(DateFormat('yMMMd').add_jm().format(DateTime.now()),
+                    Text(DateFormat('yMMMd').add_jm().format(post.datetime),
                         style: TextStyle(fontSize: 20 * scaleFactor)),
                   ],
                 ),
