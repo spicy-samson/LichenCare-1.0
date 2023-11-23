@@ -109,14 +109,17 @@ class _LichenHubState extends State<LichenHub> {
         final postsCollection =
             userDoc.reference.collection(postsCollectionName);
 
-        final userPostsSnapshot = await postsCollection.orderBy('date_uploaded', descending: true).get();
+        final userPostsSnapshot = await postsCollection
+            .orderBy('date_uploaded', descending: true)
+            .get();
 
         for (var doc in userPostsSnapshot.docs) {
           var postDoc = doc.data() as Map<String, dynamic>;
 
           var content = QuillController.basic();
           try {
-            content.document = Document.fromJson(jsonDecode(postDoc['content']));
+            content.document =
+                Document.fromJson(jsonDecode(postDoc['content']));
           } catch (e) {
             content.document = Document()..insert(0, postDoc['content'] ?? '');
           }
@@ -160,6 +163,7 @@ class _LichenHubState extends State<LichenHub> {
   }
 
   Future newPost() async {
+    // check if the post userID matches the current user
     final user = auth.currentUser;
     QuillController newController = QuillController.basic();
     newController.document =
@@ -229,6 +233,19 @@ class _LichenHubState extends State<LichenHub> {
       }
     } catch (e) {
       print('Error: $e');
+      return false;
+    }
+  }
+
+  bool isPostFromUser(Post post) {
+    // check if the post userID matches the current user
+    final user = auth.currentUser;
+
+    try {
+      return user?.uid == post.userID ? true : false;
+    } catch (e) {
+      print('Error: $e');
+      return false; // or handle the error in an appropriate way for your use case
     }
   }
 
@@ -236,7 +253,7 @@ class _LichenHubState extends State<LichenHub> {
     var user = auth.currentUser;
 
     if (user == null) {
-      return; 
+      return;
     }
 
     try {
@@ -282,11 +299,64 @@ class _LichenHubState extends State<LichenHub> {
   }
 
   Future editPost(Post post) async {
-    // edit entry (post.id)
-    // titleController.text is title
-    // jsonEncode(contentController.document.toDelta().toJson()) is the content
-    // concernController.text is content
-    loadPosts();
+    try {
+      final user = auth.currentUser;
+
+      if (user == null) {
+        return;
+      }
+
+      final userDocRef =
+          FirebaseFirestore.instance.collection('users').doc(user.uid);
+      final userSnapshot = await userDocRef.get();
+
+      if (userSnapshot.exists) {
+        final postsCollection = userDocRef.collection('LichenHub_posts');
+        final postDocRef = postsCollection.doc(post.id);
+
+        String? imageUrl = post.embeddedImage; // Default to the current image
+
+        // Upload a new image if postImage is not null
+        if (postImage != null) {
+          final storageRef = storage
+              .ref()
+              .child('lichenhub_images/${user.uid}/${DateTime.now()}.jpg');
+
+          final uploadTask = await storageRef.putFile(postImage!);
+
+          if (uploadTask.state == TaskState.success) {
+            imageUrl = await uploadTask.ref.getDownloadURL();
+          } else {
+            print('Error uploading the new image to Firebase Storage');
+          }
+        }
+
+        // Update post data in Firestore, including the new image URL
+        await postDocRef.update({
+          'title': titleController.text,
+          'content': jsonEncode(contentController.document.toDelta().toJson()),
+          'file_image': imageUrl,
+        });
+
+        // Fetch the updated post from Firestore
+        final updatedPostDoc = await postDocRef.get();
+        final updatedPostData = updatedPostDoc.data() as Map<String, dynamic>;
+
+        // Update the local list with the edited post
+        setState(() {
+          post.title = updatedPostData['title'];
+          post.content.document =
+              Document.fromJson(jsonDecode(updatedPostData['content']));
+          post.embeddedImage = updatedPostData['file_image'];
+        });
+
+        print('Post edited successfully');
+      } else {
+        print('User document does not exist in Firestore');
+      }
+    } catch (e) {
+      print('Error editing post: $e');
+    }
   }
 
   Future deletePost(Post post) async {
@@ -323,11 +393,6 @@ class _LichenHubState extends State<LichenHub> {
 
   Future reportPost(Post post) async {
     // report post using post.id and reportFlags
-  }
-
-  bool isPostFromUser(Post post) {
-    // check if the post userID matches the current user
-    return (post.userID == auth.currentUser!.uid);
   }
 
   void copyPostContent(Post post) async {
@@ -491,7 +556,7 @@ class _LichenHubState extends State<LichenHub> {
                           child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 15.0),
-                              child: QuillProvider(
+                              child:QuillProvider(
                                   configurations: QuillConfigurations(
                                     controller: contentController,
                                     sharedConfigurations:
@@ -513,7 +578,6 @@ class _LichenHubState extends State<LichenHub> {
                                     ],
                                   ),
                                 ),
-                              ),
                         ),
                         GestureDetector(
                           onTap: () async {
@@ -559,8 +623,8 @@ class _LichenHubState extends State<LichenHub> {
                         ),
                       ],
                     ),
-                    (postImage == null )
-                        ? (post != null && post.embeddedImage!=null)
+                    (postImage == null)
+                        ? (post != null && post.embeddedImage != null)
                             ? Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 10.0, vertical: 10.0),
@@ -1029,10 +1093,8 @@ class _LichenHubState extends State<LichenHub> {
   void initState() {
     super.initState();
     loadPosts().then((value) => {
-      if(mounted){
-        postLoaded = true
-      }
-    });
+          if (mounted) {postLoaded = true}
+        });
   }
 
   @override
@@ -1091,336 +1153,350 @@ class _LichenHubState extends State<LichenHub> {
       ),
 
       // Body
-      body: (!postLoaded) ? Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SpinKitThreeBounce(
-            color: Color(0XFFF0784C),
-            size: 60.0,
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Text("Loading posts...")
-        ],
-      ) : Stack(
-        children: [
-          (posts.isEmpty)
-              ? const Center(
-                  child: Text("No Posts Yet."),
-                )
-              : ListView.builder(
-                  itemCount: posts.length + 1,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (index < posts.length) {
-                      return PostBox(
-                        post: posts[index],
-                        fromUser: (isPostFromUser(posts[index])),
-                        onCopy: () => copyPostContent(posts[index]),
-                        onLike: () {
-                          likePost(posts[index]);
-                        },
-                        onDelete: () {
-                          deletePost(posts[index]);
-                          Navigator.of(context).pop();
-                        },
-                        onReport: () => reportScreen(posts[index]),
-                        onEdit: () =>
-                            composePost(scaleFactor, post: posts[index]),
-                        onReply: () {
-                          replyController.clear();
-                          isPosting = false;
-                          showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              backgroundColor: Colors.transparent,
-                              barrierColor: Colors.transparent,
-                              builder: (context) {
-                                return StatefulBuilder(
-                                    builder: ((context, setState) {
-                                  return Container(
-                                    clipBehavior: Clip.antiAlias,
-                                    decoration: const BoxDecoration(
-                                        color:
-                                            Color.fromARGB(255, 206, 206, 221),
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(15.0),
-                                            topRight: Radius.circular(15.0))),
-                                    height: MediaQuery.of(context).size.height *
-                                        0.98,
-                                    width: MediaQuery.of(context).size.width,
-                                    child: Column(children: [
-                                      Container(
-                                        width: double.infinity,
-                                        height: 75,
-                                        decoration: BoxDecoration(
-                                            color: termaryForegroundColor,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Colors.black26,
-                                                  offset: Offset(1, 1),
-                                                  blurRadius: 2,
-                                                  spreadRadius: 2)
-                                            ]),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 20),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              InkWell(
-                                                  onTap: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: Icon(
-                                                      Icons.arrow_back_ios,
-                                                      size: 28,
-                                                      color:
-                                                          primaryforegroundColor)),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text(
-                                                "Post",
-                                                style: TextStyle(fontSize: 22),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                          child: (index >= posts.length)
-                                              ? const SizedBox()
-                                              : SingleChildScrollView(
-                                                  child: Column(children: [
-                                                    PostBox(
-                                                      post: posts[index],
-                                                      onCopy: () =>
-                                                          copyPostContent(
-                                                              posts[index]),
-                                                      onLike: () {
-                                                        likePost(posts[index]);
-                                                        setState(() {});
-                                                      },
-                                                      onDelete: () async {
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                        deletePost(
-                                                            posts[index]);
-                                                        setState(() {});
-                                                      },
-                                                      fromUser: (isPostFromUser(
-                                                          posts[index])),
-                                                      onReport: () =>
-                                                          reportScreen(
-                                                              posts[index]),
-                                                      onEdit: () => composePost(
-                                                          scaleFactor,
-                                                          post: posts[index]),
+      body: (!postLoaded)
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SpinKitThreeBounce(
+                  color: Color(0XFFF0784C),
+                  size: 60.0,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text("Loading posts...")
+              ],
+            )
+          : Stack(
+              children: [
+                (posts.isEmpty)
+                    ? const Center(
+                        child: Text("No Posts Yet."),
+                      )
+                    : ListView.builder(
+                        itemCount: posts.length + 1,
+                        itemBuilder: (BuildContext context, int index) {
+                          if (index < posts.length) {
+                            return PostBox(
+                              post: posts[index],
+                              fromUser: (isPostFromUser(posts[index])),
+                              onCopy: () => copyPostContent(posts[index]),
+                              onLike: () {
+                                likePost(posts[index]);
+                              },
+                              onDelete: () {
+                                deletePost(posts[index]);
+                                Navigator.of(context).pop();
+                              },
+                              onReport: () => reportScreen(posts[index]),
+                              onEdit: () =>
+                                  composePost(scaleFactor, post: posts[index]),
+                              onReply: () {
+                                showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    backgroundColor: Colors.transparent,
+                                    barrierColor: Colors.transparent,
+                                    builder: (context) {
+                                      return StatefulBuilder(
+                                          builder: ((context, setState) {
+                                        return Container(
+                                          clipBehavior: Clip.antiAlias,
+                                          decoration: const BoxDecoration(
+                                              color: Color.fromARGB(
+                                                  255, 206, 206, 221),
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft:
+                                                      Radius.circular(15.0),
+                                                  topRight:
+                                                      Radius.circular(15.0))),
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.98,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          child: Column(children: [
+                                            Container(
+                                              width: double.infinity,
+                                              height: 75,
+                                              decoration: BoxDecoration(
+                                                  color: termaryForegroundColor,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                        color: Colors.black26,
+                                                        offset: Offset(1, 1),
+                                                        blurRadius: 2,
+                                                        spreadRadius: 2)
+                                                  ]),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 20),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    InkWell(
+                                                        onTap: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                        child: Icon(
+                                                            Icons
+                                                                .arrow_back_ios,
+                                                            size: 28,
+                                                            color:
+                                                                primaryforegroundColor)),
+                                                    SizedBox(
+                                                      width: 10,
                                                     ),
-                                                    Column(
-                                                      children: List.generate(
-                                                          posts[index]
-                                                              .comments
-                                                              .length, (i) {
-                                                        List<Comment> comments =
-                                                            posts[index]
-                                                                .comments;
-                                                        return Padding(
+                                                    Text(
+                                                      "Post",
+                                                      style: TextStyle(
+                                                          fontSize: 22),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                                child: (index >= posts.length)
+                                                    ? const SizedBox()
+                                                    : SingleChildScrollView(
+                                                        child:
+                                                            Column(children: [
+                                                          PostBox(
+                                                            post: posts[index],
+                                                            onCopy: () =>
+                                                                copyPostContent(
+                                                                    posts[
+                                                                        index]),
+                                                            onLike: () {
+                                                              likePost(
+                                                                  posts[index]);
+                                                              setState(() {});
+                                                            },
+                                                            onDelete: () async {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                              deletePost(
+                                                                  posts[index]);
+                                                              setState(() {});
+                                                            },
+                                                            fromUser:
+                                                                (isPostFromUser(
+                                                                    posts[
+                                                                        index])),
+                                                            onReport: () =>
+                                                                reportScreen(
+                                                                    posts[
+                                                                        index]),
+                                                            onEdit: () =>
+                                                                composePost(
+                                                                    scaleFactor,
+                                                                    post: posts[
+                                                                        index]),
+                                                          ),
+                                                          Column(
+                                                            children:
+                                                                List.generate(
+                                                                    posts[index]
+                                                                        .comments
+                                                                        .length,
+                                                                    (i) {
+                                                              List<Comment>
+                                                                  comments =
+                                                                  posts[index]
+                                                                      .comments;
+                                                              return Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                        top:
+                                                                            8.0,
+                                                                        left:
+                                                                            15,
+                                                                        right:
+                                                                            15),
+                                                                child:
+                                                                    Container(
+                                                                  decoration:
+                                                                      const BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.all(
+                                                                            Radius.circular(15.0)),
+                                                                    color: Color
+                                                                        .fromARGB(
+                                                                            255,
+                                                                            221,
+                                                                            221,
+                                                                            223),
+                                                                  ),
+                                                                  constraints: BoxConstraints(
+                                                                      minHeight:
+                                                                          100 *
+                                                                              scaleFactor,
+                                                                      minWidth:
+                                                                          double
+                                                                              .infinity),
+                                                                  child:
+                                                                      Padding(
+                                                                    padding: const EdgeInsets
+                                                                        .symmetric(
+                                                                        horizontal:
+                                                                            10.0,
+                                                                        vertical:
+                                                                            8.0),
+                                                                    child: Column(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.start,
+                                                                        children: [
+                                                                          Text(
+                                                                            comments[i].sender,
+                                                                            style:
+                                                                                TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                                                                          ),
+                                                                          Text(
+                                                                            comments[i].reply,
+                                                                            style:
+                                                                                TextStyle(fontSize: 14),
+                                                                          )
+                                                                        ]),
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            }),
+                                                          )
+                                                        ]),
+                                                      )),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 8.0,
+                                                  left: 15.0,
+                                                  right: 15.0),
+                                              child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: [
+                                                    Expanded(
+                                                      child: SizedBox(
+                                                        height: 40,
+                                                        child: Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                  .only(
-                                                                  top: 8.0,
-                                                                  left: 15,
-                                                                  right: 15),
-                                                          child: Container(
+                                                                  .symmetric(
+                                                                  horizontal:
+                                                                      5.0),
+                                                          child: TextFormField(
+                                                            controller:
+                                                                replyController,
+                                                            textInputAction:
+                                                                TextInputAction
+                                                                    .done,
                                                             decoration:
-                                                                const BoxDecoration(
-                                                              borderRadius: BorderRadius
-                                                                  .all(Radius
-                                                                      .circular(
-                                                                          15.0)),
-                                                              color: Color
-                                                                  .fromARGB(
-                                                                      255,
-                                                                      221,
-                                                                      221,
-                                                                      223),
-                                                            ),
-                                                            constraints: BoxConstraints(
-                                                                minHeight: 100 *
-                                                                    scaleFactor,
-                                                                minWidth: double
-                                                                    .infinity),
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .symmetric(
-                                                                      horizontal:
-                                                                          10.0,
-                                                                      vertical:
-                                                                          8.0),
-                                                              child: Column(
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .start,
-                                                                  children: [
-                                                                    Text(
-                                                                      comments[
-                                                                              i]
-                                                                          .sender,
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              14,
-                                                                          fontWeight:
-                                                                              FontWeight.bold),
-                                                                    ),
-                                                                    Text(
-                                                                      comments[
-                                                                              i]
-                                                                          .reply,
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              14),
-                                                                    )
-                                                                  ]),
+                                                                InputDecoration(
+                                                              contentPadding:
+                                                                  EdgeInsets.only(
+                                                                      left: 15,
+                                                                      bottom:
+                                                                          5),
+                                                              hintText: "Reply",
+                                                              border: OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              15.0)),
                                                             ),
                                                           ),
-                                                        );
-                                                      }),
-                                                    )
-                                                  ]),
-                                                )),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 8.0, left: 15.0, right: 15.0),
-                                        child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            children: [
-                                              Expanded(
-                                                child: SizedBox(
-                                                  height: 40,
-                                                  child: Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 5.0),
-                                                    child: TextFormField(
-                                                      controller:
-                                                          replyController,
-                                                      onChanged: (value)=>setState((){}),
-                                                      textInputAction:
-                                                          TextInputAction.done,
-                                                      decoration:
-                                                          InputDecoration(
-                                                        contentPadding:
-                                                            EdgeInsets.only(
-                                                                left: 15,
-                                                                bottom: 5),
-                                                        hintText: "Reply",
-                                                        border: OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        15.0)),
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ),
-                                              ),
-                                              (isPosting)? SpinKitRing(
-                                                color: Color(0XFFF0784C),
-                                                size: 40.0,
-                                            ) : InkWell(
-                                                onTap: () async{
-                                                  if(isPosting){
-                                                    return;
-                                                  }
-                                                  if(replyController.text == ''){
-                                                    return;
-                                                  }
-                                                  setState((){
-                                                    isPosting = true;
-                                                  });
-                                                  await commentOnPost(
-                                                      posts[index],
-                                                      replyController.text,
-                                                      DateTime.now());
-                                                  setState((){
-                                                    isPosting = false;
-                                                  });
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: Container(
-                                                  width: 45,
-                                                  height: 45,
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.transparent,
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                15.0)),
-                                                  ),
-                                                  child: Center(
-                                                      child: Icon(
-                                                    Icons.send,
-                                                    color:
-                                                        (replyController.text == '')? Colors.grey : primaryforegroundColor,
-                                                    size: 32,
-                                                  )),
-                                                ),
-                                              ),
-                                            ]),
-                                      ),
-                                      SizedBox(
-                                        height: MediaQuery.of(context)
-                                                .viewInsets
-                                                .bottom +
-                                            15,
-                                      )
-                                    ]),
-                                  );
-                                }));
-                              });
-                        },
-                      );
-                    } else {
-                      return SizedBox(
-                        height: 30,
-                      );
-                    }
-                  }),
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: InkWell(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                onTap: () {
-                  setState(() {
-                    titleController.text = '';
-                    contentController.clear();
-                  });
-                  composePost(scaleFactor);
-                },
-                child: CircleAvatar(
-                  radius: 35,
-                  backgroundColor: primaryforegroundColor,
-                  child: Icon(
-                    Icons.post_add,
-                    size: 40,
-                    color: Colors.black45,
+                                                    InkWell(
+                                                      onTap: () {
+                                                        commentOnPost(
+                                                            posts[index],
+                                                            replyController
+                                                                .text,
+                                                            DateTime.now());
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: Container(
+                                                        width: 45,
+                                                        height: 45,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: Colors
+                                                              .transparent,
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          15.0)),
+                                                        ),
+                                                        child: Center(
+                                                            child: Icon(
+                                                          Icons.send,
+                                                          color:
+                                                              primaryforegroundColor,
+                                                          size: 32,
+                                                        )),
+                                                      ),
+                                                    ),
+                                                  ]),
+                                            ),
+                                            SizedBox(
+                                              height: MediaQuery.of(context)
+                                                      .viewInsets
+                                                      .bottom +
+                                                  15,
+                                            )
+                                          ]),
+                                        );
+                                      }));
+                                    });
+                              },
+                            );
+                          } else {
+                            return SizedBox(
+                              height: 30,
+                            );
+                          }
+                        }),
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: InkWell(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () {
+                        setState(() {
+                          titleController.text = '';
+                          contentController.clear();
+                        });
+                        composePost(scaleFactor);
+                      },
+                      child: CircleAvatar(
+                        radius: 35,
+                        backgroundColor: primaryforegroundColor,
+                        child: Icon(
+                          Icons.post_add,
+                          size: 40,
+                          color: Colors.black45,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
+                )
+              ],
             ),
-          )
-        ],
-      ),
 
       // Floating action button
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
