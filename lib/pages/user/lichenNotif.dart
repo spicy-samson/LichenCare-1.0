@@ -7,7 +7,7 @@ class LichenNotif extends StatefulWidget {
 }
 
 class _LichenNotifState extends State<LichenNotif> {
-  final int _currentIndex = 1;
+  final int _currentIndex = 3;
 
   @override
   Widget build(BuildContext context) {
@@ -379,16 +379,16 @@ class _LichenNotifState extends State<LichenNotif> {
                 .pushNamed('/home'); // Navigate to the 'home' route
             break;
           case 1:
-            // Navigator.of(context).pushNamed(
-            //     '/lichenpedia'); // Navigate to the 'lichenpedia' route
+            Navigator.of(context).pushNamed(
+                '/lichenpedia'); // Navigate to the 'lichenpedia' route
             break;
           case 2:
             Navigator.of(context).pushNamed(
                 '/lichencheck'); // Navigate to the 'lichencheck' route
             break;
           case 3:
-            Navigator.of(context)
-                .pushNamed('/lichenHub'); // Navigate to the 'lichenhub' route
+            // Navigator.of(context)
+            //     .pushNamed('/lichenHub'); // Navigate to the 'lichenhub' route
             break;
           case 4:
             Navigator.of(context)
