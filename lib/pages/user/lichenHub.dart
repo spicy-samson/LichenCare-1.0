@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lichen_care/helpers/helpers.dart';
 import 'package:lichen_care/pages/guest/login.dart';
@@ -89,9 +90,10 @@ class _LichenHubState extends State<LichenHub> {
     "underline": true,
   };
   List<Post> posts = [];
-  // loader booleans
+  // UI booleans
   bool postLoaded = false;
   bool isPosting = false;
+  bool navigatorHidden = false;
 
   final FirebaseAuth auth = FirebaseAuth.instance;
   final storage = FirebaseStorage.instance;
@@ -154,9 +156,11 @@ class _LichenHubState extends State<LichenHub> {
       }
 
       // Update the local list with the loaded posts
-      setState(() {
-        posts = loadedPosts;
-      });
+      if(mounted){
+        setState(() {
+          posts = loadedPosts;
+        });
+      }
     } catch (e) {
       print('Error loading posts: $e');
     }
@@ -1174,302 +1178,334 @@ class _LichenHubState extends State<LichenHub> {
                     ? const Center(
                         child: Text("No Posts Yet."),
                       )
-                    : ListView.builder(
-                        itemCount: posts.length + 1,
-                        itemBuilder: (BuildContext context, int index) {
-                          if (index < posts.length) {
-                            return PostBox(
-                              post: posts[index],
-                              fromUser: (isPostFromUser(posts[index])),
-                              onCopy: () => copyPostContent(posts[index]),
-                              onLike: () {
-                                likePost(posts[index]);
-                              },
-                              onDelete: () {
-                                deletePost(posts[index]);
-                                Navigator.of(context).pop();
-                              },
-                              onReport: () => reportScreen(posts[index]),
-                              onEdit: () =>
-                                  composePost(scaleFactor, post: posts[index]),
-                              onReply: () {
-                                showModalBottomSheet(
-                                    context: context,
-                                    isScrollControlled: true,
-                                    backgroundColor: Colors.transparent,
-                                    barrierColor: Colors.transparent,
-                                    builder: (context) {
-                                      return StatefulBuilder(
-                                          builder: ((context, setState) {
-                                        return Container(
-                                          clipBehavior: Clip.antiAlias,
-                                          decoration: const BoxDecoration(
-                                              color: Color.fromARGB(
-                                                  255, 206, 206, 221),
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft:
-                                                      Radius.circular(15.0),
-                                                  topRight:
-                                                      Radius.circular(15.0))),
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.98,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          child: Column(children: [
-                                            Container(
-                                              width: double.infinity,
-                                              height: 75,
-                                              decoration: BoxDecoration(
-                                                  color: termaryForegroundColor,
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                        color: Colors.black26,
-                                                        offset: Offset(1, 1),
-                                                        blurRadius: 2,
-                                                        spreadRadius: 2)
-                                                  ]),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 20),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    InkWell(
-                                                        onTap: () {
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                        },
-                                                        child: Icon(
-                                                            Icons
-                                                                .arrow_back_ios,
-                                                            size: 28,
-                                                            color:
-                                                                primaryforegroundColor)),
-                                                    SizedBox(
-                                                      width: 10,
+                    : Listener(
+                      onPointerMove: (pointer){
+                        // print(pointer.delta);
+                        if(pointer.delta.dy == 0){
+                          return;
+                        }
+                        if(pointer.delta.dy < 0){
+                          // scrolls down
+                          setState(() {
+                            navigatorHidden = true;
+                          });
+                        }else{
+                          // scrolls up
+                          setState(() {
+                            navigatorHidden = false;
+                          });
+                        }
+                      },
+                      child: RefreshIndicator(
+                        backgroundColor: primaryforegroundColor,
+                        color: primaryBackgroundColor,
+                        onRefresh: () async{
+                          await Future.delayed(Duration(milliseconds:500));
+                          setState(() {
+                            postLoaded = false;
+                          });
+                          loadPosts().then((value) => setState((){
+                            postLoaded = true;
+                          }));
+                        },
+                        child: ListView.builder(
+                            itemCount: posts.length + 1,
+                            itemBuilder: (BuildContext context, int index) {
+                              if (index < posts.length) {
+                                return PostBox(
+                                  post: posts[index],
+                                  fromUser: (isPostFromUser(posts[index])),
+                                  onCopy: () => copyPostContent(posts[index]),
+                                  onLike: () {
+                                    likePost(posts[index]);
+                                  },
+                                  onDelete: () {
+                                    deletePost(posts[index]);
+                                    Navigator.of(context).pop();
+                                  },
+                                  onReport: () => reportScreen(posts[index]),
+                                  onEdit: () =>
+                                      composePost(scaleFactor, post: posts[index]),
+                                  onReply: () {
+                                    showModalBottomSheet(
+                                        context: context,
+                                        isScrollControlled: true,
+                                        backgroundColor: Colors.transparent,
+                                        barrierColor: Colors.transparent,
+                                        builder: (context) {
+                                          return StatefulBuilder(
+                                              builder: ((context, setState) {
+                                            return Container(
+                                              clipBehavior: Clip.antiAlias,
+                                              decoration: const BoxDecoration(
+                                                  color: Color.fromARGB(
+                                                      255, 206, 206, 221),
+                                                  borderRadius: BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(15.0),
+                                                      topRight:
+                                                          Radius.circular(15.0))),
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.98,
+                                              width:
+                                                  MediaQuery.of(context).size.width,
+                                              child: Column(children: [
+                                                Container(
+                                                  width: double.infinity,
+                                                  height: 75,
+                                                  decoration: BoxDecoration(
+                                                      color: termaryForegroundColor,
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                            color: Colors.black26,
+                                                            offset: Offset(1, 1),
+                                                            blurRadius: 2,
+                                                            spreadRadius: 2)
+                                                      ]),
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.symmetric(
+                                                            horizontal: 20),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.start,
+                                                      children: [
+                                                        InkWell(
+                                                            onTap: () {
+                                                              Navigator.of(context)
+                                                                  .pop();
+                                                            },
+                                                            child: Icon(
+                                                                Icons
+                                                                    .arrow_back_ios,
+                                                                size: 28,
+                                                                color:
+                                                                    primaryforegroundColor)),
+                                                        SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Text(
+                                                          "Post",
+                                                          style: TextStyle(
+                                                              fontSize: 22),
+                                                        ),
+                                                      ],
                                                     ),
-                                                    Text(
-                                                      "Post",
-                                                      style: TextStyle(
-                                                          fontSize: 22),
-                                                    ),
-                                                  ],
+                                                  ),
                                                 ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                                child: (index >= posts.length)
-                                                    ? const SizedBox()
-                                                    : SingleChildScrollView(
-                                                        child:
-                                                            Column(children: [
-                                                          PostBox(
-                                                            post: posts[index],
-                                                            onCopy: () =>
-                                                                copyPostContent(
-                                                                    posts[
-                                                                        index]),
-                                                            onLike: () {
-                                                              likePost(
-                                                                  posts[index]);
-                                                              setState(() {});
-                                                            },
-                                                            onDelete: () async {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                              deletePost(
-                                                                  posts[index]);
-                                                              setState(() {});
-                                                            },
-                                                            fromUser:
-                                                                (isPostFromUser(
-                                                                    posts[
-                                                                        index])),
-                                                            onReport: () =>
-                                                                reportScreen(
-                                                                    posts[
-                                                                        index]),
-                                                            onEdit: () =>
-                                                                composePost(
-                                                                    scaleFactor,
-                                                                    post: posts[
-                                                                        index]),
-                                                          ),
-                                                          Column(
-                                                            children:
-                                                                List.generate(
-                                                                    posts[index]
-                                                                        .comments
-                                                                        .length,
-                                                                    (i) {
-                                                              List<Comment>
-                                                                  comments =
-                                                                  posts[index]
-                                                                      .comments;
-                                                              return Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .only(
-                                                                        top:
-                                                                            8.0,
-                                                                        left:
-                                                                            15,
-                                                                        right:
-                                                                            15),
-                                                                child:
-                                                                    Container(
-                                                                  decoration:
-                                                                      const BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius.all(
-                                                                            Radius.circular(15.0)),
-                                                                    color: Color
-                                                                        .fromARGB(
-                                                                            255,
-                                                                            221,
-                                                                            221,
-                                                                            223),
-                                                                  ),
-                                                                  constraints: BoxConstraints(
-                                                                      minHeight:
-                                                                          100 *
-                                                                              scaleFactor,
-                                                                      minWidth:
-                                                                          double
-                                                                              .infinity),
-                                                                  child:
-                                                                      Padding(
-                                                                    padding: const EdgeInsets
-                                                                        .symmetric(
-                                                                        horizontal:
-                                                                            10.0,
-                                                                        vertical:
-                                                                            8.0),
-                                                                    child: Column(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.start,
-                                                                        children: [
-                                                                          Text(
-                                                                            comments[i].sender,
-                                                                            style:
-                                                                                TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                                                                          ),
-                                                                          Text(
-                                                                            comments[i].reply,
-                                                                            style:
-                                                                                TextStyle(fontSize: 14),
-                                                                          )
-                                                                        ]),
-                                                                  ),
+                                                Expanded(
+                                                    child: (index >= posts.length)
+                                                        ? const SizedBox()
+                                                        : SingleChildScrollView(
+                                                            child:
+                                                                Column(children: [
+                                                              PostBox(
+                                                                post: posts[index],
+                                                                onCopy: () =>
+                                                                    copyPostContent(
+                                                                        posts[
+                                                                            index]),
+                                                                onLike: () {
+                                                                  likePost(
+                                                                      posts[index]);
+                                                                  setState(() {});
+                                                                },
+                                                                onDelete: () async {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                  deletePost(
+                                                                      posts[index]);
+                                                                  setState(() {});
+                                                                },
+                                                                fromUser:
+                                                                    (isPostFromUser(
+                                                                        posts[
+                                                                            index])),
+                                                                onReport: () =>
+                                                                    reportScreen(
+                                                                        posts[
+                                                                            index]),
+                                                                onEdit: () =>
+                                                                    composePost(
+                                                                        scaleFactor,
+                                                                        post: posts[
+                                                                            index]),
+                                                              ),
+                                                              Column(
+                                                                children:
+                                                                    List.generate(
+                                                                        posts[index]
+                                                                            .comments
+                                                                            .length,
+                                                                        (i) {
+                                                                  List<Comment>
+                                                                      comments =
+                                                                      posts[index]
+                                                                          .comments;
+                                                                  return Padding(
+                                                                    padding:
+                                                                        const EdgeInsets
+                                                                            .only(
+                                                                            top:
+                                                                                8.0,
+                                                                            left:
+                                                                                15,
+                                                                            right:
+                                                                                15),
+                                                                    child:
+                                                                        Container(
+                                                                      decoration:
+                                                                          const BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.all(
+                                                                                Radius.circular(15.0)),
+                                                                        color: Color
+                                                                            .fromARGB(
+                                                                                255,
+                                                                                221,
+                                                                                221,
+                                                                                223),
+                                                                      ),
+                                                                      constraints: BoxConstraints(
+                                                                          minHeight:
+                                                                              100 *
+                                                                                  scaleFactor,
+                                                                          minWidth:
+                                                                              double
+                                                                                  .infinity),
+                                                                      child:
+                                                                          Padding(
+                                                                        padding: const EdgeInsets
+                                                                            .symmetric(
+                                                                            horizontal:
+                                                                                10.0,
+                                                                            vertical:
+                                                                                8.0),
+                                                                        child: Column(
+                                                                            crossAxisAlignment:
+                                                                                CrossAxisAlignment.start,
+                                                                            children: [
+                                                                              Text(
+                                                                                comments[i].sender,
+                                                                                style:
+                                                                                    TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                                                                              ),
+                                                                              Text(
+                                                                                comments[i].reply,
+                                                                                style:
+                                                                                    TextStyle(fontSize: 14),
+                                                                              )
+                                                                            ]),
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                }),
+                                                              )
+                                                            ]),
+                                                          )),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(
+                                                      top: 8.0,
+                                                      left: 15.0,
+                                                      right: 15.0),
+                                                  child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceAround,
+                                                      children: [
+                                                        Expanded(
+                                                          child: SizedBox(
+                                                            height: 40,
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          5.0),
+                                                              child: TextFormField(
+                                                                controller:
+                                                                    replyController,
+                                                                textInputAction:
+                                                                    TextInputAction
+                                                                        .done,
+                                                                decoration:
+                                                                    InputDecoration(
+                                                                  contentPadding:
+                                                                      EdgeInsets.only(
+                                                                          left: 15,
+                                                                          bottom:
+                                                                              5),
+                                                                  hintText: "Reply",
+                                                                  border: OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .circular(
+                                                                                  15.0)),
                                                                 ),
-                                                              );
-                                                            }),
-                                                          )
-                                                        ]),
-                                                      )),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 8.0,
-                                                  left: 15.0,
-                                                  right: 15.0),
-                                              child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceAround,
-                                                  children: [
-                                                    Expanded(
-                                                      child: SizedBox(
-                                                        height: 40,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                                  horizontal:
-                                                                      5.0),
-                                                          child: TextFormField(
-                                                            controller:
-                                                                replyController,
-                                                            textInputAction:
-                                                                TextInputAction
-                                                                    .done,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              contentPadding:
-                                                                  EdgeInsets.only(
-                                                                      left: 15,
-                                                                      bottom:
-                                                                          5),
-                                                              hintText: "Reply",
-                                                              border: OutlineInputBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              15.0)),
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    ),
-                                                    InkWell(
-                                                      onTap: () {
-                                                        commentOnPost(
-                                                            posts[index],
-                                                            replyController
-                                                                .text,
-                                                            DateTime.now());
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                      child: Container(
-                                                        width: 45,
-                                                        height: 45,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: Colors
-                                                              .transparent,
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius
-                                                                      .circular(
-                                                                          15.0)),
+                                                        InkWell(
+                                                          onTap: () {
+                                                            commentOnPost(
+                                                                posts[index],
+                                                                replyController
+                                                                    .text,
+                                                                DateTime.now());
+                                                            Navigator.of(context)
+                                                                .pop();
+                                                          },
+                                                          child: Container(
+                                                            width: 45,
+                                                            height: 45,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: Colors
+                                                                  .transparent,
+                                                              borderRadius:
+                                                                  BorderRadius.all(
+                                                                      Radius
+                                                                          .circular(
+                                                                              15.0)),
+                                                            ),
+                                                            child: Center(
+                                                                child: Icon(
+                                                              Icons.send,
+                                                              color:
+                                                                  primaryforegroundColor,
+                                                              size: 32,
+                                                            )),
+                                                          ),
                                                         ),
-                                                        child: Center(
-                                                            child: Icon(
-                                                          Icons.send,
-                                                          color:
-                                                              primaryforegroundColor,
-                                                          size: 32,
-                                                        )),
-                                                      ),
-                                                    ),
-                                                  ]),
-                                            ),
-                                            SizedBox(
-                                              height: MediaQuery.of(context)
-                                                      .viewInsets
-                                                      .bottom +
-                                                  15,
-                                            )
-                                          ]),
-                                        );
-                                      }));
-                                    });
-                              },
-                            );
-                          } else {
-                            return SizedBox(
-                              height: 30,
-                            );
-                          }
-                        }),
+                                                      ]),
+                                                ),
+                                                (navigatorHidden)? const SizedBox() :SizedBox(
+                                                  height: MediaQuery.of(context)
+                                                          .viewInsets
+                                                          .bottom +
+                                                      15,
+                                                )
+                                              ]),
+                                            );
+                                          }));
+                                        });
+                                  },
+                                );
+                              } else {
+                                return (navigatorHidden)? const SizedBox() : SizedBox(
+                                  height: 30,
+                                );
+                              }
+                            }),
+                      ),
+                    ),
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Align(
@@ -1501,10 +1537,10 @@ class _LichenHubState extends State<LichenHub> {
 
       // Floating action button
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: _lichenCheckBtn(context),
+      floatingActionButton: (navigatorHidden)? null:  _lichenCheckBtn(context),
 
       // Bottom navigation bar
-      bottomNavigationBar: _bottomNavBar(context),
+      bottomNavigationBar: (navigatorHidden)? null: _bottomNavBar(context),
     );
   }
 
@@ -1593,7 +1629,7 @@ class _LichenHubState extends State<LichenHub> {
             Navigator.pushReplacementNamed(context, '/lichenCheck');
             break;
           case 3:
-            Navigator.pushReplacementNamed(context, '/lichenHub');
+            // Navigator.pushReplacementNamed(context, '/lichenHub');
             break;
           case 4:
             Navigator.pushReplacementNamed(context, '/profile');

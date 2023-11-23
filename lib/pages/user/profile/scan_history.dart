@@ -30,6 +30,7 @@ class _ScanHistory extends State<ScanHistory> {
   int _currentIndex = 4;
   String selectedOption = 'All'; // Default selected option
   bool showDropdown = false;
+  bool navigatorHidden = false;
 
   @override
   Widget build(BuildContext context) {
@@ -56,171 +57,184 @@ class _ScanHistory extends State<ScanHistory> {
       ),
 
       // Body
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15, bottom: 15),
-          child: FutureBuilder<Map<String, LichenCheckEntry>>(
-            future: getLichenCheckEntries(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(
-                    color: primaryforegroundColor,
-                  ),
-                );
-              } else if (snapshot.hasError) {
-                return Text("Error: ${snapshot.error}");
-              } else {
-                Map<String, LichenCheckEntry> lichenCheckData =
-                    snapshot.data ?? {};
-
-                // Helper function to count entries based on the filter
-                int countEntries(bool Function(LichenCheckEntry entry) filter) {
-                  return lichenCheckData.values.where(filter).length;
-                }
-
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          DropdownButton<String>(
-                            value: selectedOption,
-                            icon: const Icon(Icons.arrow_downward),
-                            iconSize: 20,
-                            elevation: 16,
-                            borderRadius: BorderRadius.circular(10),
-                            focusColor: Colors.black,
-                            style: TextStyle(
-                              color: primaryforegroundColor,
-                              fontSize: 15,
+      body: Listener(
+         onPointerMove: (pointer){
+          // print(pointer.delta);
+          if(pointer.delta.dy == 0){
+            return;
+          }
+          if(pointer.delta.dy < 0){
+            // scrolls down
+            setState(() {
+              navigatorHidden = true;
+            });
+          }else{
+            // scrolls up
+            setState(() {
+              navigatorHidden = false;
+            });
+          }
+        },
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15, bottom: 15),
+            child: FutureBuilder<Map<String, LichenCheckEntry>>(
+              future: getLichenCheckEntries(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Text("Error: ${snapshot.error}");
+                } else {
+                  Map<String, LichenCheckEntry> lichenCheckData =
+                      snapshot.data ?? {};
+      
+                  // Helper function to count entries based on the filter
+                  int countEntries(bool Function(LichenCheckEntry entry) filter) {
+                    return lichenCheckData.values.where(filter).length;
+                  }
+      
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            DropdownButton<String>(
+                              value: selectedOption,
+                              icon: const Icon(Icons.arrow_downward),
+                              iconSize: 20,
+                              elevation: 16,
+                              borderRadius: BorderRadius.circular(10),
+                              focusColor: Colors.black,
+                              style: TextStyle(
+                                color: primaryforegroundColor,
+                                fontSize: 15,
+                              ),
+                              underline: Container(
+                                height: 2,
+                                color: primaryforegroundColor,
+                              ),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  selectedOption = newValue!;
+                                });
+                              },
+                              items: <String>[
+                                'All',
+                                'Detections',
+                                'No Detections'
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
                             ),
-                            underline: Container(
-                              height: 2,
-                              color: primaryforegroundColor,
-                            ),
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                selectedOption = newValue!;
-                              });
-                            },
-                            items: <String>[
-                              'All',
-                              'Detections',
-                              'No Detections'
-                            ].map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 20),
-                    Center(
-                      child: Text(
-                        '$selectedOption',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-
-                    // Display the number of results found based on the filter
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                      child: Center(
+                      SizedBox(height: 20),
+                      Center(
                         child: Text(
-                          "${countEntries(
-                            (entry) =>
-                                selectedOption == 'All' ||
-                                (selectedOption == 'Detections' &&
-                                    entry.results['detection'] != null) ||
-                                (selectedOption == 'No Detections' &&
-                                    entry.results['detection'] == null),
-                          )} entries found.",
+                          '$selectedOption',
                           style: TextStyle(
-                            fontSize: 13,
-                            fontStyle: FontStyle.italic,
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+      
+                      // Display the number of results found based on the filter
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                        child: Center(
+                          child: Text(
+                            "${countEntries(
+                              (entry) =>
+                                  selectedOption == 'All' ||
+                                  (selectedOption == 'Detections' &&
+                                      entry.results['detection'] != null) ||
+                                  (selectedOption == 'No Detections' &&
+                                      entry.results['detection'] == null),
+                            )} entries found.",
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontStyle: FontStyle.italic,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-
-                    // Sorting the Scan History; 'All' is the default
-                    if (selectedOption == 'All' ||
-                        selectedOption == 'Detections' ||
-                        selectedOption == 'No Detections')
-                      GridView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: lichenCheckData.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 8.0,
-                          mainAxisSpacing: 8.0,
-                        ),
-                        itemBuilder: (context, index) {
-                          var entryKey = lichenCheckData.keys.toList()[index];
-                          var isDetection =
-                              lichenCheckData[entryKey]?.results['detection'] !=
-                                  null;
-
-                          if ((selectedOption == 'Detections' && isDetection) ||
-                              (selectedOption == 'No Detections' &&
-                                  !isDetection) ||
-                              selectedOption == 'All') {
-                            return InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ScanHistoryDetails(
-                                      lichenCheckEntry:
-                                          lichenCheckData[entryKey],
+      
+                      // Sorting the Scan History; 'All' is the default
+                      if (selectedOption == 'All' ||
+                          selectedOption == 'Detections' ||
+                          selectedOption == 'No Detections')
+                        GridView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: lichenCheckData.length,
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 8.0,
+                            mainAxisSpacing: 8.0,
+                          ),
+                          itemBuilder: (context, index) {
+                            var entryKey = lichenCheckData.keys.toList()[index];
+                            var isDetection =
+                                lichenCheckData[entryKey]?.results['detection'] !=
+                                    null;
+      
+                            if ((selectedOption == 'Detections' && isDetection) ||
+                                (selectedOption == 'No Detections' &&
+                                    !isDetection) ||
+                                selectedOption == 'All') {
+                              return InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ScanHistoryDetails(
+                                        lichenCheckEntry:
+                                            lichenCheckData[entryKey],
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: CachedNetworkImage(
+                                    imageUrl:
+                                        "${lichenCheckData[entryKey]?.results['file_image']}",
+                                    fit: BoxFit.cover,
+                                    placeholder: (context, url) => FadeInImage(
+                                      placeholder: AssetImage(
+                                          'assets/imgs/placeholder-image.jpg'),
+                                      image: NetworkImage(url),
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
-                                );
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: CachedNetworkImage(
-                                  imageUrl:
-                                      "${lichenCheckData[entryKey]?.results['file_image']}",
-                                  fit: BoxFit.cover,
-                                  placeholder: (context, url) => FadeInImage(
-                                    placeholder: AssetImage(
-                                        'assets/imgs/placeholder-image.jpg'),
-                                    image: NetworkImage(url),
-                                    fit: BoxFit.cover,
-                                  ),
                                 ),
-                              ),
-                            );
-                          } else {
-                            // If not meeting the condition, return an empty container
-                            return Container();
-                          }
-                        },
-                      )
-                  ],
-                );
-              }
-            },
+                              );
+                            } else {
+                              // If not meeting the condition, return an empty container
+                              return Container();
+                            }
+                          },
+                        )
+                    ],
+                  );
+                }
+              },
+            ),
           ),
         ),
       ),
 
       // Floating action button
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: _lichenCheckBtn(context),
+      floatingActionButton: (navigatorHidden)? null:_lichenCheckBtn(context),
 
       // Bottom navigation bar
-      bottomNavigationBar: _bottomNavBar(context),
+      bottomNavigationBar: (navigatorHidden)? null:_bottomNavBar(context),
     );
   }
 
