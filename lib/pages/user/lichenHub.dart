@@ -89,7 +89,9 @@ class _LichenHubState extends State<LichenHub> {
     "underline": true,
   };
   List<Post> posts = [];
+  // loader booleans
   bool postLoaded = false;
+  bool isPosting = false;
 
   final FirebaseAuth auth = FirebaseAuth.instance;
   final storage = FirebaseStorage.instance;
@@ -343,6 +345,7 @@ class _LichenHubState extends State<LichenHub> {
     toolbar["italic"] = false;
     toolbar["underline"] = false;
     postImage = null;
+    isPosting = false;
     setState(() {});
     if (post != null) {
       titleController.text = post.title;
@@ -357,6 +360,11 @@ class _LichenHubState extends State<LichenHub> {
         barrierColor: Colors.transparent,
         builder: (context) {
           return StatefulBuilder(builder: (context, setState) {
+             contentController.document.changes.listen((event) { 
+                if(context.mounted){
+                  setState((){});
+                }
+              });
             return Container(
               clipBehavior: Clip.antiAlias,
               decoration: const BoxDecoration(
@@ -399,19 +407,31 @@ class _LichenHubState extends State<LichenHub> {
                             (post == null) ? "New post" : "Edit post",
                             style: TextStyle(fontSize: 22),
                           ))),
-                          InkWell(
+                          (isPosting)? SpinKitRing(
+                               color: Color(0XFFF0784C),
+                              size: 40.0,
+                          ) :InkWell(
                             onTap: () async {
+                              if(isPosting){
+                                return;
+                              }
                               if (contentController.document
                                       .toPlainText()
                                       .trim() ==
                                   "") {
                                 return;
                               }
+                              setState((){
+                                isPosting = true;
+                              });
                               if (post == null) {
                                 await newPost();
                               } else {
                                 await editPost(post);
                               }
+                               setState((){
+                                isPosting = false;
+                              });
                               Navigator.of(context).pop();
                             },
                             child: Transform.rotate(
@@ -471,14 +491,7 @@ class _LichenHubState extends State<LichenHub> {
                           child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 15.0),
-                              child: Focus(
-                                onKey: (node, event) {
-                                  var test =contentController.document.toPlainText();
-                                  print(test);
-                                  setState((){});
-                                  return KeyEventResult.handled;
-                                },
-                                child: QuillProvider(
+                              child: QuillProvider(
                                   configurations: QuillConfigurations(
                                     controller: contentController,
                                     sharedConfigurations:
@@ -500,7 +513,7 @@ class _LichenHubState extends State<LichenHub> {
                                     ],
                                   ),
                                 ),
-                              )),
+                              ),
                         ),
                         GestureDetector(
                           onTap: () async {
@@ -1115,6 +1128,8 @@ class _LichenHubState extends State<LichenHub> {
                         onEdit: () =>
                             composePost(scaleFactor, post: posts[index]),
                         onReply: () {
+                          replyController.clear();
+                          isPosting = false;
                           showModalBottomSheet(
                               context: context,
                               isScrollControlled: true,
@@ -1296,6 +1311,7 @@ class _LichenHubState extends State<LichenHub> {
                                                     child: TextFormField(
                                                       controller:
                                                           replyController,
+                                                      onChanged: (value)=>setState((){}),
                                                       textInputAction:
                                                           TextInputAction.done,
                                                       decoration:
@@ -1315,12 +1331,27 @@ class _LichenHubState extends State<LichenHub> {
                                                   ),
                                                 ),
                                               ),
-                                              InkWell(
-                                                onTap: () {
-                                                  commentOnPost(
+                                              (isPosting)? SpinKitRing(
+                                                color: Color(0XFFF0784C),
+                                                size: 40.0,
+                                            ) : InkWell(
+                                                onTap: () async{
+                                                  if(isPosting){
+                                                    return;
+                                                  }
+                                                  if(replyController.text == ''){
+                                                    return;
+                                                  }
+                                                  setState((){
+                                                    isPosting = true;
+                                                  });
+                                                  await commentOnPost(
                                                       posts[index],
                                                       replyController.text,
                                                       DateTime.now());
+                                                  setState((){
+                                                    isPosting = false;
+                                                  });
                                                   Navigator.of(context).pop();
                                                 },
                                                 child: Container(
@@ -1337,7 +1368,7 @@ class _LichenHubState extends State<LichenHub> {
                                                       child: Icon(
                                                     Icons.send,
                                                     color:
-                                                        primaryforegroundColor,
+                                                        (replyController.text == '')? Colors.grey : primaryforegroundColor,
                                                     size: 32,
                                                   )),
                                                 ),
