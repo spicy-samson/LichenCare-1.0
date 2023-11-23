@@ -92,6 +92,77 @@ class _LichenHubState extends State<LichenHub> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final storage = FirebaseStorage.instance;
 
+  Future newPost() async {
+    final user = auth.currentUser;
+    QuillController newController = QuillController.basic();
+    newController.document =
+        Document.fromDelta(contentController.document.toDelta());
+    if (user == null) {
+      return;
+    }
+
+    try {
+      final userDocRef =
+          FirebaseFirestore.instance.collection('users').doc(user.uid);
+      final userSnapshot = await userDocRef.get();
+
+      if (userSnapshot.exists) {
+        final firstName = userSnapshot.get('first_name') ?? '';
+        final postsCollection = userDocRef.collection('LichenHub_posts');
+        final storageRef = storage
+            .ref()
+            .child('lichenhub_images/${user.uid}/${DateTime.now()}.jpg');
+
+        String? imageUrl; // Default to null
+
+        if (postImage != null) {
+          final uploadTask = await storageRef.putFile(postImage!);
+
+          if (uploadTask.state == TaskState.success) {
+            imageUrl = await uploadTask.ref.getDownloadURL();
+          } else {
+            print('Error uploading the image to Firebase Storage');
+          }
+        }
+
+        final timestamp = DateTime.now(); // Get the current timestamp
+
+        final newInputDocRef = await postsCollection.add({
+          'title': titleController.text,
+          'content': newController.document.toPlainText(),
+          'date_uploaded': timestamp,
+          'file_image': imageUrl,
+          'likes': 0,
+          'uploader_name': firstName,
+          'userID': user.uid,
+        });
+
+        // Create a new Post object
+        Post newPost = Post(
+          id: newInputDocRef.id,
+          userID: user.uid,
+          user: firstName,
+          datetime: timestamp,
+          title: titleController.text,
+          content: newController,
+          isLiked: false,
+          likes: 0,
+          comments: [], // Initialize as an empty list
+          embeddedImage: imageUrl,
+        );
+
+        // Add the new post to the local list
+        setState(() {
+          posts = [newPost, ...posts];
+        });
+      } else {
+        print('User document does not exist in Firestore');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
   Future loadPosts() async {
     try {
       final usersCollection = FirebaseFirestore.instance.collection('users');
@@ -157,76 +228,15 @@ class _LichenHubState extends State<LichenHub> {
     }
   }
 
-  Future newPost() async {
+  bool isPostFromUser(Post post) {
+    // check if the post userID matches the current user
     final user = auth.currentUser;
-    QuillController newController = QuillController.basic();
-    newController.document =
-        Document.fromDelta(contentController.document.toDelta());
-    if (user == null) {
-      return;
-    }
 
     try {
-      final userDocRef =
-          FirebaseFirestore.instance.collection('users').doc(user.uid);
-      final userSnapshot = await userDocRef.get();
-
-      if (userSnapshot.exists) {
-        final firstName = userSnapshot.get('first_name') ?? '';
-        final postsCollection = userDocRef.collection('LichenHub_posts');
-        final storageRef = storage
-            .ref()
-            .child('lichenhub_images/${user.uid}/${DateTime.now()}.jpg');
-
-        String? imageUrl; // Default to null
-
-        if (postImage != null) {
-          final uploadTask = await storageRef.putFile(postImage!);
-
-          if (uploadTask.state == TaskState.success) {
-            imageUrl = await uploadTask.ref.getDownloadURL();
-          } else {
-            print('Error uploading the image to Firebase Storage');
-          }
-        }
-
-        final timestamp = DateTime.now(); // Get the current timestamp
-
-        final newInputDocRef = await postsCollection.add({
-          'title': titleController.text,
-          'content': newController.document.toPlainText(),
-          'date_uploaded': timestamp,
-          'file_image': imageUrl,
-          'likes': 0,
-          'uploader_name': firstName,
-          'userID': user.uid,
-        });
-
-        // Create a new Post object
-        Post newPost = Post(
-          id: newInputDocRef.id,
-          userID: user.uid,
-          user: firstName,
-          datetime: timestamp,
-          title: titleController.text,
-          content: newController,
-          isLiked: false,
-          likes: 0,
-          comments: [], // Initialize as an empty list
-          embeddedImage: imageUrl,
-        );
-
-        // Add the new post to the local list
-        setState(() {
-          posts = [newPost, ...posts];
-        });
-
-        //await addCommentToPost(newPost, 'Commenter Name', 'This is a comment.');
-      } else {
-        print('User document does not exist in Firestore');
-      }
+      return user?.uid == post.userID ? true : false;
     } catch (e) {
       print('Error: $e');
+      return false;
     }
   }
 
@@ -234,7 +244,7 @@ class _LichenHubState extends State<LichenHub> {
     var user = auth.currentUser;
 
     if (user == null) {
-      return; 
+      return;
     }
 
     try {
@@ -287,12 +297,6 @@ class _LichenHubState extends State<LichenHub> {
     loadPosts();
   }
 
-  Future replyPost(Post post) async {
-    // post comment connected to post.id
-    // @ reply func:
-    loadPosts();
-  }
-
   Future deletePost(Post post) async {
     // delete post from post.id
 
@@ -327,11 +331,6 @@ class _LichenHubState extends State<LichenHub> {
 
   Future reportPost(Post post) async {
     // report post using post.id and reportFlags
-  }
-
-  bool isPostFromUser(Post post) {
-    // check if the post userID matches the current user
-    return (post.userID == "1");
   }
 
   void copyPostContent(Post post) async {
