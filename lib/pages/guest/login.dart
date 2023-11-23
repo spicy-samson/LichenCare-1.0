@@ -2,6 +2,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -18,7 +19,8 @@ class _LoginPageState extends State<LoginPage> {
   late final TextEditingController _email;
   late final TextEditingController _password;
   bool _passwordVisible = false;
-  bool _isLoading = false; // Track loading state
+  bool _isLoading = false;
+  bool rememberMe = false;
 
   String errorMessage = '';
   String successMessage = '';
@@ -27,6 +29,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     _email = TextEditingController();
     _password = TextEditingController();
+    _loadSavedEmail();
     super.initState();
   }
 
@@ -35,6 +38,41 @@ class _LoginPageState extends State<LoginPage> {
     _email.dispose();
     _password.dispose();
     super.dispose();
+  }
+
+  //For the remember be functionality
+  Future<void> _loadSavedEmail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? savedEmail = prefs.getString('rememberedEmail');
+    if (savedEmail != null) {
+      setState(() {
+        _email.text = savedEmail;
+      });
+    }
+  }
+
+  Future<void> _saveEmail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('rememberedEmail', _email.text);
+  }
+
+  //Method to check and navigate based on disclaimer status
+  Future<void> checkDisclaimerAndNavigate(User? user) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // Check the disclaimer status
+    bool termsDisclaimerClosed =
+        prefs.getBool('termsDisclaimerClosed_${user?.uid}') ?? false;
+    bool privacyPolicydisclaimerClosed =
+        prefs.getBool('privacyPolicyClosed_${user?.uid}') ?? false;
+
+    // If the terms disclaimer is closed, navigate directly to the next screen
+    if (termsDisclaimerClosed && privacyPolicydisclaimerClosed) {
+      Navigator.of(context).pushReplacementNamed('/home');
+    } else {
+      // If not closed, navigate to the terms and conditions screen
+      Navigator.of(context)
+          .pushReplacementNamed('/profile/terms_and_conditions-boot');
+    }
   }
 
   final FocusNode _emailFocus = FocusNode();
@@ -80,6 +118,21 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(height: 30.0),
                     _buildTextField('Password', true, Icons.lock, _password,
                         _passwordFocus),
+                    Center(
+                      child: Row(
+                        children: [
+                          Checkbox(
+                            value: rememberMe,
+                            onChanged: (value) {
+                              setState(() {
+                                rememberMe = value!;
+                              });
+                            },
+                          ),
+                          Text('Remember Me'),
+                        ],
+                      ),
+                    ),
                     SizedBox(height: 30.0),
                     Container(
                       child: ElevatedButton(
@@ -109,6 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                                   if (userCredential.user != null &&
                                       userCredential.user!.emailVerified) {
                                     // User is logged in and email is verified
+                                    _saveEmail();
 
                                     successMessage =
                                         'You have successfully logged in!';
@@ -118,6 +172,8 @@ class _LoginPageState extends State<LoginPage> {
                                       final user =
                                           FirebaseAuth.instance.currentUser;
                                       if (user != null) {
+                                        await checkDisclaimerAndNavigate(user);
+                                        
                                         await FirebaseFirestore.instance
                                             .collection('users')
                                             .doc(user.uid)
@@ -130,11 +186,12 @@ class _LoginPageState extends State<LoginPage> {
                                           "Error updating Firestore data: $e");
                                     }
                                     // If the login is successful and email is verified, navigate to the home page using the named route.
-                                    Navigator.of(context).pushReplacementNamed(
-                                        '/profile/terms_and_conditions-boot');
+
+                                    // Navigator.of(context).pushReplacementNamed(
+                                    //     '/profile/terms_and_conditions-boot');
                                   } else if (userCredential.user != null &&
                                       !userCredential.user!.emailVerified) {
-                                    // User is logged in but email is not verified
+                                    // User tries to log in but email is not verified
                                     errorMessage =
                                         'Please verify your email first.';
                                     _showSnackBar(errorMessage);

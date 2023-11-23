@@ -2,12 +2,64 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class TermsAndConditions extends StatelessWidget {
-  final _currentIndex = 4;
-  final secondaryForegroundColor = const Color.fromARGB(255, 110, 189, 183);
+class TermsAndConditions extends StatefulWidget {
   final bool onBoot;
+
   const TermsAndConditions({super.key, this.onBoot = false});
+
+  @override
+  State<TermsAndConditions> createState() => _TermsAndConditionsState();
+}
+
+class _TermsAndConditionsState extends State<TermsAndConditions> {
+  final _currentIndex = 4;
+  late bool disclaimerClosed;
+
+  final secondaryForegroundColor = const Color.fromARGB(255, 110, 189, 183);
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.onBoot) {
+      loadDisclaimerStatus();
+    }
+  }
+
+  Future<void> loadDisclaimerStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    // Get the current user UID
+    User? user = auth.currentUser;
+    if (user != null) {
+      var userUid = user.uid;
+
+      // Use the UID as a key to load the disclaimer status
+      setState(() {
+        disclaimerClosed =
+            prefs.getBool('termsDisclaimerClosed_$userUid') ?? false;
+      });
+    }
+  }
+
+  Future<void> saveDisclaimerStatus(bool closed) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    // Get the current user UID
+    User? user = auth.currentUser;
+    // Save the disclaimer status using the UID as a key;
+
+    if (user != null) {
+      var userUid = user.uid;
+
+      // Save the disclaimer status using the UID as a key
+      await prefs.setBool('termsDisclaimerClosed_$userUid', closed);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1029,7 +1081,7 @@ class TermsAndConditions extends StatelessWidget {
                 ),
               ],
             ),
-            (onBoot)
+            (widget.onBoot)
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -1066,7 +1118,8 @@ class TermsAndConditions extends StatelessWidget {
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          await saveDisclaimerStatus(true);
                           Navigator.of(context).pushReplacementNamed(
                               '/profile/privacy_policy-boot');
                         },
@@ -1108,10 +1161,10 @@ class TermsAndConditions extends StatelessWidget {
 
       // Floating action button
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: (!onBoot) ? _lichenCheckBtn(context) : null,
+      floatingActionButton: (!widget.onBoot) ? _lichenCheckBtn(context) : null,
 
       // Bottom navigation bar
-      bottomNavigationBar: (!onBoot) ? _bottomNavBar(context) : null,
+      bottomNavigationBar: (!widget.onBoot) ? _bottomNavBar(context) : null,
     );
   }
 

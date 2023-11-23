@@ -2,11 +2,60 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class PrivacyPolicy extends StatelessWidget {
-  final int _currentIndex = 4;
+class PrivacyPolicy extends StatefulWidget {
   final bool onBoot;
   const PrivacyPolicy({super.key, this.onBoot = false});
+
+  @override
+  State<PrivacyPolicy> createState() => _PrivacyPolicyState();
+}
+
+class _PrivacyPolicyState extends State<PrivacyPolicy> {
+  final int _currentIndex = 4;
+  late bool disclaimerClosed;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.onBoot) {
+      loadDisclaimerStatus();
+    }
+  }
+
+  Future<void> loadDisclaimerStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    User? user = auth.currentUser;
+    if (user != null) {
+      var userUid = user.uid;
+
+      // Use the UID as a key to load the disclaimer status
+      setState(() {
+        disclaimerClosed =
+            prefs.getBool('privacyPolicyClosed_$userUid') ?? false;
+      });
+    }
+  }
+
+  Future<void> saveDisclaimerStatus(bool closed) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    // Get the current user UID
+    User? user = auth.currentUser;
+    // Save the disclaimer status using the UID as a key;
+
+    if (user != null) {
+      var userUid = user.uid;
+
+      // Save the disclaimer status using the UID as a key
+      await prefs.setBool('privacyPolicyClosed_$userUid', closed);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -469,7 +518,7 @@ class PrivacyPolicy extends StatelessWidget {
                 ),
               ),
             ),
-            (onBoot)
+            (widget.onBoot)
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -507,7 +556,8 @@ class PrivacyPolicy extends StatelessWidget {
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          await saveDisclaimerStatus(true);
                           Navigator.of(context).pushReplacementNamed('/home');
                         },
                         style: ButtonStyle(
@@ -548,10 +598,10 @@ class PrivacyPolicy extends StatelessWidget {
 
       // Floating action button
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: (!onBoot) ? _lichenCheckBtn(context) : null,
+      floatingActionButton: (!widget.onBoot) ? _lichenCheckBtn(context) : null,
 
       // Bottom navigation bar
-      bottomNavigationBar: (!onBoot) ? _bottomNavBar(context) : null,
+      bottomNavigationBar: (!widget.onBoot) ? _bottomNavBar(context) : null,
     );
   }
 
