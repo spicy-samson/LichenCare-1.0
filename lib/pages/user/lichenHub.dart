@@ -114,10 +114,9 @@ class _LichenHubState extends State<LichenHub> {
 
           var content = QuillController.basic();
           try {
-            content.document = Document()..insert(0, postDoc['content'] ?? '');
+            content.document = Document.fromJson(jsonDecode(postDoc['content']));
           } catch (e) {
-            print('Error decoding String content: $e');
-            continue;
+            content.document = Document()..insert(0, postDoc['content'] ?? '');
           }
 
           // Create a new Post object
@@ -127,8 +126,7 @@ class _LichenHubState extends State<LichenHub> {
             user: postDoc['uploader_name'] ?? '',
             datetime: postDoc['date_uploaded']?.toDate(),
             title: postDoc['title'] ?? '',
-            content: QuillController.basic()
-              ..document.insert(0, postDoc['content'] ?? ''),
+            content: content,
             isLiked: false,
             likes: postDoc['likes'] ?? 0,
             comments: [],
@@ -196,7 +194,7 @@ class _LichenHubState extends State<LichenHub> {
 
         final newInputDocRef = await postsCollection.add({
           'title': titleController.text,
-          'content': newController.document.toPlainText(),
+          'content': jsonEncode(newController.document.toDelta().toJson()),
           'date_uploaded': timestamp,
           'file_image': imageUrl,
           'likes': 0,
@@ -473,26 +471,34 @@ class _LichenHubState extends State<LichenHub> {
                           child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 15.0),
-                              child: QuillProvider(
-                                configurations: QuillConfigurations(
-                                  controller: contentController,
-                                  sharedConfigurations:
-                                      const QuillSharedConfigurations(),
-                                ),
-                                child: Column(
-                                  children: [
-                                    Expanded(
-                                      child: QuillEditor.basic(
-                                        focusNode: editorFocusNode,
-                                        configurations:
-                                            const QuillEditorConfigurations(
-                                          placeholder:
-                                              "Start a new conversation",
-                                          readOnly: false,
+                              child: Focus(
+                                onKey: (node, event) {
+                                  var test =contentController.document.toPlainText();
+                                  print(test);
+                                  setState((){});
+                                  return KeyEventResult.handled;
+                                },
+                                child: QuillProvider(
+                                  configurations: QuillConfigurations(
+                                    controller: contentController,
+                                    sharedConfigurations:
+                                        const QuillSharedConfigurations(),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        child: QuillEditor.basic(
+                                          focusNode: editorFocusNode,
+                                          configurations:
+                                              const QuillEditorConfigurations(
+                                            placeholder:
+                                                "Start a new conversation",
+                                            readOnly: false,
+                                          ),
                                         ),
-                                      ),
-                                    )
-                                  ],
+                                      )
+                                    ],
+                                  ),
                                 ),
                               )),
                         ),
