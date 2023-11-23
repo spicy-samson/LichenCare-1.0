@@ -390,7 +390,7 @@ class _LichenHubState extends State<LichenHub> {
         await imageRef.delete();
       }
 
-      // Delete comments collection 
+      // Delete comments collection
       final commentsCollection = postDocRef.collection('comments');
       final commentsQuery = await commentsCollection.get();
       for (var commentDoc in commentsQuery.docs) {
@@ -409,29 +409,75 @@ class _LichenHubState extends State<LichenHub> {
     }
   }
 
-  Future likePost(Post post) async {
-    // backend
-    // update the list of ids who liked the post (use post id)
-    // update the number of likes of the post (use post id)
-    if (post.isLiked) {
-    } else {}
+  Future<void> likePost(Post post) async {
+    try {
+      // Get the current user
+      User? user = auth.currentUser;
 
-    // update widget
-    if (post.isLiked) {
-      setState(() {
-        post.likes -= 1;
-        post.isLiked = false;
+      if (user == null) {
+        return;
+      }
+
+      final postRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(post.userID)
+          .collection('LichenHub_posts')
+          .doc(post.id);
+
+      // Check if the post is liked by the current user
+      bool isLiked = post.isLiked;
+
+      // Update the number of likes of the post (use post id)
+      int newLikesCount = isLiked ? post.likes - 1 : post.likes + 1;
+
+      // Firebase update
+      await postRef.update({
+        'likes': newLikesCount,
       });
-    } else {
+
       setState(() {
-        post.likes += 1;
-        post.isLiked = true;
+        post.likes = newLikesCount;
+        post.isLiked = !isLiked;
       });
+    } catch (e) {
+      print('Error liking the post: $e');
     }
   }
 
-  Future reportPost(Post post) async {
-    // report post using post.id and reportFlags
+  Future<void> reportPost(
+      Post post, List<int> reportFlags, String details) async {
+    try {
+      // Get the current user
+      User? user = auth.currentUser;
+      if (user == null) {
+        return;
+      }
+      
+      // Reference to the post document
+      final postRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(post.userID)
+          .collection('LichenHub_posts')
+          .doc(post.id);
+
+      // Extract the actual values from the reportFlags indices
+      List<String> selectedFlags = reportFlags.map((index) {
+        return concerns[index];
+      }).toList();
+
+      // Report object
+      Map<String, dynamic> reportData = {
+        'reporterUserID': user.uid,
+        'reportFlags': selectedFlags,
+        'details': details,
+        'timestamp': FieldValue.serverTimestamp(),
+      };
+
+      // Update the post document with the report
+      await postRef.collection('reports').add(reportData);
+    } catch (e) {
+      print('Error reporting the post: $e');
+    }
   }
 
   void copyPostContent(Post post) async {
@@ -998,7 +1044,13 @@ class _LichenHubState extends State<LichenHub> {
                                         if (reportFlags.isEmpty) {
                                           return;
                                         }
-                                        reportPost(post);
+                                        // Get details from the text field
+                                        String details =
+                                            reportFieldController.text.trim();
+
+                                        // Call the reportPost function
+                                        await reportPost(
+                                            post, reportFlags, details);
                                         AwesomeDialog(
                                           context: context,
                                           dialogType: DialogType.warning,
