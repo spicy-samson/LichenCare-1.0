@@ -578,6 +578,7 @@ class _LichenHubState extends State<LichenHub> {
                                     ],
                                   ),
                                 ),
+                          )
                         ),
                         GestureDetector(
                           onTap: () async {
