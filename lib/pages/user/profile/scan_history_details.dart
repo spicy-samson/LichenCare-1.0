@@ -299,6 +299,8 @@ class ScanHistoryDetails extends StatelessWidget {
                             await imageRef.delete();
                           }
 
+                          
+
                           // Document and image deleted successfully, now navigate to the updated page
                           Navigator.of(context)
                               .pushNamed('/profile/scan_history');

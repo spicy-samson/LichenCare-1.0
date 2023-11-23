@@ -133,23 +133,41 @@ class _LichenCheckState extends State<LichenCheck> {
 
   @override
   void initState() {
-    // loadDisclaimerStatus();
+    loadDisclaimerStatus();
     classifier = Classifier();
     super.initState();
   }
 
-  // Future<void> loadDisclaimerStatus() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<void> loadDisclaimerStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    FirebaseAuth auth = FirebaseAuth.instance;
 
-  //   setState(() {
-  //     disclaimerClosed = prefs.getBool('disclaimerClosed') ?? false;
-  //   });
-  // }
+    // Get the current user UID
+    User? user = auth.currentUser;
+    if (user != null) {
+      var userUid = user.uid;
 
-  // Future<void> saveDisclaimerStatus(bool closed) async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   prefs.setBool('disclaimerClosed', closed);
-  // }
+      // Use the UID as a key to load the disclaimer status
+      setState(() {
+        disclaimerClosed = prefs.getBool('disclaimerClosed_$userUid') ?? false;
+      });
+    }
+  }
+
+  Future<void> saveDisclaimerStatus(bool closed) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    // Get the current user UID
+    User? user = auth.currentUser;
+
+    if (user != null) {
+      var userUid = user.uid;
+
+      // Save the disclaimer status using the UID as a key
+      await prefs.setBool('disclaimerClosed_$userUid', closed);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -167,7 +185,7 @@ class _LichenCheckState extends State<LichenCheck> {
             automaticallyImplyLeading: false,
             backgroundColor: Color(0xFFFFF4E9),
             title: Padding(
-              padding: EdgeInsets.only(top: h * 0.05, right: w * 0.42),
+              padding: EdgeInsets.only(top: h * 0.02, right: w * 0.42),
               child: SvgPicture.asset(
                 'assets/svgs/#1 - lichencheck.svg',
                 width: w * 0.1,
@@ -175,7 +193,7 @@ class _LichenCheckState extends State<LichenCheck> {
               ),
             ),
             elevation: 0,
-            toolbarHeight: 80.0,
+            toolbarHeight: 60.0,
           ),
 
           // Body
@@ -557,10 +575,9 @@ class _LichenCheckState extends State<LichenCheck> {
                                   ),
                                 ),
                                 ElevatedButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      disclaimerClosed = true;
-                                    });
+                                  onPressed: () async {
+                                    await saveDisclaimerStatus(true);
+                                    loadDisclaimerStatus(); // Add this line
                                   },
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.symmetric(

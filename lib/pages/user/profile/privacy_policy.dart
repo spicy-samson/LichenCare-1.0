@@ -2,17 +2,41 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PrivacyPolicy extends StatefulWidget {
   final bool onBoot;
   const PrivacyPolicy({super.key, this.onBoot = false});
   @override
-  _PrivacyPolicyState createState() => _PrivacyPolicyState();
+  State<PrivacyPolicy> createState() => _PrivacyPolicyState();
 }
 
 class _PrivacyPolicyState extends State<PrivacyPolicy> {
   final int _currentIndex = 4;
-   bool navigatorHidden = false;
+  late bool disclaimerClosed;
+  bool navigatorHidden = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<void> saveDisclaimerStatus(bool closed) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    // Get the current user UID
+    User? user = auth.currentUser;
+    // Save the disclaimer status using the UID as a key;
+
+    if (user != null) {
+      var userUid = user.uid;
+
+      // Save the disclaimer status using the UID as a key
+      await prefs.setBool('privacyPolicyClosed_$userUid', closed);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +50,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
         automaticallyImplyLeading: false,
         backgroundColor: Color(0xFFFFF4E9),
         title: Padding(
-          padding: EdgeInsets.only(top: h * 0.04, right: w * 0.35),
+          padding: EdgeInsets.only(top: h * 0.02, right: w * 0.35),
           child: SvgPicture.asset(
             'assets/svgs/profileSection/profileAppBars/privacy_policy(copy).svg',
             width: w * 0.1,
@@ -34,7 +58,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
           ),
         ),
         elevation: 0,
-        toolbarHeight: 80.0,
+        toolbarHeight: 60.0,
       ),
 
       // Body
@@ -493,76 +517,79 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
                   ),
                 ),
               ),
-              (widget.onBoot) ? Row(
-                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pushReplacementNamed('/profile/terms_and_conditions-boot');
-                        },
-                        style: ButtonStyle(
-                          padding: MaterialStateProperty.all<EdgeInsets>(
-                            EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 22 * scaleFactor),
-                          ),
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                            const Color(0xFFFF7F50),
-                          ),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              side: const BorderSide(
-                                color: Colors.white,
-                                width: 2.0,
+              (widget.onBoot)
+                ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pushReplacementNamed(
+                              '/profile/terms_and_conditions-boot');
+                          },
+                          style: ButtonStyle(
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                              EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 22 * scaleFactor),
+                            ),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              const Color(0xFFFF7F50),
+                            ),
+                            shape:
+                                MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                side: const BorderSide(
+                                  color: Colors.white,
+                                  width: 2.0,
+                                ),
                               ),
                             ),
                           ),
+                          child: const Text(
+                            'Go back',
+                            style: TextStyle(
+                              fontSize: 15.0,
+                              color: Colors.white,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                        child: const Text(
-                          'Go back',
-                          style: TextStyle(
-                            fontSize: 15.0,
-                            color: Colors.white,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context)
-                              .pushReplacementNamed('/home');
-                        },
-                        style: ButtonStyle(
-                          padding: MaterialStateProperty.all<EdgeInsets>(
-                            EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 22 * scaleFactor),
-                          ),
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                            const Color(0xFFFF7F50),
-                          ),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              side: const BorderSide(
-                                color: Colors.white,
-                                width: 2.0,
+                        ElevatedButton(
+                          onPressed: () async {
+                            await saveDisclaimerStatus(true);
+                            Navigator.of(context).pushReplacementNamed('/home');
+                          },
+                          style: ButtonStyle(
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                              EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 22 * scaleFactor),
+                            ),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              const Color(0xFFFF7F50),
+                            ),
+                            shape:
+                                MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                side: const BorderSide(
+                                  color: Colors.white,
+                                  width: 2.0,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        child: const Text(
-                          'I accept',
-                          style: TextStyle(
-                            fontSize: 15.0,
-                            color: Colors.white,
+                          child: const Text(
+                            'I accept',
+                            style: TextStyle(
+                              fontSize: 15.0,
+                              color: Colors.white,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          textAlign: TextAlign.center,
                         ),
-                      ),
-                    ],
-              ) : const SizedBox(),
+                      ],
+                    )
+                : const SizedBox(),
               SizedBox(height: 15),
             ],
           ),

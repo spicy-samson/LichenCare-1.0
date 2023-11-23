@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyCarousel extends StatefulWidget {
   @override
@@ -10,11 +12,34 @@ class MyCarousel extends StatefulWidget {
 class _MyCarouselState extends State<MyCarousel> {
   int _currentIndex = 0;
 
+  @override 
+  void initState(){
+    super.initState();
+    _checkLoggedIn();
+  }
+
+  Future<void> _checkLoggedIn() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? loginEmail = prefs.getString('loginEmail');
+      if(loginEmail!=null){
+        FirebaseAuth.instance.authStateChanges().listen((User? user) { 
+          if(user!=null){
+            // compare saved email with firebaseauth
+            if(loginEmail == user.email){
+              // proceed to home page
+              Navigator.of(context).pushReplacementNamed('/home');
+            }
+          }
+        });
+      }
+    }
+
+
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
-
+    
     List<Widget> _pages = [
       Container(
         color: Color(0xFFFFF4E9),

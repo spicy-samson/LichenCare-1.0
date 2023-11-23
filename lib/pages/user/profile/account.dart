@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Account extends StatefulWidget {
   @override
@@ -521,6 +522,9 @@ class _AccountState extends State<Account> {
 
       // Delete the specific document in Firestore
       await userDocRef.delete();
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.remove('loginEmail');
 
       // Delete user's folder in Firebase Storage - TO FIX
       // final storageRef = FirebaseStorage.instance

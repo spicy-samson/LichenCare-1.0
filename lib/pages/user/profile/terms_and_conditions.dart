@@ -2,24 +2,53 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TermsAndConditions extends StatefulWidget {
   final bool onBoot;
+
   const TermsAndConditions({super.key, this.onBoot = false});
+
   @override
-  _TermsAndConditionsState createState() => _TermsAndConditionsState();
+  State<TermsAndConditions> createState() => _TermsAndConditionsState();
 }
-class _TermsAndConditionsState extends State<TermsAndConditions>{
+
+class _TermsAndConditionsState extends State<TermsAndConditions> {
   final _currentIndex = 4;
-  final secondaryForegroundColor = const Color.fromARGB(255, 110, 189, 183);
+
   bool navigatorHidden = false;
-  
+
+  final secondaryForegroundColor = const Color.fromARGB(255, 110, 189, 183);
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+
+
+  Future<void> saveDisclaimerStatus(bool closed) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    // Get the current user UID
+    User? user = auth.currentUser;
+    // Save the disclaimer status using the UID as a key;
+
+    if (user != null) {
+      var userUid = user.uid;
+
+      // Save the disclaimer status using the UID as a key
+      await prefs.setBool('termsDisclaimerClosed_$userUid', closed);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     double scaleFactor = h / 1080;
-    
 
     return Scaffold(
       backgroundColor: Color(0xFFFFF4E9),
@@ -27,7 +56,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions>{
         automaticallyImplyLeading: false,
         backgroundColor: Color(0xFFFFF4E9),
         title: Padding(
-          padding: EdgeInsets.only(top: h * 0.04, right: w * 0.15),
+          padding: EdgeInsets.only(top: h * 0.02, right: w * 0.15),
           child: SvgPicture.asset(
             'assets/svgs/profileSection/profileAppBars/terms_and_conditions(copy).svg',
             width: w * 0.1,
@@ -35,7 +64,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions>{
           ),
         ),
         elevation: 0,
-        toolbarHeight: 75.0,
+        toolbarHeight: 60.0,
       ),
 
       // Body
@@ -1089,7 +1118,8 @@ class _TermsAndConditionsState extends State<TermsAndConditions>{
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async{
+                          await saveDisclaimerStatus(true);
                           Navigator.of(context)
                               .pushReplacementNamed('/profile/privacy_policy-boot');
                         },
