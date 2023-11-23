@@ -107,7 +107,7 @@ class _LichenHubState extends State<LichenHub> {
         final postsCollection =
             userDoc.reference.collection(postsCollectionName);
 
-        final userPostsSnapshot = await postsCollection.get();
+        final userPostsSnapshot = await postsCollection.orderBy('date_uploaded', descending: true).get();
 
         for (var doc in userPostsSnapshot.docs) {
           var postDoc = doc.data() as Map<String, dynamic>;
@@ -286,12 +286,6 @@ class _LichenHubState extends State<LichenHub> {
     // titleController.text is title
     // jsonEncode(contentController.document.toDelta().toJson()) is the content
     // concernController.text is content
-    loadPosts();
-  }
-
-  Future replyPost(Post post) async {
-    // post comment connected to post.id
-    // @ reply func:
     loadPosts();
   }
 
