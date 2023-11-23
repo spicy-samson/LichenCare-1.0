@@ -20,7 +20,7 @@ class PrivacyPolicy extends StatelessWidget {
         automaticallyImplyLeading: false,
         backgroundColor: Color(0xFFFFF4E9),
         title: Padding(
-          padding: EdgeInsets.only(top: h * 0.04, right: w * 0.35),
+          padding: EdgeInsets.only(top: h * 0.02, right: w * 0.35),
           child: SvgPicture.asset(
             'assets/svgs/profileSection/profileAppBars/privacy_policy(copy).svg',
             width: w * 0.1,
@@ -28,7 +28,7 @@ class PrivacyPolicy extends StatelessWidget {
           ),
         ),
         elevation: 0,
-        toolbarHeight: 80.0,
+        toolbarHeight: 60.0,
       ),
 
       // Body
@@ -469,76 +469,78 @@ class PrivacyPolicy extends StatelessWidget {
                 ),
               ),
             ),
-            (onBoot) ? Row(
-               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pushReplacementNamed('/profile/terms_and_conditions-boot');
-                      },
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 22 * scaleFactor),
-                        ),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          const Color(0xFFFF7F50),
-                        ),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            side: const BorderSide(
-                              color: Colors.white,
-                              width: 2.0,
+            (onBoot)
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacementNamed(
+                              '/profile/terms_and_conditions-boot');
+                        },
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all<EdgeInsets>(
+                            EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 22 * scaleFactor),
+                          ),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            const Color(0xFFFF7F50),
+                          ),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: const BorderSide(
+                                color: Colors.white,
+                                width: 2.0,
+                              ),
                             ),
                           ),
                         ),
+                        child: const Text(
+                          'Go back',
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                      child: const Text(
-                        'Go back',
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          color: Colors.white,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context)
-                            .pushReplacementNamed('/home');
-                      },
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 22 * scaleFactor),
-                        ),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          const Color(0xFFFF7F50),
-                        ),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            side: const BorderSide(
-                              color: Colors.white,
-                              width: 2.0,
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacementNamed('/home');
+                        },
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all<EdgeInsets>(
+                            EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 22 * scaleFactor),
+                          ),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            const Color(0xFFFF7F50),
+                          ),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: const BorderSide(
+                                color: Colors.white,
+                                width: 2.0,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      child: const Text(
-                        'I accept',
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          color: Colors.white,
+                        child: const Text(
+                          'I accept',
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
                       ),
-                    ),
-                  ],
-            ) : const SizedBox(),
+                    ],
+                  )
+                : const SizedBox(),
             SizedBox(height: 15),
           ],
         ),
@@ -546,10 +548,10 @@ class PrivacyPolicy extends StatelessWidget {
 
       // Floating action button
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: (!onBoot)? _lichenCheckBtn(context):null,
+      floatingActionButton: (!onBoot) ? _lichenCheckBtn(context) : null,
 
       // Bottom navigation bar
-      bottomNavigationBar: (!onBoot)? _bottomNavBar(context) : null,
+      bottomNavigationBar: (!onBoot) ? _bottomNavBar(context) : null,
     );
   }
 

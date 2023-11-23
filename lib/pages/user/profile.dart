@@ -21,7 +21,7 @@ class _ProfileState extends State<Profile> {
         automaticallyImplyLeading: false,
         backgroundColor: Color(0xFFFFF4E9),
         title: Padding(
-          padding: EdgeInsets.only(top: h * 0.05, right: w * 0.45),
+          padding: EdgeInsets.only(top: h * 0.02, right: w * 0.45),
           child: SvgPicture.asset(
             'assets/svgs/profileSection/profile(copy).svg',
             width: w * 0.1,
@@ -29,7 +29,7 @@ class _ProfileState extends State<Profile> {
           ),
         ),
         elevation: 0,
-        toolbarHeight: 80.0,
+        toolbarHeight: 60.0,
       ),
 
       // Body

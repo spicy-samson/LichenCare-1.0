@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 class TermsAndConditions extends StatelessWidget {
   final _currentIndex = 4;
   final secondaryForegroundColor = const Color.fromARGB(255, 110, 189, 183);
@@ -22,7 +21,7 @@ class TermsAndConditions extends StatelessWidget {
         automaticallyImplyLeading: false,
         backgroundColor: Color(0xFFFFF4E9),
         title: Padding(
-          padding: EdgeInsets.only(top: h * 0.04, right: w * 0.15),
+          padding: EdgeInsets.only(top: h * 0.02, right: w * 0.15),
           child: SvgPicture.asset(
             'assets/svgs/profileSection/profileAppBars/terms_and_conditions(copy).svg',
             width: w * 0.1,
@@ -30,7 +29,7 @@ class TermsAndConditions extends StatelessWidget {
           ),
         ),
         elevation: 0,
-        toolbarHeight: 75.0,
+        toolbarHeight: 60.0,
       ),
 
       // Body
@@ -1030,76 +1029,78 @@ class TermsAndConditions extends StatelessWidget {
                 ),
               ],
             ),
-            (onBoot) ? Row(
-               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pushReplacementNamed('/login');
-                      },
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 22 * scaleFactor),
-                        ),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          const Color(0xFFFF7F50),
-                        ),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            side: const BorderSide(
-                              color: Colors.white,
-                              width: 2.0,
+            (onBoot)
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacementNamed('/login');
+                        },
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all<EdgeInsets>(
+                            EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 22 * scaleFactor),
+                          ),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            const Color(0xFFFF7F50),
+                          ),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: const BorderSide(
+                                color: Colors.white,
+                                width: 2.0,
+                              ),
                             ),
                           ),
                         ),
+                        child: const Text(
+                          'Go back',
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                      child: const Text(
-                        'Go back',
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          color: Colors.white,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context)
-                            .pushReplacementNamed('/profile/privacy_policy-boot');
-                      },
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 22 * scaleFactor),
-                        ),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          const Color(0xFFFF7F50),
-                        ),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            side: const BorderSide(
-                              color: Colors.white,
-                              width: 2.0,
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacementNamed(
+                              '/profile/privacy_policy-boot');
+                        },
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all<EdgeInsets>(
+                            EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 22 * scaleFactor),
+                          ),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            const Color(0xFFFF7F50),
+                          ),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: const BorderSide(
+                                color: Colors.white,
+                                width: 2.0,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      child: const Text(
-                        'I accept',
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          color: Colors.white,
+                        child: const Text(
+                          'I accept',
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
                       ),
-                    ),
-                  ],
-            ) : const SizedBox(),
+                    ],
+                  )
+                : const SizedBox(),
             SizedBox(height: 15),
           ],
         ),
@@ -1107,10 +1108,10 @@ class TermsAndConditions extends StatelessWidget {
 
       // Floating action button
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: (!onBoot) ? _lichenCheckBtn(context):null,
+      floatingActionButton: (!onBoot) ? _lichenCheckBtn(context) : null,
 
       // Bottom navigation bar
-      bottomNavigationBar: (!onBoot)?  _bottomNavBar(context) : null,
+      bottomNavigationBar: (!onBoot) ? _bottomNavBar(context) : null,
     );
   }
 

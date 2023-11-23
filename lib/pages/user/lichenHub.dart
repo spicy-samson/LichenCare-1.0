@@ -359,15 +359,50 @@ class _LichenHubState extends State<LichenHub> {
     }
   }
 
-  Future deletePost(Post post) async {
-    // delete post from post.id
+  Future<void> deletePost(Post post) async {
+    final user = auth.currentUser;
+    if (user == null) {
+      return;
+    }
 
-    // update widget
-    setState(() {
-      post.content.dispose();
-      posts.remove(post);
-      replyController.dispose();
-    });
+    try {
+      final userDocRef =
+          FirebaseFirestore.instance.collection('users').doc(user.uid);
+      final postsCollection = userDocRef.collection('LichenHub_posts');
+      final postDocRef = postsCollection.doc(post.id);
+
+      // Get the image URL from the post
+      String? imageUrl = post.embeddedImage;
+
+      // Delete post document from Cloud Firestore
+      await postDocRef.delete();
+
+      // Delete image from Firebase Storage if URL exists
+      if (imageUrl != null && imageUrl.isNotEmpty) {
+        // Get a reference to the image in Firebase Storage
+        Reference imageRef = FirebaseStorage.instance.refFromURL(imageUrl);
+
+        // Delete the image
+        await imageRef.delete();
+      }
+
+      // Delete comments collection 
+      final commentsCollection = postDocRef.collection('comments');
+      final commentsQuery = await commentsCollection.get();
+      for (var commentDoc in commentsQuery.docs) {
+        await commentDoc.reference.delete();
+      }
+
+      print('Post and comments deleted successfully');
+
+      setState(() {
+        post.content.dispose();
+        posts.remove(post);
+        replyController.dispose();
+      });
+    } catch (e) {
+      print('Error deleting post: $e');
+    }
   }
 
   Future likePost(Post post) async {
@@ -425,11 +460,11 @@ class _LichenHubState extends State<LichenHub> {
         barrierColor: Colors.transparent,
         builder: (context) {
           return StatefulBuilder(builder: (context, setState) {
-             contentController.document.changes.listen((event) { 
-                if(context.mounted){
-                  setState((){});
-                }
-              });
+            contentController.document.changes.listen((event) {
+              if (context.mounted) {
+                setState(() {});
+              }
+            });
             return Container(
               clipBehavior: Clip.antiAlias,
               decoration: const BoxDecoration(
@@ -472,46 +507,48 @@ class _LichenHubState extends State<LichenHub> {
                             (post == null) ? "New post" : "Edit post",
                             style: TextStyle(fontSize: 22),
                           ))),
-                          (isPosting)? SpinKitRing(
-                               color: Color(0XFFF0784C),
-                              size: 40.0,
-                          ) :InkWell(
-                            onTap: () async {
-                              if(isPosting){
-                                return;
-                              }
-                              if (contentController.document
-                                      .toPlainText()
-                                      .trim() ==
-                                  "") {
-                                return;
-                              }
-                              setState((){
-                                isPosting = true;
-                              });
-                              if (post == null) {
-                                await newPost();
-                              } else {
-                                await editPost(post);
-                              }
-                               setState((){
-                                isPosting = false;
-                              });
-                              Navigator.of(context).pop();
-                            },
-                            child: Transform.rotate(
-                                angle: -3.14 / 5,
-                                child: Icon(
-                                  Icons.send,
-                                  size: 24,
-                                  color: (contentController.document
-                                              .toPlainText()
-                                              .trim() ==
-                                          "")
-                                      ? Colors.grey
-                                      : primaryforegroundColor,
-                                )),
-                          ),
+                          (isPosting)
+                              ? SpinKitRing(
+                                  color: Color(0XFFF0784C),
+                                  size: 40.0,
+                                )
+                              : InkWell(
+                                  onTap: () async {
+                                    if (isPosting) {
+                                      return;
+                                    }
+                                    if (contentController.document
+                                            .toPlainText()
+                                            .trim() ==
+                                        "") {
+                                      return;
+                                    }
+                                    setState(() {
+                                      isPosting = true;
+                                    });
+                                    if (post == null) {
+                                      await newPost();
+                                    } else {
+                                      await editPost(post);
+                                    }
+                                    setState(() {
+                                      isPosting = false;
+                                    });
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Transform.rotate(
+                                      angle: -3.14 / 5,
+                                      child: Icon(
+                                        Icons.send,
+                                        size: 24,
+                                        color: (contentController.document
+                                                    .toPlainText()
+                                                    .trim() ==
+                                                "")
+                                            ? Colors.grey
+                                            : primaryforegroundColor,
+                                      )),
+                                ),
                         ],
                       ),
                     ),
@@ -551,34 +588,34 @@ class _LichenHubState extends State<LichenHub> {
                     Stack(
                       children: [
                         SizedBox(
-                          width: double.infinity,
-                          height: 380 * scaleFactor,
-                          child: Padding(
+                            width: double.infinity,
+                            height: 380 * scaleFactor,
+                            child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 15.0),
-                              child:QuillProvider(
-                                  configurations: QuillConfigurations(
-                                    controller: contentController,
-                                    sharedConfigurations:
-                                        const QuillSharedConfigurations(),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Expanded(
-                                        child: QuillEditor.basic(
-                                          focusNode: editorFocusNode,
-                                          configurations:
-                                              const QuillEditorConfigurations(
-                                            placeholder:
-                                                "Start a new conversation",
-                                            readOnly: false,
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
+                              child: QuillProvider(
+                                configurations: QuillConfigurations(
+                                  controller: contentController,
+                                  sharedConfigurations:
+                                      const QuillSharedConfigurations(),
                                 ),
-                        ),
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: QuillEditor.basic(
+                                        focusNode: editorFocusNode,
+                                        configurations:
+                                            const QuillEditorConfigurations(
+                                          placeholder:
+                                              "Start a new conversation",
+                                          readOnly: false,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            )),
                         GestureDetector(
                           onTap: () async {
                             await Future.delayed(
@@ -1117,7 +1154,7 @@ class _LichenHubState extends State<LichenHub> {
         automaticallyImplyLeading: false,
         backgroundColor: Color(0xFFFFF4E9),
         title: Padding(
-          padding: EdgeInsets.only(top: h * 0.05, right: w * 0.3),
+          padding: EdgeInsets.only(top: h * 0.02, right: w * 0.3),
           child: SvgPicture.asset(
             'assets/svgs/#3 - lichenhub.svg',
             width: w * 0.1,
@@ -1125,14 +1162,15 @@ class _LichenHubState extends State<LichenHub> {
           ),
         ),
         elevation: 0,
-        toolbarHeight: 80.0,
+        toolbarHeight: 60.0,
         actions: [
           SizedBox(
             height: 70,
             width: 80,
             child: Padding(
               padding: EdgeInsets.only(
-                top: h * 0.055,
+                top: h * 0.023,
+                bottom: h * 0.01,
               ),
               child: FittedBox(
                 child: InkWell(
@@ -1724,8 +1762,72 @@ class PostBox extends StatelessWidget {
                                                         BorderRadius.all(
                                                             Radius.circular(
                                                                 15.0)))),
-                                            onPressed: () {
-                                              onDelete!();
+                                            onPressed: () async {
+                                              bool confirmDelete =
+                                                  await showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: Text(
+                                                        'Confirm Deletion'),
+                                                    content: Text(
+                                                        'Are you sure you want to delete this post?'),
+                                                    actionsPadding:
+                                                        EdgeInsets.zero,
+                                                    actions: <Widget>[
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceEvenly,
+                                                        children: <Widget>[
+                                                          TextButton(
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop(
+                                                                      false); // Return false if canceled
+                                                            },
+                                                            child: Text(
+                                                              'Cancel',
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .black, // Change text color to orange
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          TextButton(
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop(
+                                                                      true); // Return true if confirmed
+                                                            },
+                                                            child: Text(
+                                                              'Delete',
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .red, // Change text color to orange
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+
+                                              if (confirmDelete ?? false) {
+                                                try {
+                                                  onDelete!();
+                                                  Navigator.of(context)
+                                                      .pushNamed('/lichenHub');
+                                                } catch (e) {
+                                                  print(
+                                                      'Error deleting document and/or image: $e');
+                                                }
+                                              }
                                             },
                                             child: Row(
                                               children: [

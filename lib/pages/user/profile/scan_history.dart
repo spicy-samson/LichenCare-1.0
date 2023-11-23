@@ -44,7 +44,7 @@ class _ScanHistory extends State<ScanHistory> {
         backgroundColor: Color(0xFFFFF4E9),
         title: Padding(
           padding:
-              EdgeInsets.only(top: h * 0.04, right: w * 0.35, left: w * 0.005),
+              EdgeInsets.only(top: h * 0.02, right: w * 0.35, left: w * 0.005),
           child: SvgPicture.asset(
             'assets/svgs/profileSection/profileAppBars/scan_history(copy).svg',
             width: w * 0.1,
@@ -52,7 +52,7 @@ class _ScanHistory extends State<ScanHistory> {
           ),
         ),
         elevation: 0,
-        toolbarHeight: 80.0,
+        toolbarHeight: 60.0,
       ),
 
       // Body
@@ -121,7 +121,7 @@ class _ScanHistory extends State<ScanHistory> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 5),
                     Center(
                       child: Text(
                         '$selectedOption',
@@ -187,7 +187,7 @@ class _ScanHistory extends State<ScanHistory> {
                                 );
                               },
                               child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(5.0),
                                 child: CachedNetworkImage(
                                   imageUrl:
                                       "${lichenCheckData[entryKey]?.results['file_image']}",
