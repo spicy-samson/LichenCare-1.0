@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lichen_care/helpers/helpers.dart';
@@ -88,6 +89,7 @@ class _LichenHubState extends State<LichenHub> {
     "underline": true,
   };
   List<Post> posts = [];
+  bool postLoaded = false;
 
   final FirebaseAuth auth = FirebaseAuth.instance;
   final storage = FirebaseStorage.instance;
@@ -176,7 +178,7 @@ class _LichenHubState extends State<LichenHub> {
         final postsCollection =
             userDoc.reference.collection(postsCollectionName);
 
-        final userPostsSnapshot = await postsCollection.get();
+        final userPostsSnapshot = await postsCollection.orderBy('date_uploaded', descending: true).get();
 
         for (var doc in userPostsSnapshot.docs) {
           var postDoc = doc.data() as Map<String, dynamic>;
@@ -201,7 +203,7 @@ class _LichenHubState extends State<LichenHub> {
             isLiked: false,
             likes: postDoc['likes'] ?? 0,
             comments: [],
-            embeddedImage: postDoc['file_image'] ?? '',
+            embeddedImage: postDoc['file_image'],
           );
 
           // Fetch comments
@@ -332,6 +334,7 @@ class _LichenHubState extends State<LichenHub> {
   Future reportPost(Post post) async {
     // report post using post.id and reportFlags
   }
+
 
   void copyPostContent(Post post) async {
     await Clipboard.setData(
@@ -543,8 +546,8 @@ class _LichenHubState extends State<LichenHub> {
                         ),
                       ],
                     ),
-                    (postImage == null)
-                        ? (post != null)
+                    (postImage == null )
+                        ? (post != null && post.embeddedImage!=null)
                             ? Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 10.0, vertical: 10.0),
@@ -1012,7 +1015,11 @@ class _LichenHubState extends State<LichenHub> {
   @override
   void initState() {
     super.initState();
-    loadPosts();
+    loadPosts().then((value) => {
+      if(mounted){
+        postLoaded = true
+      }
+    });
   }
 
   @override
@@ -1071,7 +1078,19 @@ class _LichenHubState extends State<LichenHub> {
       ),
 
       // Body
-      body: Stack(
+      body: (!postLoaded) ? Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SpinKitThreeBounce(
+            color: Color(0XFFF0784C),
+            size: 60.0,
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Text("Loading posts...")
+        ],
+      ) : Stack(
         children: [
           (posts.isEmpty)
               ? const Center(
