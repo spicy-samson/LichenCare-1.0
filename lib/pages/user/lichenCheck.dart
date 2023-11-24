@@ -25,6 +25,8 @@ class LichenCheck extends StatefulWidget {
 
 class _LichenCheckState extends State<LichenCheck> {
   final _currentIndex = 2;
+  bool navigatorHidden = false;
+
   List<String> ethnicities = [
     "African",
     "Asian (Central)",
@@ -295,82 +297,101 @@ class _LichenCheckState extends State<LichenCheck> {
                           : Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 30.0),
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  children: [
-                                    const SizedBox(
-                                      height: 20.0,
-                                    ),
-                                    result(context),
-                                    const SizedBox(
-                                      height: 30.0,
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 0.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              Navigator.of(context)
-                                                  .pushReplacementNamed(
-                                                      '/home'); //
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                                shape:
-                                                    const RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    15.0))),
-                                                backgroundColor:
-                                                    primaryforegroundColor),
-                                            child: const Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 0.0,
-                                                  vertical: 10.0),
-                                              child: Text(
-                                                "Back to Home",
-                                                style:
-                                                    TextStyle(fontSize: 16.0),
-                                              ),
-                                            ),
-                                          ),
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                reset();
-                                              });
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                                shape:
-                                                    const RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    15.0))),
-                                                backgroundColor:
-                                                    primaryforegroundColor),
-                                            child: const Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 10.0,
-                                                  vertical: 10.0),
-                                              child: Text(
-                                                "Scan Again",
-                                                style:
-                                                    TextStyle(fontSize: 16.0),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                              child: Listener(
+                                  onPointerMove: (pointer){
+                                // print(pointer.delta);
+                                if(pointer.delta.dy == 0){
+                                  return;
+                                }
+                                if(pointer.delta.dy < 0){
+                                  // scrolls down
+                                  setState(() {
+                                    navigatorHidden = true;
+                                  });
+                                }else{
+                                  // scrolls up
+                                  setState(() {
+                                    navigatorHidden = false;
+                                  });
+                                }
+                              },
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(
+                                        height: 20.0,
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      height: 45.0,
-                                    )
-                                  ],
+                                      result(context),
+                                      const SizedBox(
+                                        height: 30.0,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 0.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.of(context)
+                                                    .pushReplacementNamed(
+                                                        '/home'); //
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                  shape:
+                                                      const RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius.circular(
+                                                                      15.0))),
+                                                  backgroundColor:
+                                                      primaryforegroundColor),
+                                              child: const Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 0.0,
+                                                    vertical: 10.0),
+                                                child: Text(
+                                                  "Back to Home",
+                                                  style:
+                                                      TextStyle(fontSize: 16.0),
+                                                ),
+                                              ),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  reset();
+                                                });
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                  shape:
+                                                      const RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius.circular(
+                                                                      15.0))),
+                                                  backgroundColor:
+                                                      primaryforegroundColor),
+                                              child: const Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 10.0,
+                                                    vertical: 10.0),
+                                                child: Text(
+                                                  "Scan Again",
+                                                  style:
+                                                      TextStyle(fontSize: 16.0),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 45.0,
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             )
@@ -417,9 +438,9 @@ class _LichenCheckState extends State<LichenCheck> {
           // Floating action button
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: _lichenCheckBtn(context),
+          floatingActionButton: (navigatorHidden)? null: _lichenCheckBtn(context),
           // Bottom navigation bar
-          bottomNavigationBar: _bottomNavBar(context),
+          bottomNavigationBar: (navigatorHidden)? null: _bottomNavBar(context),
         ),
         (disclaimerClosed)
             ? const SizedBox()

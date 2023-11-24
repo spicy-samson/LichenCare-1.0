@@ -26,11 +26,20 @@ class LichenCheckEntry {
 
 Color primaryforegroundColor = const Color(0xFFFF7F50);
 
+
 class _ScanHistory extends State<ScanHistory> {
   int _currentIndex = 4;
   String selectedOption = 'All'; // Default selected option
   bool showDropdown = false;
   bool navigatorHidden = false;
+  Future<Map<String, LichenCheckEntry>>? _lichenEntryData;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _lichenEntryData = getLichenCheckEntries();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,9 +88,14 @@ class _ScanHistory extends State<ScanHistory> {
           child: Padding(
             padding: const EdgeInsets.only(left: 15, right: 15, bottom: 15),
             child: FutureBuilder<Map<String, LichenCheckEntry>>(
-              future: getLichenCheckEntries(),
+              future: _lichenEntryData,
               builder: (context, snapshot) {
-                if (snapshot.hasError) {
+                if(snapshot.connectionState == ConnectionState.waiting){
+                    return CircularProgressIndicator(
+                      color: primaryforegroundColor,
+                    );            
+                }
+                else if (snapshot.hasError) {
                   return Text("Error: ${snapshot.error}");
                 } else {
                   Map<String, LichenCheckEntry> lichenCheckData =

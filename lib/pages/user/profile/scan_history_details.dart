@@ -6,16 +6,21 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:lichen_care/pages/user/profile/scan_history.dart'
     as ScanHistoryPage;
 
-class ScanHistoryDetails extends StatelessWidget {
+class ScanHistoryDetails extends StatefulWidget {
   final ScanHistoryPage.LichenCheckEntry? lichenCheckEntry;
-
   ScanHistoryDetails({Key? key, this.lichenCheckEntry}) : super(key: key);
+  @override
+  State<ScanHistoryDetails> createState() => _ScanHistoryDetailsState();
+}
+
+class _ScanHistoryDetailsState extends State<ScanHistoryDetails> {
 
   int _currentIndex = 4;
 
   String selectedOption = 'All';
   // Default selected option
   bool showDropdown = false;
+  bool navigatorHidden = false;
 
   @override
   Widget build(BuildContext context) {
@@ -42,315 +47,334 @@ class ScanHistoryDetails extends StatelessWidget {
       ),
 
       // Body
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              width: 220,
-              height: 220,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  alignment: Alignment.center,
-                  image: NetworkImage(
-                      "${lichenCheckEntry?.results['file_image']}"),
-                  fit: BoxFit.fill,
+      body: Listener(
+         onPointerMove: (pointer){
+        // print(pointer.delta);
+        if(pointer.delta.dy == 0){
+          return;
+        }
+        if(pointer.delta.dy < 0){
+          // scrolls down
+          setState(() {
+            navigatorHidden = true;
+          });
+        }else{
+          // scrolls up
+          setState(() {
+            navigatorHidden = false;
+          });
+        }
+      },
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                width: 220,
+                height: 220,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    alignment: Alignment.center,
+                    image: NetworkImage(
+                        "${widget.lichenCheckEntry?.results['file_image']}"),
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Confidence Score:",
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
+              Padding(
+                padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Confidence Score:",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 5.0,
+                    ),
+                    Text(
+                      "${widget.lichenCheckEntry?.results['detection_score'] ?? 'N/A'}",
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 3, horizontal: 6),
+                child: Text(
+                  "${widget.lichenCheckEntry?.results['detection'] ?? 'NO DETECTIONS'}",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.0,
+                    color: Color.fromARGB(255, 126, 64, 7),
+                  ),
+                ),
+              ),
+              // Additional information about the detection
+              if (widget.lichenCheckEntry?.results['detection'] != null)
+                Padding(
+                  padding: EdgeInsets.only(left: w * 0.08),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 20),
+                        Text(
+                          "Detection Details:",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          "Age: ${widget.lichenCheckEntry?.additionalInfo['age']}",
+                          style: TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                        Text("Sex: ${widget.lichenCheckEntry?.additionalInfo['gender']}",
+                            style: TextStyle(
+                              fontSize: 15,
+                            )),
+                        Text(
+                            "Country: ${widget.lichenCheckEntry?.additionalInfo['country']}",
+                            style: TextStyle(
+                              fontSize: 15,
+                            )),
+                        Text(
+                            "Ethnicity: ${widget.lichenCheckEntry?.additionalInfo['ethnicity']}",
+                            style: TextStyle(
+                              fontSize: 15,
+                            )),
+                        SizedBox(height: 10),
+                        Text(
+                          "When did the onset began?",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        Text(
+                          " -> ${widget.lichenCheckEntry?.symptoms['onset']}",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        Text(
+                          "Severity of Itching",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        Text(
+                          " -> ${widget.lichenCheckEntry?.symptoms['itching']}",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        Text(
+                          "Severity of Pain",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        Text(
+                          " -> ${widget.lichenCheckEntry?.symptoms['pain']}",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(
-                    width: 5.0,
+                ),
+              SizedBox(height: w * 0.08),
+      
+              //Back and Delete buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all<EdgeInsets>(
+                        EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 22 * scaleFactor),
+                      ),
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          const Color(0xFFFF7F50)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          side: const BorderSide(
+                              color: Colors.white,
+                              width: 2.0), // Add the white border here
+                        ),
+                      ),
+                    ),
+                    child: const Text(
+                      'Back',
+                      style: TextStyle(
+                        fontSize: 15.0,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                  Text(
-                    "${lichenCheckEntry?.results['detection_score'] ?? 'N/A'}",
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87,
+      
+                  //DELETE BUTTON w/ FUNCTION
+                  ElevatedButton(
+                    onPressed: () async {
+                      bool confirmDelete = await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Confirm Deletion'),
+                            content: Text(
+                                'Are you sure you want to delete this document?'),
+                            actionsPadding: EdgeInsets.zero,
+                            actions: <Widget>[
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(false); // Return false if canceled
+                                    },
+                                    child: Text(
+                                      'Cancel',
+                                      style: TextStyle(
+                                        color: Colors
+                                            .black, // Change text color to orange
+                                      ),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(true); // Return true if confirmed
+                                    },
+                                    child: Text(
+                                      'Delete',
+                                      style: TextStyle(
+                                        color: Colors
+                                            .red, // Change text color to orange
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          );
+                        },
+                      );
+      
+                      if (confirmDelete ?? false) {
+                        try {
+                          User? user = FirebaseAuth.instance.currentUser;
+      
+                          if (user != null && widget.lichenCheckEntry != null) {
+                            final userDocRef = FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(user.uid);
+                            final lichenCheckDocRef = userDocRef
+                                .collection('LichenCheck_inputs')
+                                .doc('${widget.lichenCheckEntry!.documentId}');
+      
+                            // Get the image URL from the lichenCheckEntry
+                            String? imageUrl =
+                                widget.lichenCheckEntry!.results['file_image'];
+      
+                            // Delete document from Cloud Firestore
+                            await lichenCheckDocRef.delete();
+      
+                            // Delete image from Firebase Storage if URL exists
+                            if (imageUrl != null && imageUrl.isNotEmpty) {
+                              // Get a reference to the image in Firebase Storage
+                              Reference imageRef =
+                                  FirebaseStorage.instance.refFromURL(imageUrl);
+      
+                              // Delete the image
+                              await imageRef.delete();
+                            }
+      
+                            
+      
+                            // Document and image deleted successfully, now navigate to the updated page
+                            Navigator.of(context)
+                                .pushNamed('/profile/scan_history');
+                          }
+                        } catch (e) {
+                          print('Error deleting document and/or image: $e');
+                        }
+                      }
+                    },
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all<EdgeInsets>(
+                        EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 22 * scaleFactor),
+                      ),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.red),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          side: const BorderSide(
+                              color: Colors.white,
+                              width: 2.0), // Add the white border here
+                        ),
+                      ),
+                    ),
+                    child: const Text(
+                      'Delete',
+                      style: TextStyle(
+                        fontSize: 15.0,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ],
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 3, horizontal: 6),
-              child: Text(
-                "${lichenCheckEntry?.results['detection'] ?? 'NO DETECTIONS'}",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.0,
-                  color: Color.fromARGB(255, 126, 64, 7),
-                ),
-              ),
-            ),
-            // Additional information about the detection
-            if (lichenCheckEntry?.results['detection'] != null)
-              Padding(
-                padding: EdgeInsets.only(left: w * 0.08),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 20),
-                      Text(
-                        "Detection Details:",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        "Age: ${lichenCheckEntry?.additionalInfo['age']}",
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
-                      Text("Sex: ${lichenCheckEntry?.additionalInfo['gender']}",
-                          style: TextStyle(
-                            fontSize: 15,
-                          )),
-                      Text(
-                          "Country: ${lichenCheckEntry?.additionalInfo['country']}",
-                          style: TextStyle(
-                            fontSize: 15,
-                          )),
-                      Text(
-                          "Ethnicity: ${lichenCheckEntry?.additionalInfo['ethnicity']}",
-                          style: TextStyle(
-                            fontSize: 15,
-                          )),
-                      SizedBox(height: 10),
-                      Text(
-                        "When did the onset began?",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      Text(
-                        " -> ${lichenCheckEntry?.symptoms['onset']}",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Text(
-                        "Severity of Itching",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      Text(
-                        " -> ${lichenCheckEntry?.symptoms['itching']}",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Text(
-                        "Severity of Pain",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      Text(
-                        " -> ${lichenCheckEntry?.symptoms['pain']}",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black87,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            SizedBox(height: w * 0.08),
-
-            //Back and Delete buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  style: ButtonStyle(
-                    padding: MaterialStateProperty.all<EdgeInsets>(
-                      EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 22 * scaleFactor),
-                    ),
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                        const Color(0xFFFF7F50)),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        side: const BorderSide(
-                            color: Colors.white,
-                            width: 2.0), // Add the white border here
-                      ),
-                    ),
-                  ),
-                  child: const Text(
-                    'Back',
-                    style: TextStyle(
-                      fontSize: 15.0,
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-
-                //DELETE BUTTON w/ FUNCTION
-                ElevatedButton(
-                  onPressed: () async {
-                    bool confirmDelete = await showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text('Confirm Deletion'),
-                          content: Text(
-                              'Are you sure you want to delete this document?'),
-                          actionsPadding: EdgeInsets.zero,
-                          actions: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context)
-                                        .pop(false); // Return false if canceled
-                                  },
-                                  child: Text(
-                                    'Cancel',
-                                    style: TextStyle(
-                                      color: Colors
-                                          .black, // Change text color to orange
-                                    ),
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context)
-                                        .pop(true); // Return true if confirmed
-                                  },
-                                  child: Text(
-                                    'Delete',
-                                    style: TextStyle(
-                                      color: Colors
-                                          .red, // Change text color to orange
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        );
-                      },
-                    );
-
-                    if (confirmDelete ?? false) {
-                      try {
-                        User? user = FirebaseAuth.instance.currentUser;
-
-                        if (user != null && lichenCheckEntry != null) {
-                          final userDocRef = FirebaseFirestore.instance
-                              .collection('users')
-                              .doc(user.uid);
-                          final lichenCheckDocRef = userDocRef
-                              .collection('LichenCheck_inputs')
-                              .doc('${lichenCheckEntry!.documentId}');
-
-                          // Get the image URL from the lichenCheckEntry
-                          String? imageUrl =
-                              lichenCheckEntry!.results['file_image'];
-
-                          // Delete document from Cloud Firestore
-                          await lichenCheckDocRef.delete();
-
-                          // Delete image from Firebase Storage if URL exists
-                          if (imageUrl != null && imageUrl.isNotEmpty) {
-                            // Get a reference to the image in Firebase Storage
-                            Reference imageRef =
-                                FirebaseStorage.instance.refFromURL(imageUrl);
-
-                            // Delete the image
-                            await imageRef.delete();
-                          }
-
-                          
-
-                          // Document and image deleted successfully, now navigate to the updated page
-                          Navigator.of(context)
-                              .pushNamed('/profile/scan_history');
-                        }
-                      } catch (e) {
-                        print('Error deleting document and/or image: $e');
-                      }
-                    }
-                  },
-                  style: ButtonStyle(
-                    padding: MaterialStateProperty.all<EdgeInsets>(
-                      EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 22 * scaleFactor),
-                    ),
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.red),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        side: const BorderSide(
-                            color: Colors.white,
-                            width: 2.0), // Add the white border here
-                      ),
-                    ),
-                  ),
-                  child: const Text(
-                    'Delete',
-                    style: TextStyle(
-                      fontSize: 15.0,
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
-            ),
-
-            SizedBox(
-              height: h * 0.05,
-            )
-          ],
+      
+              SizedBox(
+                height: h * 0.05,
+              )
+            ],
+          ),
         ),
       ),
 
       // Floating action button
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: _lichenCheckBtn(context),
+      floatingActionButton:  (navigatorHidden)? null :  _lichenCheckBtn(context),
 
       // Bottom navigation bar
-      bottomNavigationBar: _bottomNavBar(context),
+      bottomNavigationBar:   (navigatorHidden)? null : _bottomNavBar(context),
     );
   }
 
