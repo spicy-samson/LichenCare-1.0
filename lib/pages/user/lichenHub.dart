@@ -17,6 +17,7 @@ import 'package:lichen_care/pages/guest/login.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Color primaryBackgroundColor = const Color(0xFFFFF4E9);
 Color primaryforegroundColor = const Color(0xFFFF7F50);
@@ -38,26 +39,35 @@ class Post {
   QuillController content;
   String? embeddedImage;
   int likes;
+  List<String> likedByUserIds;
   bool isLiked;
   List<Comment> comments;
-  Post(
-      {required this.id,
-      required this.userID,
-      required this.user,
-      required this.datetime,
-      required this.title,
-      required this.content,
-      required this.isLiked,
-      this.embeddedImage,
-      required this.likes,
-      required this.comments});
+
+  Post({
+    required this.id,
+    required this.userID,
+    required this.user,
+    required this.datetime,
+    required this.title,
+    required this.content,
+    required this.isLiked,
+    this.embeddedImage,
+    required this.likes,
+    required this.likedByUserIds,
+    required this.comments,
+  });
 }
 
 class Comment {
   String id;
   String sender;
   String reply;
-  Comment({required this.id, required this.sender, required this.reply});
+  DateTime datetime;
+  Comment(
+      {required this.id,
+      required this.sender,
+      required this.reply,
+      required this.datetime});
 }
 
 class _LichenHubState extends State<LichenHub> {
@@ -136,6 +146,7 @@ class _LichenHubState extends State<LichenHub> {
             content: content,
             isLiked: false,
             likes: postDoc['likes'] ?? 0,
+            likedByUserIds: [],
             comments: [],
             embeddedImage: postDoc['file_image'],
           );
@@ -147,6 +158,7 @@ class _LichenHubState extends State<LichenHub> {
                     id: commentDoc.id,
                     sender: commentDoc['sender'] ?? '',
                     reply: commentDoc['reply'] ?? '',
+                    datetime: commentDoc['timestamp']?.toDate() ?? '',
                   ))
               .toList();
 
@@ -156,7 +168,7 @@ class _LichenHubState extends State<LichenHub> {
       }
 
       // Update the local list with the loaded posts
-      if(mounted){
+      if (mounted) {
         setState(() {
           posts = loadedPosts;
         });
@@ -222,7 +234,8 @@ class _LichenHubState extends State<LichenHub> {
           content: newController,
           isLiked: false,
           likes: 0,
-          comments: [], // Initialize as an empty list
+          likedByUserIds: [],
+          comments: [],
           embeddedImage: imageUrl,
         );
 
@@ -288,6 +301,7 @@ class _LichenHubState extends State<LichenHub> {
           id: newCommentDocRef.id,
           sender: makeAnonymous(firstName),
           reply: reply,
+          datetime: time,
         );
 
         // Update the local list with the new comment
@@ -411,9 +425,7 @@ class _LichenHubState extends State<LichenHub> {
 
   Future<void> likePost(Post post) async {
     try {
-      // Get the current user
       User? user = auth.currentUser;
-
       if (user == null) {
         return;
       }
@@ -424,20 +436,42 @@ class _LichenHubState extends State<LichenHub> {
           .collection('LichenHub_posts')
           .doc(post.id);
 
-      // Check if the post is liked by the current user
-      bool isLiked = post.isLiked;
+      // Check if the post is liked by the current user locally
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      List<String> userLikedPosts =
+          prefs.getStringList('userLikedPosts_${user.uid}') ?? [];
 
-      // Update the number of likes of the post (use post id)
-      int newLikesCount = isLiked ? post.likes - 1 : post.likes + 1;
+      bool isLiked = userLikedPosts.contains(post.id);
+
+      // Use FieldValue.arrayUnion and FieldValue.arrayRemove to append/remove user ID
+      final likeUpdate = isLiked
+          ? FieldValue.arrayRemove([user.uid])
+          : FieldValue.arrayUnion([user.uid]);
 
       // Firebase update
       await postRef.update({
-        'likes': newLikesCount,
+        'likes': isLiked ? post.likes - 1 : post.likes + 1,
+        'likedByUserIds': likeUpdate,
       });
 
+      // Update local liked posts
+      if (isLiked) {
+        userLikedPosts.remove(post.id);
+      } else {
+        userLikedPosts.add(post.id);
+      }
+
+      // Save updated liked post IDs locally
+      await prefs.setStringList('userLikedPosts_${user.uid}', userLikedPosts);
+
       setState(() {
-        post.likes = newLikesCount;
+        post.likes = isLiked ? post.likes - 1 : post.likes + 1;
         post.isLiked = !isLiked;
+        post.likedByUserIds = List.from(
+            likeUpdate == FieldValue.arrayUnion([user.uid])
+                ? [...post.likedByUserIds, user.uid]
+                : post.likedByUserIds
+              ..remove(user.uid));
       });
     } catch (e) {
       print('Error liking the post: $e');
@@ -452,7 +486,7 @@ class _LichenHubState extends State<LichenHub> {
       if (user == null) {
         return;
       }
-      
+
       // Reference to the post document
       final postRef = FirebaseFirestore.instance
           .collection('users')
@@ -643,30 +677,29 @@ class _LichenHubState extends State<LichenHub> {
                             child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 15.0),
-                              child:QuillProvider(
-                                  configurations: QuillConfigurations(
-                                    controller: contentController,
-                                    sharedConfigurations:
-                                        const QuillSharedConfigurations(),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Expanded(
-                                        child: QuillEditor.basic(
-                                          focusNode: editorFocusNode,
-                                          configurations:
-                                              const QuillEditorConfigurations(
-                                            placeholder:
-                                                "Start a new conversation",
-                                            readOnly: false,
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
+                              child: QuillProvider(
+                                configurations: QuillConfigurations(
+                                  controller: contentController,
+                                  sharedConfigurations:
+                                      const QuillSharedConfigurations(),
                                 ),
-                          )
-                        ),
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: QuillEditor.basic(
+                                        focusNode: editorFocusNode,
+                                        configurations:
+                                            const QuillEditorConfigurations(
+                                          placeholder:
+                                              "Start a new conversation",
+                                          readOnly: false,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            )),
                         GestureDetector(
                           onTap: () async {
                             await Future.delayed(
@@ -1269,333 +1302,329 @@ class _LichenHubState extends State<LichenHub> {
                         child: Text("No Posts Yet."),
                       )
                     : Listener(
-                      onPointerMove: (pointer){
-                        // print(pointer.delta);
-                        if(pointer.delta.dy == 0){
-                          return;
-                        }
-                        if(pointer.delta.dy < 0){
-                          // scrolls down
-                          setState(() {
-                            navigatorHidden = true;
-                          });
-                        }else{
-                          // scrolls up
-                          setState(() {
-                            navigatorHidden = false;
-                          });
-                        }
-                      },
-                      child: RefreshIndicator(
-                        backgroundColor: primaryforegroundColor,
-                        color: primaryBackgroundColor,
-                        onRefresh: () async{
-                          await Future.delayed(Duration(milliseconds:500));
-                          setState(() {
-                            postLoaded = false;
-                          });
-                          loadPosts().then((value) => setState((){
-                            postLoaded = true;
-                          }));
+                        onPointerMove: (pointer) {
+                          // print(pointer.delta);
+                          if (pointer.delta.dy == 0) {
+                            return;
+                          }
+                          if (pointer.delta.dy < 0) {
+                            // scrolls down
+                            setState(() {
+                              navigatorHidden = true;
+                            });
+                          } else {
+                            // scrolls up
+                            setState(() {
+                              navigatorHidden = false;
+                            });
+                          }
                         },
-                        child: ListView.builder(
-                            itemCount: posts.length + 1,
-                            itemBuilder: (BuildContext context, int index) {
-                              if (index < posts.length) {
-                                return PostBox(
-                                  post: posts[index],
-                                  fromUser: (isPostFromUser(posts[index])),
-                                  onCopy: () => copyPostContent(posts[index]),
-                                  onLike: () {
-                                    likePost(posts[index]);
-                                  },
-                                  onDelete: () {
-                                    deletePost(posts[index]);
-                                    Navigator.of(context).pop();
-                                  },
-                                  onReport: () => reportScreen(posts[index]),
-                                  onEdit: () =>
-                                      composePost(scaleFactor, post: posts[index]),
-                                  onReply: () {
-                                    showModalBottomSheet(
-                                        context: context,
-                                        isScrollControlled: true,
-                                        backgroundColor: Colors.transparent,
-                                        barrierColor: Colors.transparent,
-                                        builder: (context) {
-                                          return StatefulBuilder(
-                                              builder: ((context, setState) {
-                                            return Container(
-                                              clipBehavior: Clip.antiAlias,
-                                              decoration: const BoxDecoration(
-                                                  color: Color.fromARGB(
-                                                      255, 206, 206, 221),
-                                                  borderRadius: BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(15.0),
-                                                      topRight:
-                                                          Radius.circular(15.0))),
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.98,
-                                              width:
-                                                  MediaQuery.of(context).size.width,
-                                              child: Column(children: [
-                                                Container(
-                                                  width: double.infinity,
-                                                  height: 75,
-                                                  decoration: BoxDecoration(
-                                                      color: termaryForegroundColor,
-                                                      boxShadow: [
-                                                        BoxShadow(
-                                                            color: Colors.black26,
-                                                            offset: Offset(1, 1),
-                                                            blurRadius: 2,
-                                                            spreadRadius: 2)
-                                                      ]),
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.symmetric(
-                                                            horizontal: 20),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment.start,
-                                                      children: [
-                                                        InkWell(
-                                                            onTap: () {
-                                                              Navigator.of(context)
-                                                                  .pop();
-                                                            },
-                                                            child: Icon(
-                                                                Icons
-                                                                    .arrow_back_ios,
-                                                                size: 28,
-                                                                color:
-                                                                    primaryforegroundColor)),
-                                                        SizedBox(
-                                                          width: 10,
-                                                        ),
-                                                        Text(
-                                                          "Post",
-                                                          style: TextStyle(
-                                                              fontSize: 22),
-                                                        ),
-                                                      ],
+                        child: RefreshIndicator(
+                          backgroundColor: primaryforegroundColor,
+                          color: primaryBackgroundColor,
+                          onRefresh: () async {
+                            await Future.delayed(Duration(milliseconds: 500));
+                            setState(() {
+                              postLoaded = false;
+                            });
+                            loadPosts().then((value) => setState(() {
+                                  postLoaded = true;
+                                }));
+                          },
+                          child: ListView.builder(
+                              itemCount: posts.length + 1,
+                              itemBuilder: (BuildContext context, int index) {
+                                if (index < posts.length) {
+                                  return PostBox(
+                                    post: posts[index],
+                                    fromUser: (isPostFromUser(posts[index])),
+                                    onCopy: () => copyPostContent(posts[index]),
+                                    onLike: () {
+                                      likePost(posts[index]);
+                                    },
+                                    onDelete: () {
+                                      deletePost(posts[index]);
+                                      Navigator.of(context).pop();
+                                    },
+                                    onReport: () => reportScreen(posts[index]),
+                                    onEdit: () => composePost(scaleFactor,
+                                        post: posts[index]),
+                                    onReply: () {
+                                      showModalBottomSheet(
+                                          context: context,
+                                          isScrollControlled: true,
+                                          backgroundColor: Colors.transparent,
+                                          barrierColor: Colors.transparent,
+                                          builder: (context) {
+                                            return StatefulBuilder(
+                                                builder: ((context, setState) {
+                                              return Container(
+                                                clipBehavior: Clip.antiAlias,
+                                                decoration: const BoxDecoration(
+                                                    color: Color.fromARGB(
+                                                        255, 206, 206, 221),
+                                                    borderRadius: BorderRadius
+                                                        .only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    15.0),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    15.0))),
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.98,
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                child: Column(children: [
+                                                  Container(
+                                                    width: double.infinity,
+                                                    height: 75,
+                                                    decoration: BoxDecoration(
+                                                        color:
+                                                            termaryForegroundColor,
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                              color: Colors
+                                                                  .black26,
+                                                              offset:
+                                                                  Offset(1, 1),
+                                                              blurRadius: 2,
+                                                              spreadRadius: 2)
+                                                        ]),
+                                                    child: Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 20),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          InkWell(
+                                                              onTap: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                              },
+                                                              child: Icon(
+                                                                  Icons
+                                                                      .arrow_back_ios,
+                                                                  size: 28,
+                                                                  color:
+                                                                      primaryforegroundColor)),
+                                                          SizedBox(
+                                                            width: 10,
+                                                          ),
+                                                          Text(
+                                                            "Post",
+                                                            style: TextStyle(
+                                                                fontSize: 22),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                                Expanded(
-                                                    child: (index >= posts.length)
-                                                        ? const SizedBox()
-                                                        : SingleChildScrollView(
-                                                            child:
-                                                                Column(children: [
-                                                              PostBox(
-                                                                post: posts[index],
-                                                                onCopy: () =>
-                                                                    copyPostContent(
-                                                                        posts[
-                                                                            index]),
-                                                                onLike: () {
-                                                                  likePost(
-                                                                      posts[index]);
-                                                                  setState(() {});
-                                                                },
-                                                                onDelete: () async {
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                  deletePost(
-                                                                      posts[index]);
-                                                                  setState(() {});
-                                                                },
-                                                                fromUser:
-                                                                    (isPostFromUser(
-                                                                        posts[
-                                                                            index])),
-                                                                onReport: () =>
-                                                                    reportScreen(
-                                                                        posts[
-                                                                            index]),
-                                                                onEdit: () =>
-                                                                    composePost(
-                                                                        scaleFactor,
-                                                                        post: posts[
-                                                                            index]),
-                                                              ),
-                                                              Column(
-                                                                children:
-                                                                    List.generate(
+                                                  Expanded(
+                                                      child: (index >=
+                                                              posts.length)
+                                                          ? const SizedBox()
+                                                          : SingleChildScrollView(
+                                                              child: Column(
+                                                                  children: [
+                                                                    PostBox(
+                                                                      post: posts[
+                                                                          index],
+                                                                      onCopy: () =>
+                                                                          copyPostContent(
+                                                                              posts[index]),
+                                                                      onLike:
+                                                                          () {
+                                                                        likePost(
+                                                                            posts[index]);
+                                                                        setState(
+                                                                            () {});
+                                                                      },
+                                                                      onDelete:
+                                                                          () async {
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                        deletePost(
+                                                                            posts[index]);
+                                                                        setState(
+                                                                            () {});
+                                                                      },
+                                                                      fromUser:
+                                                                          (isPostFromUser(
+                                                                              posts[index])),
+                                                                      onReport: () =>
+                                                                          reportScreen(
+                                                                              posts[index]),
+                                                                      onEdit: () => composePost(
+                                                                          scaleFactor,
+                                                                          post:
+                                                                              posts[index]),
+                                                                    ),
+                                                                    Column(
+                                                                      children:
+                                                                          List.generate(
                                                                         posts[index]
                                                                             .comments
                                                                             .length,
                                                                         (i) {
-                                                                  List<Comment>
-                                                                      comments =
-                                                                      posts[index]
-                                                                          .comments;
-                                                                  return Padding(
-                                                                    padding:
-                                                                        const EdgeInsets
-                                                                            .only(
-                                                                            top:
-                                                                                8.0,
-                                                                            left:
-                                                                                15,
-                                                                            right:
-                                                                                15),
-                                                                    child:
-                                                                        Container(
-                                                                      decoration:
-                                                                          const BoxDecoration(
-                                                                        borderRadius:
-                                                                            BorderRadius.all(
-                                                                                Radius.circular(15.0)),
-                                                                        color: Color
-                                                                            .fromARGB(
-                                                                                255,
-                                                                                221,
-                                                                                221,
-                                                                                223),
-                                                                      ),
-                                                                      constraints: BoxConstraints(
-                                                                          minHeight:
-                                                                              100 *
-                                                                                  scaleFactor,
-                                                                          minWidth:
-                                                                              double
-                                                                                  .infinity),
-                                                                      child:
-                                                                          Padding(
-                                                                        padding: const EdgeInsets
-                                                                            .symmetric(
-                                                                            horizontal:
-                                                                                10.0,
-                                                                            vertical:
-                                                                                8.0),
-                                                                        child: Column(
-                                                                            crossAxisAlignment:
-                                                                                CrossAxisAlignment.start,
-                                                                            children: [
-                                                                              Text(
-                                                                                comments[i].sender,
-                                                                                style:
-                                                                                    TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                                                                          List<Comment>
+                                                                              comments =
+                                                                              posts[index].comments;
+                                                                          return Padding(
+                                                                            padding: const EdgeInsets.only(
+                                                                                top: 8.0,
+                                                                                left: 15,
+                                                                                right: 15),
+                                                                            child:
+                                                                                Container(
+                                                                              decoration: const BoxDecoration(
+                                                                                borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                                                                                color: Color.fromARGB(255, 221, 221, 223),
                                                                               ),
-                                                                              Text(
-                                                                                comments[i].reply,
-                                                                                style:
-                                                                                    TextStyle(fontSize: 14),
-                                                                              )
-                                                                            ]),
+                                                                              constraints: BoxConstraints(minHeight: 100 * scaleFactor, minWidth: double.infinity),
+                                                                              child: Padding(
+                                                                                padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
+                                                                                child: Column(
+                                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                  children: [
+                                                                                    Row(
+                                                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                      children: [
+                                                                                        Text(
+                                                                                          comments[i].sender,
+                                                                                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                                                                                        ),
+                                                                                        Text(
+                                                                                          DateFormat('yMMMd').add_jm().format(comments[i].datetime),
+                                                                                          style: TextStyle(fontSize: 9, fontWeight: FontWeight.w600),
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                    Text(
+                                                                                      comments[i].reply,
+                                                                                      style: TextStyle(fontSize: 14),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          );
+                                                                        },
                                                                       ),
-                                                                    ),
-                                                                  );
-                                                                }),
-                                                              )
-                                                            ]),
-                                                          )),
-                                                Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      top: 8.0,
-                                                      left: 15.0,
-                                                      right: 15.0),
-                                                  child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceAround,
-                                                      children: [
-                                                        Expanded(
-                                                          child: SizedBox(
-                                                            height: 40,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .symmetric(
-                                                                      horizontal:
-                                                                          5.0),
-                                                              child: TextFormField(
-                                                                controller:
-                                                                    replyController,
-                                                                textInputAction:
-                                                                    TextInputAction
-                                                                        .done,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                  contentPadding:
-                                                                      EdgeInsets.only(
-                                                                          left: 15,
-                                                                          bottom:
-                                                                              5),
-                                                                  hintText: "Reply",
-                                                                  border: OutlineInputBorder(
-                                                                      borderRadius:
-                                                                          BorderRadius
-                                                                              .circular(
-                                                                                  15.0)),
+                                                                    )
+                                                                  ]),
+                                                            )),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 8.0,
+                                                            left: 15.0,
+                                                            right: 15.0),
+                                                    child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceAround,
+                                                        children: [
+                                                          Expanded(
+                                                            child: SizedBox(
+                                                              height: 40,
+                                                              child: Padding(
+                                                                padding: const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        5.0),
+                                                                child:
+                                                                    TextFormField(
+                                                                  controller:
+                                                                      replyController,
+                                                                  textInputAction:
+                                                                      TextInputAction
+                                                                          .done,
+                                                                  decoration:
+                                                                      InputDecoration(
+                                                                    contentPadding: EdgeInsets.only(
+                                                                        left:
+                                                                            15,
+                                                                        bottom:
+                                                                            5),
+                                                                    hintText:
+                                                                        "Reply",
+                                                                    border: OutlineInputBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(15.0)),
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ),
                                                           ),
-                                                        ),
-                                                        InkWell(
-                                                          onTap: () {
-                                                            commentOnPost(
-                                                                posts[index],
-                                                                replyController
-                                                                    .text,
-                                                                DateTime.now());
-                                                            Navigator.of(context)
-                                                                .pop();
-                                                          },
-                                                          child: Container(
-                                                            width: 45,
-                                                            height: 45,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: Colors
-                                                                  .transparent,
-                                                              borderRadius:
-                                                                  BorderRadius.all(
-                                                                      Radius
-                                                                          .circular(
-                                                                              15.0)),
+                                                          InkWell(
+                                                            onTap: () {
+                                                              commentOnPost(
+                                                                  posts[index],
+                                                                  replyController
+                                                                      .text,
+                                                                  DateTime
+                                                                      .now());
+                                                              replyController
+                                                                  .clear();
+                                                            },
+                                                            child: Container(
+                                                              width: 45,
+                                                              height: 45,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: Colors
+                                                                    .transparent,
+                                                                borderRadius: BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            15.0)),
+                                                              ),
+                                                              child: Center(
+                                                                  child: Icon(
+                                                                Icons.send,
+                                                                color:
+                                                                    primaryforegroundColor,
+                                                                size: 32,
+                                                              )),
                                                             ),
-                                                            child: Center(
-                                                                child: Icon(
-                                                              Icons.send,
-                                                              color:
-                                                                  primaryforegroundColor,
-                                                              size: 32,
-                                                            )),
                                                           ),
-                                                        ),
-                                                      ]),
-                                                ),
-                                                (navigatorHidden)? const SizedBox() :SizedBox(
-                                                  height: MediaQuery.of(context)
-                                                          .viewInsets
-                                                          .bottom +
-                                                      15,
-                                                )
-                                              ]),
-                                            );
-                                          }));
-                                        });
-                                  },
-                                );
-                              } else {
-                                return (navigatorHidden)? const SizedBox() : SizedBox(
-                                  height: 30,
-                                );
-                              }
-                            }),
+                                                        ]),
+                                                  ),
+                                                  (navigatorHidden)
+                                                      ? const SizedBox()
+                                                      : SizedBox(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .viewInsets
+                                                                  .bottom +
+                                                              15,
+                                                        )
+                                                ]),
+                                              );
+                                            }));
+                                          });
+                                    },
+                                  );
+                                } else {
+                                  return (navigatorHidden)
+                                      ? const SizedBox()
+                                      : SizedBox(
+                                          height: 30,
+                                        );
+                                }
+                              }),
+                        ),
                       ),
-                    ),
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Align(
@@ -1627,10 +1656,10 @@ class _LichenHubState extends State<LichenHub> {
 
       // Floating action button
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: (navigatorHidden)? null:  _lichenCheckBtn(context),
+      floatingActionButton: (navigatorHidden) ? null : _lichenCheckBtn(context),
 
       // Bottom navigation bar
-      bottomNavigationBar: (navigatorHidden)? null: _bottomNavBar(context),
+      bottomNavigationBar: (navigatorHidden) ? null : _bottomNavBar(context),
     );
   }
 

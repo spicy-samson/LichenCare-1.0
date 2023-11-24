@@ -193,10 +193,7 @@ class _LoginPageState extends State<LoginPage> {
                                       print(
                                           "Error updating Firestore data: $e");
                                     }
-                                    // If the login is successful and email is verified, navigate to the home page using the named route.
-
-                                    // Navigator.of(context).pushReplacementNamed(
-                                    //     '/profile/terms_and_conditions-boot');
+                                  
                                   } else if (userCredential.user != null &&
                                       !userCredential.user!.emailVerified) {
                                     // User tries to log in but email is not verified

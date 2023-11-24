@@ -33,17 +33,17 @@ class _LichenNotifState extends State<LichenNotif> {
 
       // Body
       body: Listener(
-        onPointerMove: (pointer){
+        onPointerMove: (pointer) {
           // print(pointer.delta);
-          if(pointer.delta.dy == 0){
+          if (pointer.delta.dy == 0) {
             return;
           }
-          if(pointer.delta.dy < 0){
+          if (pointer.delta.dy < 0) {
             // scrolls down
             setState(() {
               navigatorHidden = true;
             });
-          }else{
+          } else {
             // scrolls up
             setState(() {
               navigatorHidden = false;
@@ -406,8 +406,8 @@ class _LichenNotifState extends State<LichenNotif> {
                 '/lichencheck'); // Navigate to the 'lichencheck' route
             break;
           case 3:
-            // Navigator.of(context)
-            //     .pushNamed('/lichenHub'); // Navigate to the 'lichenhub' route
+            Navigator.of(context)
+                .pushNamed('/lichenHub'); // Navigate to the 'lichenhub' route
             break;
           case 4:
             Navigator.of(context)

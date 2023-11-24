@@ -298,23 +298,23 @@ class _LichenCheckState extends State<LichenCheck> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 30.0),
                               child: Listener(
-                                  onPointerMove: (pointer){
-                                // print(pointer.delta);
-                                if(pointer.delta.dy == 0){
-                                  return;
-                                }
-                                if(pointer.delta.dy < 0){
-                                  // scrolls down
-                                  setState(() {
-                                    navigatorHidden = true;
-                                  });
-                                }else{
-                                  // scrolls up
-                                  setState(() {
-                                    navigatorHidden = false;
-                                  });
-                                }
-                              },
+                                onPointerMove: (pointer) {
+                                  // print(pointer.delta);
+                                  if (pointer.delta.dy == 0) {
+                                    return;
+                                  }
+                                  if (pointer.delta.dy < 0) {
+                                    // scrolls down
+                                    setState(() {
+                                      navigatorHidden = true;
+                                    });
+                                  } else {
+                                    // scrolls up
+                                    setState(() {
+                                      navigatorHidden = false;
+                                    });
+                                  }
+                                },
                                 child: SingleChildScrollView(
                                   child: Column(
                                     children: [
@@ -435,12 +435,15 @@ class _LichenCheckState extends State<LichenCheck> {
                             : "Please Wait...")
                       ],
                     ),
+
           // Floating action button
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: (navigatorHidden)? null: _lichenCheckBtn(context),
+          floatingActionButton:
+              (navigatorHidden) ? null : _lichenCheckBtn(context),
           // Bottom navigation bar
-          bottomNavigationBar: (navigatorHidden)? null: _bottomNavBar(context),
+          bottomNavigationBar:
+              (navigatorHidden) ? null : _bottomNavBar(context),
         ),
         (disclaimerClosed)
             ? const SizedBox()

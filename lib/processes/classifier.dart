@@ -21,7 +21,8 @@ class Classifier {
   Interpreter? _clsInterpreter;
 
   static const String MODEL_RPN_FILENAME = "model/model_rpn.tflite";
-  static const String MODEL_CLASSIFIER_FILENAME = "model/model_classifier.tflite";
+  static const String MODEL_CLASSIFIER_FILENAME =
+      "model/model_classifier.tflite";
   static const String LABEL_FILE_NAME = "model/labels.txt";
 
   /// Result score threshold
@@ -53,10 +54,8 @@ class Classifier {
     try {
       var options = InterpreterOptions();
       options.threads = 2;
-      _clsInterpreter = await Interpreter.fromAsset(
-        MODEL_CLASSIFIER_FILENAME,
-        options: options
-      );
+      _clsInterpreter = await Interpreter.fromAsset(MODEL_CLASSIFIER_FILENAME,
+          options: options);
     } catch (e) {
       print("Error while creating interpreter: $e");
     }
@@ -66,10 +65,8 @@ class Classifier {
     try {
       var options = InterpreterOptions();
       options.threads = 2;
-      _rpnInterpreter = await Interpreter.fromAsset(
-        MODEL_RPN_FILENAME,
-        options: options
-      );
+      _rpnInterpreter =
+          await Interpreter.fromAsset(MODEL_RPN_FILENAME, options: options);
     } catch (e) {
       print("Error while creating rpn interpreter: $e");
     }
@@ -153,17 +150,17 @@ class Classifier {
   }
 
   // Place on the classifier
-  void putImage(imageLib.Image image){
+  void putImage(imageLib.Image image) {
     this.image = image;
   }
 
   // dispose image from the classifier
-  void disposeImage(){
+  void disposeImage() {
     image = null;
   }
 
   /// Runs obect detection on the input image
-  Future predict() async{
+  Future predict() async {
     loadRPNModel();
     if (_rpnInterpreter == null) {
       print("RPN interpreter not initialized");
@@ -352,7 +349,7 @@ class Classifier {
     _numROIS = _clsInterpreter!.getInputTensors()[1].shape[1];
     List<double> ROIS = List<double>.filled(_numROIS! * 4, 0.0);
 
-        // Outputs Buffer of classifier
+    // Outputs Buffer of classifier
     TensorBuffer PregrLayer = TensorBuffer.createFixedSize(
         _clsInterpreter!.getOutputTensors()[0].shape,
         _clsInterpreter!.getOutputTensors()[0].type);
@@ -383,7 +380,6 @@ class Classifier {
       Map<int, Object> clsOuputs = {0: PregrLayer.buffer, 1: PclsLayer.buffer};
 
       _clsInterpreter!.runForMultipleInputs(clsInputs, clsOuputs);
-    
 
       for (int ii = 0; ii < PclsLayer.shape[1]; ii++) {
         for (int p = 0; p < PclsLayer.shape[2]; p++) {
@@ -454,34 +450,36 @@ class Classifier {
         double y1 = result[0][i][1];
         double y2 = result[0][i][3];
         // pad out of bounds coordinates
-        x1 = (x1 < 0)? 0 : x1;
-        y1 = (y1 < 0)? 0 : y1;
-        x2 = (x2 > image!.width) ? image!.width.toDouble(): x2;
-        y2 = (y2 > image!.height) ? image!.height.toDouble(): y2;
+        x1 = (x1 < 0) ? 0 : x1;
+        y1 = (y1 < 0) ? 0 : y1;
+        x2 = (x2 > image!.width) ? image!.width.toDouble() : x2;
+        y2 = (y2 > image!.height) ? image!.height.toDouble() : y2;
         // detect average color in bounding box and check if it is a skin
         List<int> averageColor = [0, 0, 0];
         int boxSize = 0;
-        for(int y = y1.round(); y < y2.round(); y ++){
-          for(int x = x1.round(); x < x2.round(); x++){
+        for (int y = y1.round(); y < y2.round(); y++) {
+          for (int x = x1.round(); x < x2.round(); x++) {
             boxSize += 1;
-            for(int rgb = 0; rgb < 3; rgb++){
-              averageColor[rgb] += (data[((x + (y * image!.width-1))* 4) + rgb]).round();
+            for (int rgb = 0; rgb < 3; rgb++) {
+              averageColor[rgb] +=
+                  (data[((x + (y * image!.width - 1)) * 4) + rgb]).round();
             }
           }
         }
         averageColor[0] = ((averageColor[0] / boxSize)).round();
         averageColor[1] = ((averageColor[1] / boxSize)).round();
         averageColor[2] = ((averageColor[2] / boxSize)).round();
-        int r = averageColor[0]; int g = averageColor[1]; int b = averageColor[2]; 
-        if(r > 60 && g > 40 && b > 20 && r > g &&
-         r - g > 10 && r - b > 10){
+        int r = averageColor[0];
+        int g = averageColor[1];
+        int b = averageColor[2];
+        if (r > 60 && g > 40 && b > 20 && r > g && r - g > 10 && r - b > 10) {
           recognitions.add(
             Recognition(i, key, result[1][i], Rect.fromLTRB(x1, y1, x2, y2)),
           );
-         }        
+        }
       }
     });
-    if(recognitions.isNotEmpty) {
+    if (recognitions.isNotEmpty) {
       recognitions.sort(((b, a) => a.score.compareTo(b.score)));
     }
     return recognitions;
@@ -490,6 +488,4 @@ class Classifier {
   /// Gets the interpreter instance
   Interpreter get rpnInterpreter => _rpnInterpreter!;
   Interpreter get clsInterpreter => _clsInterpreter!;
-
 }
-
