@@ -8,7 +8,7 @@ class LichenNotif extends StatefulWidget {
 
 class _LichenNotifState extends State<LichenNotif> {
   final int _currentIndex = 3;
-
+  bool navigatorHidden = false;
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -32,269 +32,288 @@ class _LichenNotifState extends State<LichenNotif> {
       ),
 
       // Body
-      body: SingleChildScrollView(
-        // ignore: sized_box_for_whitespace
-        child: Center(
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
-              const SizedBox(height: 25),
-              GestureDetector(
-                onTap: () {},
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SvgPicture.asset(
-                        'assets/svgs/profileSection/account(icon_only).svg',
-                        height: 70,
-                        width: 70,
-                      ),
-                      const Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 10.0, right: 45),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna a',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w300,
+      body: Listener(
+        onPointerMove: (pointer){
+          // print(pointer.delta);
+          if(pointer.delta.dy == 0){
+            return;
+          }
+          if(pointer.delta.dy < 0){
+            // scrolls down
+            setState(() {
+              navigatorHidden = true;
+            });
+          }else{
+            // scrolls up
+            setState(() {
+              navigatorHidden = false;
+            });
+          }
+        },
+        child: SingleChildScrollView(
+          // ignore: sized_box_for_whitespace
+          child: Center(
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+                const SizedBox(height: 25),
+                GestureDetector(
+                  onTap: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/svgs/profileSection/account(icon_only).svg',
+                          height: 70,
+                          width: 70,
+                        ),
+                        const Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 10.0, right: 45),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna a',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w300,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 15),
-                              Text(
-                                '1d',
-                                style: TextStyle(
-                                  color: Color(0xFF797272),
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w100,
+                                  ],
                                 ),
-                              ),
-                            ],
+                                SizedBox(height: 15),
+                                Text(
+                                  '1d',
+                                  style: TextStyle(
+                                    color: Color(0xFF797272),
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w100,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              GestureDetector(
-                onTap: () {},
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SvgPicture.asset(
-                        'assets/svgs/profileSection/account(icon_only).svg',
-                        height: 70,
-                        width: 70,
-                      ),
-                      const Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 10.0, right: 45),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna a',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w300,
+                const SizedBox(height: 20),
+                GestureDetector(
+                  onTap: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/svgs/profileSection/account(icon_only).svg',
+                          height: 70,
+                          width: 70,
+                        ),
+                        const Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 10.0, right: 45),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna a',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w300,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 15),
-                              Text(
-                                '1d',
-                                style: TextStyle(
-                                  color: Color(0xFF797272),
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w100,
+                                  ],
                                 ),
-                              ),
-                            ],
+                                SizedBox(height: 15),
+                                Text(
+                                  '1d',
+                                  style: TextStyle(
+                                    color: Color(0xFF797272),
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w100,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              GestureDetector(
-                onTap: () {},
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SvgPicture.asset(
-                        'assets/svgs/profileSection/account(icon_only).svg',
-                        height: 70,
-                        width: 70,
-                      ),
-                      const Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 10.0, right: 45),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna a',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w300,
+                const SizedBox(height: 20),
+                GestureDetector(
+                  onTap: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/svgs/profileSection/account(icon_only).svg',
+                          height: 70,
+                          width: 70,
+                        ),
+                        const Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 10.0, right: 45),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna a',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w300,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 15),
-                              Text(
-                                '1d',
-                                style: TextStyle(
-                                  color: Color(0xFF797272),
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w100,
+                                  ],
                                 ),
-                              ),
-                            ],
+                                SizedBox(height: 15),
+                                Text(
+                                  '1d',
+                                  style: TextStyle(
+                                    color: Color(0xFF797272),
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w100,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              GestureDetector(
-                onTap: () {},
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SvgPicture.asset(
-                        'assets/svgs/profileSection/account(icon_only).svg',
-                        height: 70,
-                        width: 70,
-                      ),
-                      const Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 10.0, right: 45),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna a',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w300,
+                const SizedBox(height: 20),
+                GestureDetector(
+                  onTap: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/svgs/profileSection/account(icon_only).svg',
+                          height: 70,
+                          width: 70,
+                        ),
+                        const Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 10.0, right: 45),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna a',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w300,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 15),
-                              Text(
-                                '1d',
-                                style: TextStyle(
-                                  color: Color(0xFF797272),
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w100,
+                                  ],
                                 ),
-                              ),
-                            ],
+                                SizedBox(height: 15),
+                                Text(
+                                  '1d',
+                                  style: TextStyle(
+                                    color: Color(0xFF797272),
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w100,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              GestureDetector(
-                onTap: () {},
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SvgPicture.asset(
-                        'assets/svgs/profileSection/account(icon_only).svg',
-                        height: 70,
-                        width: 70,
-                      ),
-                      const Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 10.0, right: 45),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna a',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w300,
+                const SizedBox(height: 20),
+                GestureDetector(
+                  onTap: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/svgs/profileSection/account(icon_only).svg',
+                          height: 70,
+                          width: 70,
+                        ),
+                        const Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 10.0, right: 45),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna a',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w300,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 15),
-                              Text(
-                                '1d',
-                                style: TextStyle(
-                                  color: Color(0xFF797272),
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w100,
+                                  ],
                                 ),
-                              ),
-                            ],
+                                SizedBox(height: 15),
+                                Text(
+                                  '1d',
+                                  style: TextStyle(
+                                    color: Color(0xFF797272),
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w100,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-            ],
+                const SizedBox(height: 20),
+              ],
+            ),
           ),
         ),
       ),
 
       // Floating action button
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: _lichenCheckBtn(context),
+      floatingActionButton: navigatorHidden ? null : _lichenCheckBtn(context),
 
       // Bottom navigation ba()
-      bottomNavigationBar: _bottomNavBar(context),
+      bottomNavigationBar: navigatorHidden ? null : _bottomNavBar(context),
     );
   }
 
