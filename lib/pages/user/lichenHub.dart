@@ -1350,6 +1350,7 @@ class _LichenHubState extends State<LichenHub> {
                                     onEdit: () => composePost(scaleFactor,
                                         post: posts[index]),
                                     onReply: () {
+                                      isPosting = false;
                                       showModalBottomSheet(
                                           context: context,
                                           isScrollControlled: true,
@@ -1566,14 +1567,26 @@ class _LichenHubState extends State<LichenHub> {
                                                               ),
                                                             ),
                                                           ),
-                                                          InkWell(
-                                                            onTap: () {
-                                                              commentOnPost(
+                                                          (isPosting) ? SpinKitRing(
+                                                            color: Color(0XFFF0784C),
+                                                            size: 45.0,
+                                                          ): InkWell(
+                                                            onTap: ()async {
+                                                              if(isPosting){
+                                                                return;
+                                                              }
+                                                              setState((){
+                                                                isPosting = true;
+                                                              });
+                                                              await commentOnPost(
                                                                   posts[index],
                                                                   replyController
                                                                       .text,
                                                                   DateTime
                                                                       .now());
+                                                              setState((){
+                                                                isPosting = false;
+                                                              });
                                                               replyController
                                                                   .clear();
                                                             },
@@ -1600,15 +1613,13 @@ class _LichenHubState extends State<LichenHub> {
                                                           ),
                                                         ]),
                                                   ),
-                                                  (navigatorHidden)
-                                                      ? const SizedBox()
-                                                      : SizedBox(
-                                                          height: MediaQuery.of(
-                                                                      context)
-                                                                  .viewInsets
-                                                                  .bottom +
-                                                              15,
-                                                        )
+                                                  SizedBox(
+                                                      height: MediaQuery.of(
+                                                                  context)
+                                                              .viewInsets
+                                                              .bottom +
+                                                          15,
+                                                    )
                                                 ]),
                                               );
                                             }));
