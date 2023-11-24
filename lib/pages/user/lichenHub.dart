@@ -152,7 +152,7 @@ class _LichenHubState extends State<LichenHub> {
           );
 
           // Fetch comments
-          var commentsQuery = await doc.reference.collection('comments').get();
+          var commentsQuery = await doc.reference.collection('comments').orderBy('timestamp', descending: true).get();
           post.comments = commentsQuery.docs
               .map((commentDoc) => Comment(
                     id: commentDoc.id,
