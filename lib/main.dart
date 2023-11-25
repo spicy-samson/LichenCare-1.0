@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:lichen_care/pages/user/stream_example.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -89,6 +90,8 @@ class MyApp extends StatelessWidget {
             return pageRoute(route, TermsAndConditions(onBoot: true,), 0);
           case '/profile/privacy_policy-boot':
             return pageRoute(route, PrivacyPolicy(onBoot: true), 0);
+          case '/stream_example':
+            return pageRoute(route, LichenCareNotifications(), 0);
         }
       },
     );

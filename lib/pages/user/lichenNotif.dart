@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
+import 'package:lichen_care/pages/user/lichenHub.dart';
 
 class LichenNotif extends StatefulWidget {
   @override
@@ -9,10 +13,19 @@ class LichenNotif extends StatefulWidget {
 class _LichenNotifState extends State<LichenNotif> {
   final int _currentIndex = 3;
   bool navigatorHidden = false;
+  late User user;
+
+  @override
+  void initState() {
+    super.initState();
+    user = FirebaseAuth.instance.currentUser!;
+  }
+
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
+    int newNotificationsCount = 0;
 
     return Scaffold(
       backgroundColor: const Color(0xFFFFF4E9),
@@ -20,7 +33,7 @@ class _LichenNotifState extends State<LichenNotif> {
         automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFFFFF4E9),
         title: Padding(
-          padding: EdgeInsets.only(top: h * 0.05, right: w * 0.5),
+          padding: EdgeInsets.only(top: h * 0.02, right: w * 0.3),
           child: SvgPicture.asset(
             'assets/svgs/profileSection/notifications_with_icon.svg',
             width: w * 0.1,
@@ -28,7 +41,7 @@ class _LichenNotifState extends State<LichenNotif> {
           ),
         ),
         elevation: 0,
-        toolbarHeight: 80.0,
+        toolbarHeight: 60.0,
       ),
 
       // Body
@@ -37,7 +50,7 @@ class _LichenNotifState extends State<LichenNotif> {
           // print(pointer.delta);
           if (pointer.delta.dy == 0) {
             return;
-          } 
+          }
           if (pointer.delta.dy < 0) {
             // scrolls down
             setState(() {
@@ -51,257 +64,477 @@ class _LichenNotifState extends State<LichenNotif> {
           }
         },
         child: SingleChildScrollView(
-          // ignore: sized_box_for_whitespace
           child: Center(
             child: Column(
               children: [
-                const SizedBox(height: 20),
-                const SizedBox(height: 25),
-                GestureDetector(
-                  onTap: () {},
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SvgPicture.asset(
-                          'assets/svgs/profileSection/account(icon_only).svg',
-                          height: 70,
-                          width: 70,
-                        ),
-                        const Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 10.0, right: 45),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna a',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w300,
+                StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(user.uid)
+                      .collection('LichenHub_posts')
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> postsSnapshot) {
+                    if (postsSnapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (postsSnapshot.hasError) {
+                      return const Text('Error loading posts');
+                    } else {
+                      List<Widget> postWidgets = [];
+
+                      for (var postDoc in postsSnapshot.data!.docs) {
+                        var post = postDoc.data() as Map<String, dynamic>;
+                        postWidgets.add(
+                          Column(
+                            children: [
+                              // Stream for fetching comments
+                              StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(user.uid)
+                                    .collection('LichenHub_posts')
+                                    .doc(postDoc.id)
+                                    .collection('comments')
+                                    .orderBy('timestamp', descending: true)
+                                    .snapshots(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<QuerySnapshot>
+                                        commentsSnapshot) {
+                                  if (commentsSnapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const CircularProgressIndicator();
+                                  } else if (commentsSnapshot.hasError) {
+                                    return const Text('Error loading comments');
+                                  } else {
+                                    List<Widget> commentWidgets = [];
+                                    for (var commentDoc
+                                        in commentsSnapshot.data!.docs) {
+                                      var comment = commentDoc.data()
+                                          as Map<String, dynamic>;
+                                      commentWidgets.add(
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 10, right: 10),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              // Handle onTap for each comment
+                                            },
+                                            child: Container(
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 8),
+                                              padding: const EdgeInsets.all(16),
+                                              decoration: BoxDecoration(
+                                                color: Colors.grey[100],
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const Icon(
+                                                    Icons.comment,
+                                                    size: 30,
+                                                    color: Colors.blue,
+                                                  ),
+                                                  const SizedBox(width: 16),
+                                                  Expanded(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        RichText(
+                                                          text: TextSpan(
+                                                            style: const TextStyle(
+                                                                fontFamily:
+                                                                    'ABeeZee'),
+                                                            children: [
+                                                              TextSpan(
+                                                                text:
+                                                                    "${comment['sender']} replied to your post ",
+                                                                style: const TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .normal,
+                                                                    color: Colors
+                                                                        .black),
+                                                              ),
+                                                              TextSpan(
+                                                                text:
+                                                                    "${post['title']}",
+                                                                style: const TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    color: Colors
+                                                                        .black),
+                                                              ),
+                                                              const TextSpan(
+                                                                text: ":",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .normal,
+                                                                    color: Colors
+                                                                        .black),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                            height: 14),
+                                                        Text(
+                                                          '"${comment['reply']}"',
+                                                          style:
+                                                              const TextStyle(
+                                                            color: Color(
+                                                                0xFF797272),
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                            height: 8),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            Text(
+                                                              DateFormat(
+                                                                      'yyyy-MM-dd hh:mma')
+                                                                  .format(comment[
+                                                                          'timestamp']
+                                                                      .toDate()),
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: Color(
+                                                                    0xFF797272),
+                                                                fontSize: 10,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300,
+                                                                fontStyle:
+                                                                    FontStyle
+                                                                        .italic,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+
+                                    return Column(
+                                      children: commentWidgets,
+                                    );
+                                  }
+                                },
+                              ),
+
+                              // Stream for fetching likes
+                              StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(user.uid)
+                                    .collection('LichenHub_posts')
+                                    .doc(postDoc.id)
+                                    .collection('likes')
+                                    .snapshots(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<QuerySnapshot>
+                                        likesSnapshot) {
+                                  if (likesSnapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const CircularProgressIndicator();
+                                  } else if (likesSnapshot.hasError) {
+                                    return const Text('Error loading likes');
+                                  } else {
+                                    List<String> likedUserIds = [];
+                                    for (var likeDoc
+                                        in likesSnapshot.data!.docs) {
+                                      likedUserIds.add(likeDoc.id);
+                                    }
+
+                                    return Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 5, right: 5),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          // Handle onTap for each like
+                                        },
+                                        child: Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 8),
+                                          padding: const EdgeInsets.all(16),
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey[100],
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              const Icon(
+                                                Icons.thumb_up,
+                                                size: 30,
+                                                color: Colors.green,
+                                              ),
+                                              const SizedBox(width: 16),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    RichText(
+                                                      text: TextSpan(
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                'ABeeZee'),
+                                                        children: [
+                                                          TextSpan(
+                                                            text:
+                                                                "A user liked your post",
+                                                            style: const TextStyle(
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                                color: Colors
+                                                                    .black),
+                                                          ),
+                                                          TextSpan(
+                                                            text:
+                                                                " ${post['title']}",
+                                                            style: const TextStyle(
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                color: Colors
+                                                                    .black),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 15),
-                                Text(
-                                  '1d',
-                                  style: TextStyle(
-                                    color: Color(0xFF797272),
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w100,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                GestureDetector(
-                  onTap: () {},
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SvgPicture.asset(
-                          'assets/svgs/profileSection/account(icon_only).svg',
-                          height: 70,
-                          width: 70,
-                        ),
-                        const Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 10.0, right: 45),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna a',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w300,
+                                    );
+                                  }
+                                },
+                              ),
+
+                              // Stream for fetching reports
+                              StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(user.uid)
+                                    .collection('LichenHub_posts')
+                                    .doc(postDoc.id)
+                                    .collection('reports')
+                                    .snapshots(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<QuerySnapshot>
+                                        reportsSnapshot) {
+                                  if (reportsSnapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const CircularProgressIndicator();
+                                  } else if (reportsSnapshot.hasError) {
+                                    return const Text('Error loading reports');
+                                  } else {
+                                    List<Widget> reportWidgets = [];
+                                    for (var reportDoc
+                                        in reportsSnapshot.data!.docs) {
+                                      var report = reportDoc.data()
+                                          as Map<String, dynamic>;
+                                      reportWidgets.add(
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 5, right: 5),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              // Handle onTap for each report
+                                            },
+                                            child: Container(
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 8),
+                                              padding: const EdgeInsets.all(16),
+                                              decoration: BoxDecoration(
+                                                color: Colors.grey[100],
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const Icon(
+                                                    Icons.report,
+                                                    size: 35,
+                                                    color: Colors.red,
+                                                  ),
+                                                  const SizedBox(width: 16),
+                                                  Expanded(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        RichText(
+                                                          text: TextSpan(
+                                                            style: const TextStyle(
+                                                                fontFamily:
+                                                                    'ABeeZee'),
+                                                            children: [
+                                                              TextSpan(
+                                                                text:
+                                                                    "Your post",
+                                                                style: const TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .normal,
+                                                                    color: Colors
+                                                                        .black),
+                                                              ),
+                                                              TextSpan(
+                                                                text:
+                                                                    " ${post['title']}",
+                                                                style: const TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700,
+                                                                    color: Colors
+                                                                        .black),
+                                                              ),
+                                                              TextSpan(
+                                                                text:
+                                                                    "was reported by 1 user for the following concerns: \n",
+                                                                style: const TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .normal,
+                                                                    color: Colors
+                                                                        .black),
+                                                              ),
+                                                              for (var flag in report[
+                                                                      'reportFlags']
+                                                                  as List<
+                                                                      dynamic>)
+                                                                TextSpan(
+                                                                  text:
+                                                                      "\n\u2022 $flag", // Bullet point
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    color: Color(
+                                                                        0xFF797272),
+                                                                    fontSize:
+                                                                        13,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                  ),
+                                                                ),
+                                                              // TextSpan(
+                                                              //   text: report[
+                                                              //       'reporterUserID'],
+                                                              //   style: const TextStyle(
+                                                              //       fontSize:
+                                                              //           14,
+                                                              //       fontWeight:
+                                                              //           FontWeight
+                                                              //               .bold,
+                                                              //       color: Colors
+                                                              //           .black),
+                                                              // ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                            height: 14),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            Text(
+                                                              DateFormat(
+                                                                      'yyyy-MM-dd hh:mma')
+                                                                  .format(report[
+                                                                          'timestamp']
+                                                                      .toDate()),
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: Color(
+                                                                    0xFF797272),
+                                                                fontSize: 10,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300,
+                                                                fontStyle:
+                                                                    FontStyle
+                                                                        .italic,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 15),
-                                Text(
-                                  '1d',
-                                  style: TextStyle(
-                                    color: Color(0xFF797272),
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w100,
-                                  ),
-                                ),
-                              ],
-                            ),
+                                      );
+                                    }
+
+                                    return Column(
+                                      children: reportWidgets,
+                                    );
+                                  }
+                                },
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
+                        );
+                      }
+
+                      return Column(
+                        children: postWidgets,
+                      );
+                    }
+                  },
                 ),
-                const SizedBox(height: 20),
-                GestureDetector(
-                  onTap: () {},
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SvgPicture.asset(
-                          'assets/svgs/profileSection/account(icon_only).svg',
-                          height: 70,
-                          width: 70,
-                        ),
-                        const Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 10.0, right: 45),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna a',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w300,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 15),
-                                Text(
-                                  '1d',
-                                  style: TextStyle(
-                                    color: Color(0xFF797272),
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w100,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                GestureDetector(
-                  onTap: () {},
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SvgPicture.asset(
-                          'assets/svgs/profileSection/account(icon_only).svg',
-                          height: 70,
-                          width: 70,
-                        ),
-                        const Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 10.0, right: 45),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna a',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w300,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 15),
-                                Text(
-                                  '1d',
-                                  style: TextStyle(
-                                    color: Color(0xFF797272),
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w100,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                GestureDetector(
-                  onTap: () {},
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SvgPicture.asset(
-                          'assets/svgs/profileSection/account(icon_only).svg',
-                          height: 70,
-                          width: 70,
-                        ),
-                        const Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 10.0, right: 45),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna a',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w300,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 15),
-                                Text(
-                                  '1d',
-                                  style: TextStyle(
-                                    color: Color(0xFF797272),
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w100,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -337,7 +570,7 @@ class _LichenNotifState extends State<LichenNotif> {
             height: 32, // Set the height to adjust the size of the icon
           ),
         ),
-        backgroundColor: Color(0xFFFFF4E9),
+        backgroundColor: const Color(0xFFFFF4E9),
         onPressed: () {},
       ),
     );
@@ -346,14 +579,14 @@ class _LichenNotifState extends State<LichenNotif> {
   BottomNavigationBar _bottomNavBar(BuildContext context) {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
-      backgroundColor: Color(0xFF66D7D1),
+      backgroundColor: const Color(0xFF66D7D1),
       selectedItemColor: Colors.white,
-      unselectedItemColor: Color.fromARGB(94, 0, 0, 0),
+      unselectedItemColor: const Color.fromARGB(94, 0, 0, 0),
       selectedFontSize: 12,
       unselectedFontSize: 12,
       currentIndex: _currentIndex,
       items: [
-        BottomNavigationBarItem(
+        const BottomNavigationBarItem(
           icon: Icon(
             Icons.home,
             size: 30,
@@ -369,7 +602,7 @@ class _LichenNotifState extends State<LichenNotif> {
           ),
           label: 'Lichenpedia',
         ),
-        BottomNavigationBarItem(
+        const BottomNavigationBarItem(
           icon: Icon(Icons.add, size: 32),
           label: 'LichenCheck',
         ),
@@ -417,29 +650,4 @@ class _LichenNotifState extends State<LichenNotif> {
       },
     );
   }
-}
-
-Widget _buildTextWithDivider(String text) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Padding(
-        padding: const EdgeInsets.only(
-          left: 30.0,
-          bottom: 6,
-        ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-      ),
-      if (text != 'Variants of Lichen Planus')
-        const Divider(
-          color: Colors.black,
-        ),
-    ],
-  );
 }

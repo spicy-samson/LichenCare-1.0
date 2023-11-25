@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:badges/badges.dart' as badges;
 
 Color primaryBackgroundColor = const Color(0xFFFFF4E9);
 Color primaryforegroundColor = const Color(0xFFFF7F50);
@@ -1289,7 +1290,7 @@ class _LichenHubState extends State<LichenHub> {
             width: 80,
             child: Padding(
               padding: EdgeInsets.only(
-                top: h * 0.023,
+                top: h * 0.027,
                 bottom: h * 0.01,
               ),
               child: FittedBox(
@@ -1299,9 +1300,22 @@ class _LichenHubState extends State<LichenHub> {
                   onTap: () {
                     Navigator.pushNamed(context, "/lichenNotif");
                   },
-                  child: Icon(
-                    Icons.notifications,
-                    color: primaryforegroundColor,
+                  child: badges.Badge(
+                    position: badges.BadgePosition.topEnd(top: -10, end: -5),
+                    badgeStyle: badges.BadgeStyle(
+                      padding: EdgeInsets.all(5),
+                      borderRadius: BorderRadius.circular(4),
+                      borderSide: BorderSide(color: Colors.white, width: 1),
+                    ),
+                    badgeAnimation: badges.BadgeAnimation.fade(),
+                    badgeContent: Text(
+                      '0',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    child: Icon(
+                      Icons.notifications,
+                      color: primaryforegroundColor,
+                    ),
                   ),
                 ),
               ),
