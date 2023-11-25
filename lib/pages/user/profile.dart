@@ -263,7 +263,7 @@ class _ProfileState extends State<Profile> {
       Navigator.of(context)
           .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
     } catch (e) {
-      print("Error while signing out: $e");
+      debugPrint("Error while signing out: $e");
     }
   }
 

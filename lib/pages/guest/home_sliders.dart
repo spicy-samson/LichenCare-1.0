@@ -40,9 +40,9 @@ class _MyCarouselState extends State<MyCarousel> {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     
-    List<Widget> _pages = [
+    List<Widget> pages = [
       Container(
-        color: Color(0xFFFFF4E9),
+        color: const Color(0xFFFFF4E9),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -57,14 +57,14 @@ class _MyCarouselState extends State<MyCarousel> {
               width: w * 0.15,
               height: h * 0.08,
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
-            Text(
+            const Text(
               "WELCOME, MY FRIEND!",
               style: TextStyle(fontWeight: FontWeight.w900, fontSize: 25),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Container(
@@ -82,14 +82,14 @@ class _MyCarouselState extends State<MyCarousel> {
                 textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 60,
             ),
           ],
         ),
       ),
       Container(
-        color: Color(0xFFFFF4E9),
+        color: const Color(0xFFFFF4E9),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -152,7 +152,7 @@ class _MyCarouselState extends State<MyCarousel> {
         ),
       ),
       Container(
-        color: Color(0xFFFFF4E9),
+        color: const Color(0xFFFFF4E9),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -217,7 +217,7 @@ class _MyCarouselState extends State<MyCarousel> {
     ];
 
     List<Widget> _buildPageIndicator() {
-      return _pages.asMap().entries.map((entry) {
+      return pages.asMap().entries.map((entry) {
         return Container(
           width: 25, // Adjust the width as needed for the border
           height: 25, // Adjust the height as needed for the border
@@ -231,7 +231,7 @@ class _MyCarouselState extends State<MyCarousel> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: _currentIndex == entry.key
-                      ? Color(0xFFFF7F50)
+                      ? const Color(0xFFFF7F50)
                       : Colors.white,
                 ),
               ),
@@ -256,7 +256,7 @@ class _MyCarouselState extends State<MyCarousel> {
       body: Stack(
         children: [
           CarouselSlider(
-            items: _pages,
+            items: pages,
             options: CarouselOptions(
               height: h,
               viewportFraction: 1.0,

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -10,10 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lichen_care/helpers/helpers.dart';
-import 'package:lichen_care/pages/guest/login.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -61,17 +58,19 @@ class Post {
 class Comment {
   String id;
   String sender;
+  String senderID;
   String reply;
   DateTime datetime;
   Comment(
       {required this.id,
       required this.sender,
+      required this.senderID,
       required this.reply,
       required this.datetime});
 }
 
 class _LichenHubState extends State<LichenHub> {
-  int _currentIndex = 3;
+  final int _currentIndex = 3;
   List<String> concerns = [
     "Sexually inappropriate",
     "Terrorist or Violent extermisit content",
@@ -113,10 +112,10 @@ class _LichenHubState extends State<LichenHub> {
       final usersCollection = FirebaseFirestore.instance.collection('users');
       final postsCollectionName = 'LichenHub_posts';
 
-      final querySnapshot = await usersCollection.get();
-
       List<Post> loadedPosts = [];
 
+      // Get all posts from all users
+      var querySnapshot = await usersCollection.get();
       for (var userDoc in querySnapshot.docs) {
         final postsCollection =
             userDoc.reference.collection(postsCollectionName);
@@ -152,20 +151,50 @@ class _LichenHubState extends State<LichenHub> {
           );
 
           // Fetch comments
-          var commentsQuery = await doc.reference.collection('comments').orderBy('timestamp', descending: true).get();
-          post.comments = commentsQuery.docs
-              .map((commentDoc) => Comment(
-                    id: commentDoc.id,
-                    sender: commentDoc['sender'] ?? '',
-                    reply: commentDoc['reply'] ?? '',
-                    datetime: commentDoc['timestamp']?.toDate() ?? '',
-                  ))
-              .toList();
+          var commentsQuery = await doc.reference
+              .collection('comments')
+              .orderBy('timestamp', descending: true)
+              .get();
 
-          // Add the post to the list
+          post.comments = [];
+
+          for (var commentDoc in commentsQuery.docs) {
+            var commentData = commentDoc.data() as Map<String, dynamic>;
+
+            // Fetch the sender details
+            var senderID = commentData['senderID'] ?? '';
+            var senderDoc = await FirebaseFirestore.instance
+                .collection('users')
+                .doc(senderID)
+                .get();
+
+            var senderFirstName = senderDoc['first_name'] ?? '';
+
+            // Create a new Comment object
+            var comment = Comment(
+              id: commentDoc.id,
+              senderID: senderID,
+              sender: makeAnonymous(senderFirstName),
+              reply: commentData['reply'] ?? '',
+              datetime: commentData['timestamp']?.toDate() ?? '',
+            );
+
+            // Add the comment to the post's comments list
+            post.comments.add(comment);
+          }
+
           loadedPosts.add(post);
         }
       }
+
+      // Order loadedPosts by the latest timestamp before updating the local list
+      loadedPosts.sort((a, b) =>
+          (b.comments.isNotEmpty
+              ? b.comments[0].datetime?.millisecondsSinceEpoch ?? 0
+              : b.datetime?.millisecondsSinceEpoch ?? 0) -
+          (a.comments.isNotEmpty
+              ? a.comments[0].datetime?.millisecondsSinceEpoch ?? 0
+              : a.datetime?.millisecondsSinceEpoch ?? 0));
 
       // Update the local list with the loaded posts
       if (mounted) {
@@ -174,7 +203,7 @@ class _LichenHubState extends State<LichenHub> {
         });
       }
     } catch (e) {
-      print('Error loading posts: $e');
+      debugPrint('Error loading posts: $e');
     }
   }
 
@@ -208,7 +237,7 @@ class _LichenHubState extends State<LichenHub> {
           if (uploadTask.state == TaskState.success) {
             imageUrl = await uploadTask.ref.getDownloadURL();
           } else {
-            print('Error uploading the image to Firebase Storage');
+            debugPrint('Error uploading the image to Firebase Storage');
           }
         }
 
@@ -246,10 +275,10 @@ class _LichenHubState extends State<LichenHub> {
 
         //await addCommentToPost(newPost, 'Commenter Name', 'This is a comment.');
       } else {
-        print('User document does not exist in Firestore');
+        debugPrint('User document does not exist in Firestore');
       }
     } catch (e) {
-      print('Error: $e');
+      debugPrint('Error: $e');
       return false;
     }
   }
@@ -261,7 +290,7 @@ class _LichenHubState extends State<LichenHub> {
     try {
       return user?.uid == post.userID ? true : false;
     } catch (e) {
-      print('Error: $e');
+      debugPrint('Error: $e');
       return false; // or handle the error in an appropriate way for your use case
     }
   }
@@ -292,6 +321,7 @@ class _LichenHubState extends State<LichenHub> {
 
         final newCommentDocRef = await postDocRef.collection('comments').add({
           'sender': makeAnonymous(firstName),
+          'senderID': user.uid,
           'reply': reply,
           'timestamp': time,
         });
@@ -300,6 +330,7 @@ class _LichenHubState extends State<LichenHub> {
         Comment newComment = Comment(
           id: newCommentDocRef.id,
           sender: makeAnonymous(firstName),
+          senderID: user.uid,
           reply: reply,
           datetime: time,
         );
@@ -309,10 +340,10 @@ class _LichenHubState extends State<LichenHub> {
           post.comments = [newComment, ...post.comments];
         });
       } else {
-        print('User document does not exist in Firestore');
+        debugPrint('User document does not exist in Firestore');
       }
     } catch (e) {
-      print('Error adding comment: $e');
+      debugPrint('Error adding comment: $e');
     }
   }
 
@@ -345,7 +376,7 @@ class _LichenHubState extends State<LichenHub> {
           if (uploadTask.state == TaskState.success) {
             imageUrl = await uploadTask.ref.getDownloadURL();
           } else {
-            print('Error uploading the new image to Firebase Storage');
+            debugPrint('Error uploading the new image to Firebase Storage');
           }
         }
 
@@ -368,12 +399,12 @@ class _LichenHubState extends State<LichenHub> {
           post.embeddedImage = updatedPostData['file_image'];
         });
 
-        print('Post edited successfully');
+        debugPrint('Post edited successfully');
       } else {
-        print('User document does not exist in Firestore');
+        debugPrint('User document does not exist in Firestore');
       }
     } catch (e) {
-      print('Error editing post: $e');
+      debugPrint('Error editing post: $e');
     }
   }
 
@@ -411,7 +442,7 @@ class _LichenHubState extends State<LichenHub> {
         await commentDoc.reference.delete();
       }
 
-      print('Post and comments deleted successfully');
+      debugPrint('Post and comments deleted successfully');
 
       setState(() {
         post.content.dispose();
@@ -419,7 +450,7 @@ class _LichenHubState extends State<LichenHub> {
         replyController.dispose();
       });
     } catch (e) {
-      print('Error deleting post: $e');
+      debugPrint('Error deleting post: $e');
     }
   }
 
@@ -474,7 +505,7 @@ class _LichenHubState extends State<LichenHub> {
               ..remove(user.uid));
       });
     } catch (e) {
-      print('Error liking the post: $e');
+      debugPrint('Error liking the post: $e');
     }
   }
 
@@ -510,7 +541,7 @@ class _LichenHubState extends State<LichenHub> {
       // Update the post document with the report
       await postRef.collection('reports').add(reportData);
     } catch (e) {
-      print('Error reporting the post: $e');
+      debugPrint('Error reporting the post: $e');
     }
   }
 
@@ -763,8 +794,9 @@ class _LichenHubState extends State<LichenHub> {
                                       loadingBuilder: (BuildContext context,
                                           Widget child,
                                           ImageChunkEvent? loadingProgress) {
-                                        if (loadingProgress == null)
+                                        if (loadingProgress == null) {
                                           return child;
+                                        }
                                         return FadeInImage(
                                           placeholder: AssetImage(
                                               'assets/imgs/placeholder-image.jpg'), // Your placeholder image asset
@@ -909,16 +941,14 @@ class _LichenHubState extends State<LichenHub> {
                                 onTap: () {
                                   if (toolbar["underline"]!) {
                                     toolbar["underline"] = false;
-                                    contentController.formatSelection(Attribute(
-                                        "underline",
-                                        AttributeScope.INLINE,
-                                        null));
+                                    contentController.formatSelection(
+                                        const Attribute("underline",
+                                            AttributeScope.INLINE, null));
                                   } else {
                                     toolbar["underline"] = true;
-                                    contentController.formatSelection(Attribute(
-                                        "underline",
-                                        AttributeScope.INLINE,
-                                        true));
+                                    contentController.formatSelection(
+                                        const Attribute("underline",
+                                            AttributeScope.INLINE, true));
                                   }
                                   setState(() {});
                                 },
@@ -1303,7 +1333,7 @@ class _LichenHubState extends State<LichenHub> {
                       )
                     : Listener(
                         onPointerMove: (pointer) {
-                          // print(pointer.delta);
+                          // debugPrint(pointer.delta);
                           if (pointer.delta.dy == 0) {
                             return;
                           }
@@ -1386,7 +1416,7 @@ class _LichenHubState extends State<LichenHub> {
                                                     decoration: BoxDecoration(
                                                         color:
                                                             termaryForegroundColor,
-                                                        boxShadow: [
+                                                        boxShadow: const [
                                                           BoxShadow(
                                                               color: Colors
                                                                   .black26,
@@ -1416,10 +1446,10 @@ class _LichenHubState extends State<LichenHub> {
                                                                   size: 28,
                                                                   color:
                                                                       primaryforegroundColor)),
-                                                          SizedBox(
+                                                          const SizedBox(
                                                             width: 10,
                                                           ),
-                                                          Text(
+                                                          const Text(
                                                             "Post",
                                                             style: TextStyle(
                                                                 fontSize: 22),
@@ -1552,7 +1582,8 @@ class _LichenHubState extends State<LichenHub> {
                                                                           .done,
                                                                   decoration:
                                                                       InputDecoration(
-                                                                    contentPadding: EdgeInsets.only(
+                                                                    contentPadding: const EdgeInsets
+                                                                        .only(
                                                                         left:
                                                                             15,
                                                                         bottom:
@@ -1567,59 +1598,69 @@ class _LichenHubState extends State<LichenHub> {
                                                               ),
                                                             ),
                                                           ),
-                                                          (isPosting) ? SpinKitRing(
-                                                            color: Color(0XFFF0784C),
-                                                            size: 45.0,
-                                                          ): InkWell(
-                                                            onTap: ()async {
-                                                              if(isPosting){
-                                                                return;
-                                                              }
-                                                              setState((){
-                                                                isPosting = true;
-                                                              });
-                                                              await commentOnPost(
-                                                                  posts[index],
-                                                                  replyController
-                                                                      .text,
-                                                                  DateTime
-                                                                      .now());
-                                                              setState((){
-                                                                isPosting = false;
-                                                              });
-                                                              replyController
-                                                                  .clear();
-                                                            },
-                                                            child: Container(
-                                                              width: 45,
-                                                              height: 45,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: Colors
-                                                                    .transparent,
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            15.0)),
-                                                              ),
-                                                              child: Center(
-                                                                  child: Icon(
-                                                                Icons.send,
-                                                                color:
-                                                                    primaryforegroundColor,
-                                                                size: 32,
-                                                              )),
-                                                            ),
-                                                          ),
+                                                          (isPosting)
+                                                              ? const SpinKitRing(
+                                                                  color: Color(
+                                                                      0XFFF0784C),
+                                                                  size: 45.0,
+                                                                )
+                                                              : InkWell(
+                                                                  onTap:
+                                                                      () async {
+                                                                    if (isPosting) {
+                                                                      return;
+                                                                    }
+                                                                    setState(
+                                                                        () {
+                                                                      isPosting =
+                                                                          true;
+                                                                    });
+                                                                    await commentOnPost(
+                                                                        posts[
+                                                                            index],
+                                                                        replyController
+                                                                            .text,
+                                                                        DateTime
+                                                                            .now());
+                                                                    setState(
+                                                                        () {
+                                                                      isPosting =
+                                                                          false;
+                                                                    });
+                                                                    replyController
+                                                                        .clear();
+                                                                  },
+                                                                  child:
+                                                                      Container(
+                                                                    width: 45,
+                                                                    height: 45,
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                      color: Colors
+                                                                          .transparent,
+                                                                      borderRadius:
+                                                                          BorderRadius.all(
+                                                                              Radius.circular(15.0)),
+                                                                    ),
+                                                                    child: Center(
+                                                                        child: Icon(
+                                                                      Icons
+                                                                          .send,
+                                                                      color:
+                                                                          primaryforegroundColor,
+                                                                      size: 32,
+                                                                    )),
+                                                                  ),
+                                                                ),
                                                         ]),
                                                   ),
                                                   SizedBox(
-                                                      height: MediaQuery.of(
-                                                                  context)
-                                                              .viewInsets
-                                                              .bottom +
-                                                          15,
-                                                    )
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .viewInsets
+                                                                .bottom +
+                                                            15,
+                                                  )
                                                 ]),
                                               );
                                             }));
@@ -1684,6 +1725,8 @@ class _LichenHubState extends State<LichenHub> {
         ),
       ),
       child: FloatingActionButton(
+        backgroundColor: Color(0xFFFFF4E9),
+        onPressed: () {},
         child: IconButton(
           onPressed: () {
             Navigator.of(context).pushNamed('/lichenCheck');
@@ -1694,8 +1737,6 @@ class _LichenHubState extends State<LichenHub> {
             height: 32, // Set the height to adjust the size of the icon
           ),
         ),
-        backgroundColor: Color(0xFFFFF4E9),
-        onPressed: () {},
       ),
     );
   }
@@ -1842,7 +1883,7 @@ class PostBox extends StatelessWidget {
                             isScrollControlled: true,
                             builder: (context) {
                               return Container(
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                     color: Color.fromARGB(255, 206, 206, 221),
                                     borderRadius: BorderRadius.only(
                                         topRight: Radius.circular(15.0),
@@ -1874,7 +1915,7 @@ class PostBox extends StatelessWidget {
                                                 SizedBox(
                                                   width: 10,
                                                 ),
-                                                Text(
+                                                const Text(
                                                   "Edit",
                                                   style: TextStyle(
                                                       fontSize: 20,
@@ -1886,11 +1927,12 @@ class PostBox extends StatelessWidget {
                                         ? const SizedBox()
                                         : TextButton(
                                             style: TextButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                15.0)))),
+                                                shape:
+                                                    const RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    15.0)))),
                                             onPressed: () async {
                                               bool confirmDelete =
                                                   await showDialog(
@@ -1900,7 +1942,7 @@ class PostBox extends StatelessWidget {
                                                   return AlertDialog(
                                                     title: Text(
                                                         'Confirm Deletion'),
-                                                    content: Text(
+                                                    content: const Text(
                                                         'Are you sure you want to delete this post?'),
                                                     actionsPadding:
                                                         EdgeInsets.zero,
@@ -1917,7 +1959,7 @@ class PostBox extends StatelessWidget {
                                                                   .pop(
                                                                       false); // Return false if canceled
                                                             },
-                                                            child: Text(
+                                                            child: const Text(
                                                               'Cancel',
                                                               style: TextStyle(
                                                                 color: Colors
@@ -1932,7 +1974,7 @@ class PostBox extends StatelessWidget {
                                                                   .pop(
                                                                       true); // Return true if confirmed
                                                             },
-                                                            child: Text(
+                                                            child: const Text(
                                                               'Delete',
                                                               style: TextStyle(
                                                                 color: Colors
@@ -1953,7 +1995,7 @@ class PostBox extends StatelessWidget {
                                                   Navigator.of(context)
                                                       .pushNamed('/lichenHub');
                                                 } catch (e) {
-                                                  print(
+                                                  debugPrint(
                                                       'Error deleting document and/or image: $e');
                                                 }
                                               }
@@ -1967,7 +2009,7 @@ class PostBox extends StatelessWidget {
                                                 SizedBox(
                                                   width: 10,
                                                 ),
-                                                Text(
+                                                const Text(
                                                   "Delete",
                                                   style: TextStyle(
                                                       fontSize: 20,
@@ -1977,7 +2019,7 @@ class PostBox extends StatelessWidget {
                                             )),
                                     TextButton(
                                         style: TextButton.styleFrom(
-                                            shape: RoundedRectangleBorder(
+                                            shape: const RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(15.0)))),
                                         onPressed: () {
@@ -1991,7 +2033,7 @@ class PostBox extends StatelessWidget {
                                             SizedBox(
                                               width: 10,
                                             ),
-                                            Text(
+                                            const Text(
                                               "Copy",
                                               style: TextStyle(
                                                   fontSize: 20,
@@ -2001,7 +2043,7 @@ class PostBox extends StatelessWidget {
                                         )),
                                     TextButton(
                                         style: TextButton.styleFrom(
-                                            shape: RoundedRectangleBorder(
+                                            shape: const RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(15.0)))),
                                         onPressed: () {
@@ -2015,7 +2057,7 @@ class PostBox extends StatelessWidget {
                                             SizedBox(
                                               width: 10,
                                             ),
-                                            Text(
+                                            const Text(
                                               "Report a concern",
                                               style: TextStyle(
                                                   fontSize: 20,

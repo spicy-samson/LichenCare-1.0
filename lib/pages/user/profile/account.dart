@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -14,16 +16,17 @@ Color primaryforegroundColor = const Color(0xFFFF7F50);
 
 class _AccountState extends State<Account> {
   int _currentIndex = 4;
+  bool _isLoading = false;
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Color(0xFFFFF4E9),
+      backgroundColor: const Color(0xFFFFF4E9),
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Color(0xFFFFF4E9),
+        backgroundColor: const Color(0xFFFFF4E9),
         title: Padding(
           padding: EdgeInsets.only(
             top: h * 0.04,
@@ -75,7 +78,7 @@ class _AccountState extends State<Account> {
                                 String newLastName = userData['lastName'] ?? '';
 
                                 return AlertDialog(
-                                  title: Text('Edit Profile'),
+                                  title: const Text('Edit Profile'),
                                   content: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -89,13 +92,13 @@ class _AccountState extends State<Account> {
                                           focusedBorder: OutlineInputBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10.0),
-                                            borderSide: BorderSide(
+                                            borderSide: const BorderSide(
                                               color: Color(0xFFFF7F50),
                                             ),
                                           ),
                                         ),
                                       ),
-                                      SizedBox(height: 10),
+                                      const SizedBox(height: 10),
                                       TextFormField(
                                         initialValue: newLastName,
                                         onChanged: (value) {
@@ -106,7 +109,7 @@ class _AccountState extends State<Account> {
                                           focusedBorder: OutlineInputBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10.0),
-                                            borderSide: BorderSide(
+                                            borderSide: const BorderSide(
                                               color: Color(0xFFFF7F50),
                                             ),
                                           ),
@@ -116,16 +119,34 @@ class _AccountState extends State<Account> {
                                   ),
                                   actions: [
                                     ElevatedButton(
-                                      onPressed: () {
-                                        // Close the dialog and update the profile
-                                        Navigator.of(context).pop();
-                                        updateProfile(
-                                            newFirstName, newLastName);
+                                      onPressed: () async {
+                                        try {
+                                          // Close the dialog and update the profile
+                                          Navigator.of(context).pop();
+                                          setState(() {
+                                            _isLoading = true;
+                                          });
+
+                                          await updateProfile(
+                                              newFirstName, newLastName);
+
+                                          // Reset loading state
+                                          setState(() {
+                                            _isLoading = false;
+                                          });
+                                        } catch (e) {
+                                          // Handle errors if needed
+                                          debugPrint(
+                                              'Error updating profile: $e');
+                                          setState(() {
+                                            _isLoading = false;
+                                          });
+                                        }
                                       },
                                       style: ButtonStyle(
                                         padding: MaterialStateProperty.all<
                                             EdgeInsets>(
-                                          EdgeInsets.symmetric(
+                                          const EdgeInsets.symmetric(
                                               horizontal: 20, vertical: 10),
                                         ),
                                         backgroundColor:
@@ -136,13 +157,22 @@ class _AccountState extends State<Account> {
                                           RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10.0),
-                                            side: BorderSide(
+                                            side: const BorderSide(
                                                 color: Colors.white,
                                                 width: 2.0),
                                           ),
                                         ),
                                       ),
-                                      child: Text('Save'),
+                                      child: _isLoading
+                                          ? const CircularProgressIndicator(
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                      Colors.white),
+                                              strokeWidth: 4.0,
+                                            ) // Show a loading indicator
+                                          : const Text(
+                                              'Save',
+                                            ),
                                     ),
                                   ],
                                 );
@@ -151,7 +181,7 @@ class _AccountState extends State<Account> {
                           },
                           style: ButtonStyle(
                             padding: MaterialStateProperty.all<EdgeInsets>(
-                              EdgeInsets.symmetric(
+                              const EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 10),
                             ),
                             backgroundColor: MaterialStateProperty.all<Color>(
@@ -160,12 +190,12 @@ class _AccountState extends State<Account> {
                                 RoundedRectangleBorder>(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
-                                side:
-                                    BorderSide(color: Colors.white, width: 2.0),
+                                side: const BorderSide(
+                                    color: Colors.white, width: 2.0),
                               ),
                             ),
                           ),
-                          child: Text("Edit Profile"),
+                          child: const Text("Edit Profile"),
                         ),
                         ElevatedButton(
                           onPressed: () {
@@ -173,7 +203,7 @@ class _AccountState extends State<Account> {
                           },
                           style: ButtonStyle(
                             padding: MaterialStateProperty.all<EdgeInsets>(
-                              EdgeInsets.symmetric(
+                              const EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 10),
                             ),
                             backgroundColor:
@@ -182,64 +212,54 @@ class _AccountState extends State<Account> {
                                 RoundedRectangleBorder>(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
-                                side:
-                                    BorderSide(color: Colors.white, width: 2.0),
+                                side: const BorderSide(
+                                    color: Colors.white, width: 2.0),
                               ),
                             ),
                           ),
-                          child: Text("Delete Account"),
+                          child: const Text("Delete Account"),
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     // First Name
                     Padding(
                       padding: const EdgeInsets.only(left: 20.0),
                       child: Text(
                         "First Name: ${userData['firstName']}",
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
 
                     // Last Name
                     Padding(
                       padding: const EdgeInsets.only(left: 20.0),
                       child: Text(
                         "Last Name: ${userData['lastName']}",
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
 
                     // Email
                     Padding(
                       padding: const EdgeInsets.only(left: 20.0),
                       child: Text(
                         "Email: ${userData['email']}",
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
-
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // ... Your other UI elements ...
-                        ],
-                      ),
-                    ),
+                    const SizedBox(height: 20),
                   ],
                 );
               }
@@ -267,6 +287,8 @@ class _AccountState extends State<Account> {
         ),
       ),
       child: FloatingActionButton(
+        backgroundColor: const Color(0xFFFFF4E9),
+        onPressed: () {},
         child: IconButton(
           onPressed: () {
             Navigator.of(context).pushNamed('/lichenCheck');
@@ -277,8 +299,6 @@ class _AccountState extends State<Account> {
             height: 32, // Set the height to adjust the size of the icon
           ),
         ),
-        backgroundColor: Color(0xFFFFF4E9),
-        onPressed: () {},
       ),
     );
   }
@@ -286,9 +306,9 @@ class _AccountState extends State<Account> {
   BottomNavigationBar _bottomNavBar(BuildContext context) {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
-      backgroundColor: Color(0xFF66D7D1),
+      backgroundColor: const Color(0xFF66D7D1),
       selectedItemColor: Colors.white,
-      unselectedItemColor: Color.fromARGB(94, 0, 0, 0),
+      unselectedItemColor: const Color.fromARGB(94, 0, 0, 0),
       selectedFontSize: 12,
       unselectedFontSize: 12,
       currentIndex: _currentIndex,
@@ -309,7 +329,7 @@ class _AccountState extends State<Account> {
           ),
           label: 'Lichenpedia',
         ),
-        BottomNavigationBarItem(
+        const BottomNavigationBarItem(
           icon: Icon(Icons.add, size: 32),
           label: 'LichenCheck',
         ),
@@ -373,7 +393,7 @@ class _AccountState extends State<Account> {
           };
         }
       } catch (e) {
-        print("Error fetching user data: $e");
+        debugPrint("Error fetching user data: $e");
       }
     }
 
@@ -393,7 +413,7 @@ class _AccountState extends State<Account> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          title: Text(
+          title: const Text(
             "Delete Account",
             style: TextStyle(
               fontSize: 20,
@@ -403,20 +423,20 @@ class _AccountState extends State<Account> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
+              const Text(
                 "Are you sure you want to delete your account?",
                 style: TextStyle(
                   color: Colors.black,
                 ),
               ),
-              SizedBox(height: 15),
-              Text(
+              const SizedBox(height: 15),
+              const Text(
                 "THIS ACTION IS IRREVERSIBLE!",
                 style: TextStyle(
                   color: Colors.black,
                 ),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               TextFormField(
                 onChanged: (value) {
                   password = value;
@@ -426,13 +446,13 @@ class _AccountState extends State<Account> {
                   labelText: 'Enter your password',
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: Color(0xFFFF7F50),
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -440,7 +460,7 @@ class _AccountState extends State<Account> {
                     onPressed: () {
                       Navigator.of(context).pop(); // Close the dialog
                     },
-                    child: Text(
+                    child: const Text(
                       "Cancel",
                       style: TextStyle(
                         color: Colors.black,
@@ -452,7 +472,7 @@ class _AccountState extends State<Account> {
                       Navigator.of(context).pop(); // Close the dialog
                       DeleteAccount(password);
                     },
-                    child: Text(
+                    child: const Text(
                       "Delete",
                       style: TextStyle(
                         color: Colors.red,
@@ -481,17 +501,42 @@ class _AccountState extends State<Account> {
           'last_name': lastName,
         });
 
-        // Reload user to reflect the changes
-        await user.reload();
-        user = FirebaseAuth.instance.currentUser;
+        // Update display name
+        await user.updateDisplayName('$firstName $lastName');
 
-        // Update the display name
-        await user?.updateDisplayName('$firstName $lastName');
+        // Update the posts
+        final postsCollectionName = 'LichenHub_posts';
+        final postsCollection = userDocRef.collection(postsCollectionName);
+        final userPostsSnapshot = await postsCollection
+            .orderBy('date_uploaded', descending: true)
+            .get();
 
-        print('Profile updated successfully');
+        for (var doc in userPostsSnapshot.docs) {
+          await doc.reference.update({
+            'uploader_name': firstName,
+          });
+        }
+
+        debugPrint('Profile updated successfully');
       } catch (e) {
-        print('Error updating profile: $e');
+        debugPrint('Error updating profile: $e');
       }
+
+      AwesomeDialog(
+        context: context,
+        dialogType: DialogType.success,
+        animType: AnimType.topSlide,
+        title: 'Profile updated.',
+        desc: "Profile details successfully changed! 🤗",
+        descTextStyle: const TextStyle(
+          fontSize: 16.0,
+        ),
+        padding: const EdgeInsets.all(16.0),
+        btnOkOnPress: () {
+          Navigator.of(context).pop();
+          ;
+        },
+      ).show();
     }
   }
 
@@ -511,10 +556,8 @@ class _AccountState extends State<Account> {
         password: password,
       );
 
-      // Re-authenticate the user
+      // User reauthenticate for sure deletion
       await user.reauthenticateWithCredential(credential);
-
-      // Delete in Firebase Auth
       await user.delete();
 
       final userDocRef =
@@ -540,19 +583,19 @@ class _AccountState extends State<Account> {
         title: 'Account deleted.',
         desc:
             "Thank you for your using our App! Hopefully you'll come back soon! 🤗",
-        descTextStyle: TextStyle(
+        descTextStyle: const TextStyle(
           fontSize: 16.0,
         ),
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         btnOkOnPress: () {
           Navigator.of(context).pushNamed('/login');
           ; // Navigate to the login page
         },
       ).show();
 
-      print("Account deleted successfully");
+      debugPrint("Account deleted successfully");
     } catch (e) {
-      print("Error during reauthentication or account deletion: $e");
+      debugPrint("Error during reauthentication or account deletion: $e");
     }
   }
 }

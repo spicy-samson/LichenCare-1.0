@@ -37,7 +37,7 @@ class _LichenNotifState extends State<LichenNotif> {
           // print(pointer.delta);
           if (pointer.delta.dy == 0) {
             return;
-          }
+          } 
           if (pointer.delta.dy < 0) {
             // scrolls down
             setState(() {

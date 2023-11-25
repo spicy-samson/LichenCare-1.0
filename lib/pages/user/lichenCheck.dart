@@ -112,16 +112,16 @@ class _LichenCheckState extends State<LichenCheck> {
               },
             });
           } else {
-            print('Error uploading the image to Firebase Storage');
+            debugPrint('Error uploading the image to Firebase Storage');
           }
         } else {
-          print('patientInformation.image is null');
+          debugPrint('patientInformation.image is null');
         }
       } else {
-        print('User document does not exist in Firestore');
+        debugPrint('User document does not exist in Firestore');
       }
     } catch (e) {
-      print('Error: $e');
+      debugPrint('Error: $e');
     }
   }
 
@@ -299,7 +299,7 @@ class _LichenCheckState extends State<LichenCheck> {
                                   const EdgeInsets.symmetric(horizontal: 30.0),
                               child: Listener(
                                 onPointerMove: (pointer) {
-                                  // print(pointer.delta);
+                                  // debugPrint(pointer.delta);
                                   if (pointer.delta.dy == 0) {
                                     return;
                                   }
@@ -1620,7 +1620,7 @@ class _LichenCheckState extends State<LichenCheck> {
       setState(() {
         patientInformation.image = file;
       });
-      print("No recognition");
+      debugPrint("No recognition");
     }
   }
 
@@ -1650,7 +1650,7 @@ class _LichenCheckState extends State<LichenCheck> {
         isPredicting = false;
       });
     } on PlatformException catch (e) {
-      print(e);
+      debugPrint('Error: $e');
       Navigator.of(context).pop();
     }
   }

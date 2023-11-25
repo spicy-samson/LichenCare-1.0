@@ -329,7 +329,7 @@ class _ScanHistoryDetailsState extends State<ScanHistoryDetails> {
                                 .pushNamed('/profile/scan_history');
                           }
                         } catch (e) {
-                          print('Error deleting document and/or image: $e');
+                          debugPrint('Error deleting document and/or image: $e');
                         }
                       }
                     },

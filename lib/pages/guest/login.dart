@@ -111,11 +111,11 @@ class _LoginPageState extends State<LoginPage> {
                 width: w * 0.15,
                 height: h * 0.08,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Padding(
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                     horizontal: 60,
                     vertical: 10), // Adjust the horizontal padding
                 child: Column(
@@ -222,22 +222,9 @@ class _LoginPageState extends State<LoginPage> {
                                   }
                                 }
                               },
-                        child: _isLoading
-                            ? CircularProgressIndicator(
-                                valueColor:
-                                    AlwaysStoppedAnimation<Color>(Colors.white),
-                                strokeWidth: 4.0,
-                              ) // Show a loading indicator
-                            : Text(
-                                'Sign in',
-                                style: TextStyle(
-                                  fontSize: 23.0,
-                                  color: Colors.white,
-                                ),
-                              ),
                         style: ButtonStyle(
                           padding: MaterialStateProperty.all<EdgeInsets>(
-                            EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                            const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
                           ),
                           backgroundColor: MaterialStateProperty.all<Color>(
                               primaryforegroundColor),
@@ -245,22 +232,35 @@ class _LoginPageState extends State<LoginPage> {
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
-                              side: BorderSide(
+                              side: const BorderSide(
                                   color: Colors.white,
                                   width: 2.0), // Add the white border here
                             ),
                           ),
                         ),
+                        child: _isLoading
+                            ? const CircularProgressIndicator(
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                                strokeWidth: 4.0,
+                              ) // Show a loading indicator
+                            : const Text(
+                                'Sign in',
+                                style: TextStyle(
+                                  fontSize: 23.0,
+                                  color: Colors.white,
+                                ),
+                              ),
                       ),
                     ),
-                    SizedBox(height: 35.0),
+                    const SizedBox(height: 35.0),
                     Padding(
                       padding: const EdgeInsets.only(left: 13.0, right: 13.0),
                       child: RichText(
                         textAlign: TextAlign.center,
                         text: TextSpan(
                           children: [
-                            TextSpan(
+                            const TextSpan(
                               text: "Don't have an account?",
                               style: TextStyle(
                                 // height: 0.8,
@@ -367,7 +367,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Text(
           message,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white, // Set the text color to white
           ),
         ),

@@ -71,13 +71,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
       key: _scaffoldKey, // Add the key to your Scaffold
-      backgroundColor: Color(0xFFFFF4E9),
+      backgroundColor: const Color(0xFFFFF4E9),
       appBar: AppBar(
-        backgroundColor: Color(0xFFFFF4E9),
+        backgroundColor: const Color(0xFFFFF4E9),
         leading: Container(
-          margin: EdgeInsets.only(left: 30.0),
+          margin: const EdgeInsets.only(left: 30.0),
           child: IconButton(
-            icon: Icon(Icons.arrow_back_ios),
+            icon: const Icon(Icons.arrow_back_ios),
             color: Colors.black,
             onPressed: () {
               Navigator.of(context).push(
@@ -88,7 +88,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             },
           ),
         ),
-        title: Text(
+        title: const Text(
           'Sign Up',
           style: TextStyle(
             color: Colors.black,
@@ -103,38 +103,42 @@ class _RegistrationPageState extends State<RegistrationPage> {
       body: isFirebaseInitialized
           ? SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 60, vertical: 30),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 60, vertical: 30),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
+                    const Text(
                       'Create an account',
                       style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 20.0),
+                    const SizedBox(height: 20.0),
                     _buildTextField('First Name', false, Icons.person,
                         _firstName, _firstNameFocus),
-                    SizedBox(height: 30.0),
+                    const SizedBox(height: 30.0),
                     _buildTextField('Last Name', false, Icons.person, _lastName,
                         _lastNameFocus),
-                    SizedBox(height: 30.0),
+                    const SizedBox(height: 30.0),
                     _buildTextField(
                         'Email', false, Icons.email, _email, _emailFocus),
-                    SizedBox(height: 30.0),
+                    const SizedBox(height: 30.0),
                     _buildTextField('Password', true, Icons.lock, _password,
                         _passwordFocus),
-                    SizedBox(height: 30.0),
+                    const SizedBox(height: 30.0),
                     _buildTextField('Confirm Password', true, Icons.lock,
                         _confirmPassword, _confirmPasswordFocus),
-                    SizedBox(height: 35.0),
+                    const SizedBox(height: 35.0),
                     Container(
                       child: ElevatedButton(
                         onPressed: _isLoading
                             ? null
                             : () async {
+                                // Capture the context
+                                BuildContext dialogContext = context;
+
                                 if (_firstName.text.isEmpty ||
                                     _lastName.text.isEmpty ||
                                     _email.text.isEmpty ||
@@ -187,25 +191,26 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                       await userCredential.user!
                                           .sendEmailVerification();
 
-                                      // Show the verification email dialog
+                                      // Show the verification email dialog using the captured context
+                                      // ignore: use_build_context_synchronously
                                       AwesomeDialog(
-                                        context: context,
+                                        context: dialogContext,
                                         dialogType: DialogType.success,
                                         animType: AnimType.topSlide,
                                         title: 'Successful registration!',
                                         desc:
                                             'A verification email has been sent to your email address. Please check your email and click the verification link to activate your account.',
-                                        descTextStyle: TextStyle(
+                                        descTextStyle: const TextStyle(
                                           fontSize: 16.0,
                                         ),
-                                        padding: EdgeInsets.all(16.0),
+                                        padding: const EdgeInsets.all(16.0),
                                         btnOkOnPress: () {
-                                          Navigator.of(context).pop();
-                                          Navigator.of(context)
+                                          Navigator.of(dialogContext).pop();
+                                          Navigator.of(dialogContext)
                                               .pushNamedAndRemoveUntil(
                                                   '/login',
                                                   (Route<dynamic> route) =>
-                                                      false); // Navigate to the login page
+                                                      false);
                                         },
                                       ).show();
                                     }
@@ -230,22 +235,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                   });
                                 }
                               },
-                        child: _isLoading
-                            ? CircularProgressIndicator(
-                                valueColor:
-                                    AlwaysStoppedAnimation<Color>(Colors.white),
-                                strokeWidth: 4.0,
-                              ) // Show a loading indicator
-                            : Text(
-                                'Sign Up',
-                                style: TextStyle(
-                                  fontSize: 23.0,
-                                  color: Colors.white,
-                                ),
-                              ),
                         style: ButtonStyle(
                           padding: MaterialStateProperty.all<EdgeInsets>(
-                            EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                            const EdgeInsets.symmetric(
+                                horizontal: 40, vertical: 10),
                           ),
                           backgroundColor: MaterialStateProperty.all<Color>(
                               primaryforegroundColor),
@@ -253,20 +246,34 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
-                              side: BorderSide(color: Colors.white, width: 2.0),
+                              side: const BorderSide(
+                                  color: Colors.white, width: 2.0),
                             ),
                           ),
                         ),
+                        child: _isLoading
+                            ? const CircularProgressIndicator(
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                                strokeWidth: 4.0,
+                              ) // Show a loading indicator
+                            : const Text(
+                                'Sign Up',
+                                style: TextStyle(
+                                  fontSize: 23.0,
+                                  color: Colors.white,
+                                ),
+                              ),
                       ),
                     ),
-                    SizedBox(height: 43.0),
+                    const SizedBox(height: 43.0),
                     Padding(
                       padding: const EdgeInsets.only(left: 13.0, right: 13.0),
                       child: RichText(
                         textAlign: TextAlign.center,
                         text: TextSpan(
                           children: [
-                            TextSpan(
+                            const TextSpan(
                               text: 'Already have an account?',
                               style: TextStyle(
                                 fontSize: 16.0,
@@ -330,7 +337,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             filled: true,
             fillColor: Colors.white,
             labelText: label,
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               color: Colors.grey,
             ),
             prefixIcon: Icon(icon,
@@ -338,7 +345,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     states.contains(MaterialState.selected)
                         ? Colors.orange
                         : Colors.grey)),
-            prefixIconConstraints: BoxConstraints(
+            prefixIconConstraints: const BoxConstraints(
               minWidth: 40,
             ),
             border: OutlineInputBorder(
@@ -346,7 +353,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(
+              borderSide: const BorderSide(
                 color: Color(0xFFFF7F50),
               ),
             ),
@@ -399,30 +406,32 @@ class _RegistrationPageState extends State<RegistrationPage> {
         child: Text(
           message,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white, // Set the text color to white
           ),
         ),
       ),
-      duration: Duration(milliseconds: 2000),
+      duration: const Duration(milliseconds: 2000),
     ));
   }
 }
 
 class EmailVerificationDialog extends StatelessWidget {
+  const EmailVerificationDialog({super.key});
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0), // Rounded borders
       ),
-      title: Text(
+      title: const Text(
         'Successful registration! but first, we need to verify your email.',
         style: TextStyle(
           color: Color(0xFF66D7D1),
         ),
       ),
-      content: Text(
+      content: const Text(
           'A verification email has been sent to your email address. Please check your email and click the verification link to activate your account.'),
       actions: <Widget>[
         TextButton(
@@ -431,7 +440,7 @@ class EmailVerificationDialog extends StatelessWidget {
             Navigator.of(context).pushNamedAndRemoveUntil('/login',
                 (Route<dynamic> route) => false); // Navigate to the login page
           },
-          child: Text('OK'),
+          child: const Text('OK'),
         ),
       ],
     );

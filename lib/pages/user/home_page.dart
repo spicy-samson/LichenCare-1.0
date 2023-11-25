@@ -1,19 +1,12 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
-
-// ignore: must_be_immutable
 
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 class _HomePageState extends State<HomePage> {
-  int _currentIndex = 0;
+  final int _currentIndex = 0;
   bool navigatorHidden = false;
 
   @override
@@ -22,9 +15,9 @@ class _HomePageState extends State<HomePage> {
     double h = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Color(0xFFFFF4E9),
+      backgroundColor: const Color(0xFFFFF4E9),
       appBar: AppBar(
-        backgroundColor: Color(0xFFFFF4E9),
+        backgroundColor: const Color(0xFFFFF4E9),
         title: Padding(
           padding: const EdgeInsets.only(top: 20.0),
           child: SvgPicture.asset(
@@ -73,7 +66,7 @@ class _HomePageState extends State<HomePage> {
                       height: h * 0.27,
                     ), // Replace with your image path
                     SizedBox(height: h * 0.025),
-                    Text(
+                    const Text(
                       'Dermatology powered by Machine Learning',
                       style:
                           TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
@@ -92,14 +85,14 @@ class _HomePageState extends State<HomePage> {
                       },
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         ),
                         backgroundColor: MaterialStateProperty.all<Color>(
                             const Color(0xFFFF7F50)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
-                            side: BorderSide(
+                            side: const BorderSide(
                                 color: Colors.white,
                                 width: 2.0), // Add the white border here
                           ),
@@ -129,14 +122,14 @@ class _HomePageState extends State<HomePage> {
                       height: h * 0.33,
                     ), // Replace with your image path
                     SizedBox(height: h * 0.017),
-                    Text(
+                    const Text(
                       'Learn Lichen Planus in just a few taps',
                       style:
                           TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: h * 0.020),
-                    Text(
+                    const Text(
                       "LichenCare extends its function as a support system by providing a library of educational resources on Lichen Planus skin condition including its multiple variants. This allows patients to make an informed decision and explore the skin condition with ease.",
                       style: TextStyle(fontSize: 17.0),
                       textAlign: TextAlign.center,
@@ -148,16 +141,9 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () {
                           Navigator.of(context).pushNamed('/lichenpedia');
                         },
-                        child: Text(
-                          'Browse Now',
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.white,
-                          ),
-                        ),
                         style: ButtonStyle(
                           padding: MaterialStateProperty.all<EdgeInsets>(
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                           ),
                           backgroundColor: MaterialStateProperty.all<Color>(
                               const Color(0xFFFF7F50)),
@@ -165,10 +151,17 @@ class _HomePageState extends State<HomePage> {
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
-                              side: BorderSide(
+                              side: const BorderSide(
                                   color: Colors.white,
                                   width: 2.0), // Add the white border here
                             ),
+                          ),
+                        ),
+                        child: const Text(
+                          'Browse Now',
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -189,14 +182,14 @@ class _HomePageState extends State<HomePage> {
                       height: h * 0.33,
                     ), // Replace with your image path
                     SizedBox(height: h * 0.010),
-                    Text(
+                    const Text(
                       'Connecting Lichen Planus Warriors',
                       style:
                           TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: h * 0.025),
-                    Text(
+                    const Text(
                       "LichenCare aspires to unite Lichen Planus patients with a community that shares a bond of support and care. A feature that illuminates the rare skin condition and empowers patients to openly exchange their experiences in battling the condition.",
                       style: TextStyle(fontSize: 17.0),
                       textAlign: TextAlign.center,
@@ -208,16 +201,9 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () {
                           Navigator.of(context).pushNamed('/lichenHub');
                         },
-                        child: Text(
-                          'Join Now',
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.white,
-                          ),
-                        ),
                         style: ButtonStyle(
                           padding: MaterialStateProperty.all<EdgeInsets>(
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                           ),
                           backgroundColor: MaterialStateProperty.all<Color>(
                               const Color(0xFFFF7F50)),
@@ -225,10 +211,17 @@ class _HomePageState extends State<HomePage> {
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
-                              side: BorderSide(
+                              side: const BorderSide(
                                   color: Colors.white,
                                   width: 2.0), // Add the white border here
                             ),
+                          ),
+                        ),
+                        child: const Text(
+                          'Join Now',
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -252,14 +245,14 @@ class _HomePageState extends State<HomePage> {
                       height: h * 0.33,
                     ),
                     SizedBox(height: h * 0.025),
-                    Text(
+                    const Text(
                       'The Future of Healthcare has arrived!',
                       style:
                           TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: h * 0.025),
-                    Text(
+                    const Text(
                       "Having an instant second opinion through information leads to improved clinical outcomes. The utilization of modern technology allows LichenCare to provide healthcare support for patients with Lichen Planus.",
                       style: TextStyle(fontSize: 17.0),
                       textAlign: TextAlign.center,
@@ -271,16 +264,9 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () {
                           Navigator.of(context).pushNamed('/profile/about_us');
                         },
-                        child: Text(
-                          'Learn More',
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.white,
-                          ),
-                        ),
                         style: ButtonStyle(
                           padding: MaterialStateProperty.all<EdgeInsets>(
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                           ),
                           backgroundColor: MaterialStateProperty.all<Color>(
                               const Color(0xFFFF7F50)),
@@ -288,10 +274,17 @@ class _HomePageState extends State<HomePage> {
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
-                              side: BorderSide(
+                              side: const BorderSide(
                                   color: Colors.white,
                                   width: 2.0), // Add the white border here
                             ),
+                          ),
+                        ),
+                        child: const Text(
+                          'Learn More',
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -323,6 +316,8 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       child: FloatingActionButton(
+        backgroundColor: const Color(0xFFFFF4E9),
+        onPressed: () {},
         child: IconButton(
           onPressed: () {
             Navigator.of(context).pushNamed('/lichenCheck');
@@ -333,8 +328,6 @@ class _HomePageState extends State<HomePage> {
             height: 32, // Set the height to adjust the size of the icon
           ),
         ),
-        backgroundColor: Color(0xFFFFF4E9),
-        onPressed: () {},
       ),
     );
   }
@@ -342,9 +335,9 @@ class _HomePageState extends State<HomePage> {
   BottomNavigationBar _bottomNavBar(BuildContext context) {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
-      backgroundColor: Color(0xFF66D7D1),
+      backgroundColor: const Color(0xFF66D7D1),
       selectedItemColor: Colors.white,
-      unselectedItemColor: Color.fromARGB(94, 0, 0, 0),
+      unselectedItemColor: const Color.fromARGB(94, 0, 0, 0),
       selectedFontSize: 12,
       unselectedFontSize: 12,
       currentIndex: _currentIndex,
@@ -365,7 +358,7 @@ class _HomePageState extends State<HomePage> {
           ),
           label: 'Lichenpedia',
         ),
-        BottomNavigationBarItem(
+        const BottomNavigationBarItem(
           icon: Icon(Icons.add, size: 32),
           label: 'LichenCheck',
         ),

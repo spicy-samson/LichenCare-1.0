@@ -68,7 +68,7 @@ class _ScanHistory extends State<ScanHistory> {
       // Body
       body: Listener(
          onPointerMove: (pointer){
-          // print(pointer.delta);
+          // debugPrint(pointer.delta);
           if(pointer.delta.dy == 0){
             return;
           }
@@ -286,7 +286,7 @@ class _ScanHistory extends State<ScanHistory> {
         );
       }));
     } catch (e) {
-      print('Error fetching LichenCheck entries: $e');
+      debugPrint('Error fetching LichenCheck entries: $e');
       return {};
     }
   }
@@ -297,11 +297,11 @@ class _ScanHistory extends State<ScanHistory> {
 
     // Accessing values in the map
     lichenCheckEntries.forEach((String docId, LichenCheckEntry entry) {
-      print('Document ID: $docId');
-      print('Additional Info: ${entry.additionalInfo}');
-      print('Symptoms: ${entry.symptoms}');
-      print('Results: ${entry.results}');
-      print('------------------------');
+      debugPrint('Document ID: $docId');
+      debugPrint('Additional Info: ${entry.additionalInfo}');
+      debugPrint('Symptoms: ${entry.symptoms}');
+      debugPrint('Results: ${entry.results}');
+      debugPrint('------------------------');
     });
   }
 
@@ -326,7 +326,7 @@ class _ScanHistory extends State<ScanHistory> {
           };
         }
       } catch (e) {
-        print("Error fetching user data: $e");
+        debugPrint("Error fetching user data: $e");
       }
     }
 

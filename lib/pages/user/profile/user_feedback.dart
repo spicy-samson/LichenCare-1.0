@@ -221,7 +221,7 @@ class _UserFeedbackState extends State<UserFeedback> {
         });
       }
     } catch (e) {
-      print('Error submitting feedback: $e');
+      debugPrint('Error submitting feedback: $e');
       setState(() {
         _isSubmitting = false; // Set the flag to false if an error occurs
       });
