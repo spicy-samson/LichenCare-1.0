@@ -3,6 +3,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -68,7 +69,7 @@ class _AccountState extends State<Account> {
                           onPressed: () async {
                             // Fetch the current user data
                             Map<String, String> userData = await getUserData();
-
+                            _isLoading = false;
                             // Show a dialog to edit the first name and last name
                             await showDialog(
                               context: context,
@@ -77,105 +78,108 @@ class _AccountState extends State<Account> {
                                     userData['firstName'] ?? '';
                                 String newLastName = userData['lastName'] ?? '';
 
-                                return AlertDialog(
-                                  title: const Text('Edit Profile'),
-                                  content: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      TextFormField(
-                                        initialValue: newFirstName,
-                                        onChanged: (value) {
-                                          newFirstName = value;
-                                        },
-                                        decoration: InputDecoration(
-                                          labelText: 'First Name',
-                                          focusedBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10.0),
-                                            borderSide: const BorderSide(
-                                              color: Color(0xFFFF7F50),
+                                return StatefulBuilder(builder: ((context, setState) {
+                                      return AlertDialog(
+                                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                                      title: const Text('Edit Profile'),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          TextFormField(
+                                            initialValue: newFirstName,
+                                            onChanged: (value) {
+                                              newFirstName = value;
+                                            },
+                                            decoration: InputDecoration(
+                                              labelText: 'First Name',
+                                              focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                                borderSide: const BorderSide(
+                                                  color: Color(0xFFFF7F50),
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      TextFormField(
-                                        initialValue: newLastName,
-                                        onChanged: (value) {
-                                          newLastName = value;
-                                        },
-                                        decoration: InputDecoration(
-                                          labelText: 'Last Name',
-                                          focusedBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10.0),
-                                            borderSide: const BorderSide(
-                                              color: Color(0xFFFF7F50),
+                                          const SizedBox(height: 10),
+                                          TextFormField(
+                                            initialValue: newLastName,
+                                            onChanged: (value) {
+                                              newLastName = value;
+                                            },
+                                            decoration: InputDecoration(
+                                              labelText: 'Last Name',
+                                              focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                                borderSide: const BorderSide(
+                                                  color: Color(0xFFFF7F50),
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                  actions: [
-                                    ElevatedButton(
-                                      onPressed: () async {
-                                        try {
-                                          // Close the dialog and update the profile
-                                          Navigator.of(context).pop();
-                                          setState(() {
-                                            _isLoading = true;
-                                          });
-
-                                          await updateProfile(
-                                              newFirstName, newLastName);
-
-                                          // Reset loading state
-                                          setState(() {
-                                            _isLoading = false;
-                                          });
-                                        } catch (e) {
-                                          // Handle errors if needed
-                                          debugPrint(
-                                              'Error updating profile: $e');
-                                          setState(() {
-                                            _isLoading = false;
-                                          });
-                                        }
-                                      },
-                                      style: ButtonStyle(
-                                        padding: MaterialStateProperty.all<
-                                            EdgeInsets>(
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 20, vertical: 10),
-                                        ),
-                                        backgroundColor:
-                                            MaterialStateProperty.all<Color>(
-                                                primaryforegroundColor),
-                                        shape: MaterialStateProperty.all<
-                                            RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10.0),
-                                            side: const BorderSide(
-                                                color: Colors.white,
-                                                width: 2.0),
-                                          ),
-                                        ),
-                                      ),
-                                      child: _isLoading
-                                          ? const CircularProgressIndicator(
-                                              valueColor:
-                                                  AlwaysStoppedAnimation<Color>(
-                                                      Colors.white),
-                                              strokeWidth: 4.0,
-                                            ) // Show a loading indicator
-                                          : const Text(
-                                              'Save',
+                                      actions: [
+                                         SizedBox(
+                                          height: 40,
+                                          width: 80,
+                                           child: ElevatedButton(
+                                            onPressed: () async {
+                                              if(_isLoading){
+                                                return;
+                                              }
+                                              try {
+                                                // Close the dialog and update the profile
+                                                setState(() {
+                                                  _isLoading = true;
+                                                });
+                                         
+                                                await updateProfile(
+                                                    newFirstName, newLastName);
+                                         
+                                                // Reset loading state
+                                                setState(() {
+                                                  _isLoading = false;
+                                                });
+                                              } catch (e) {
+                                                // Handle errors if needed
+                                                debugPrint(
+                                                    'Error updating profile: $e');
+                                                setState(() {
+                                                  _isLoading = false;
+                                                });
+                                                Navigator.of(context).pop();
+                                              }
+                                            },
+                                            style: ButtonStyle(
+                                              padding: MaterialStateProperty.all<
+                                                  EdgeInsets>(
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 20, vertical: 10),
+                                              ),
+                                              backgroundColor:
+                                                  MaterialStateProperty.all<Color>(
+                                                      primaryforegroundColor),
+                                              shape: MaterialStateProperty.all<
+                                                  RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10.0),
+                                                  side: const BorderSide(
+                                                      color: Colors.white,
+                                                      width: 2.0),
+                                                ),
+                                              ),
                                             ),
-                                    ),
-                                  ],
-                                );
+                                            child: (_isLoading) ? const FittedBox(child:   SpinKitRing(color: Colors.white, size: 20, lineWidth: 2.0,) ,): const Text(
+                                                    'Save',
+                                                  ),
+                                                                                 ),
+                                         ),
+                                      ],
+                                    );
+                                }));
                               },
                             );
                           },

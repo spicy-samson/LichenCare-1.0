@@ -1472,8 +1472,8 @@ class _LichenHubState extends State<LichenHub> {
                                                                           copyPostContent(
                                                                               posts[index]),
                                                                       onLike:
-                                                                          () {
-                                                                        likePost(
+                                                                          () async{
+                                                                        await likePost(
                                                                             posts[index]);
                                                                         setState(
                                                                             () {});
