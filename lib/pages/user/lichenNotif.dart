@@ -69,7 +69,7 @@ class _LichenNotifState extends State<LichenNotif> {
               children: [
                 StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
-                      .collection('users')
+                      .collection('use rs')
                       .doc(user.uid)
                       .collection('LichenHub_posts')
                       .snapshots(),
@@ -310,10 +310,10 @@ class _LichenNotifState extends State<LichenNotif> {
                                                             fontFamily:
                                                                 'ABeeZee'),
                                                         children: [
-                                                          TextSpan(
+                                                          const TextSpan(
                                                             text:
                                                                 "A user liked your post",
-                                                            style: const TextStyle(
+                                                            style: TextStyle(
                                                                 fontSize: 14,
                                                                 fontWeight:
                                                                     FontWeight
@@ -410,10 +410,10 @@ class _LichenNotifState extends State<LichenNotif> {
                                                                 fontFamily:
                                                                     'ABeeZee'),
                                                             children: [
-                                                              TextSpan(
+                                                              const TextSpan(
                                                                 text:
                                                                     "Your post",
-                                                                style: const TextStyle(
+                                                                style: TextStyle(
                                                                     fontSize:
                                                                         14,
                                                                     fontWeight:
@@ -434,10 +434,10 @@ class _LichenNotifState extends State<LichenNotif> {
                                                                     color: Colors
                                                                         .black),
                                                               ),
-                                                              TextSpan(
+                                                              const TextSpan(
                                                                 text:
                                                                     "was reported by 1 user for the following concerns: \n",
-                                                                style: const TextStyle(
+                                                                style: TextStyle(
                                                                     fontSize:
                                                                         14,
                                                                     fontWeight:
@@ -560,6 +560,8 @@ class _LichenNotifState extends State<LichenNotif> {
         ),
       ),
       child: FloatingActionButton(
+        backgroundColor: const Color(0xFFFFF4E9),
+        onPressed: () {},
         child: IconButton(
           onPressed: () {
             Navigator.of(context).pushNamed('/lichenCheck');
@@ -570,8 +572,6 @@ class _LichenNotifState extends State<LichenNotif> {
             height: 32, // Set the height to adjust the size of the icon
           ),
         ),
-        backgroundColor: const Color(0xFFFFF4E9),
-        onPressed: () {},
       ),
     );
   }
