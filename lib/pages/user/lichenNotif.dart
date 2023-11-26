@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
@@ -53,14 +55,14 @@ class _LichenNotifState extends State<LichenNotif> {
           }
           if (pointer.delta.dy < 0) {
             // scrolls down
-            setState(() {
-              navigatorHidden = true;
-            });
+            // setState(() {
+            //   navigatorHidden = true;
+            // });
           } else {
             // scrolls up
-            setState(() {
-              navigatorHidden = false;
-            });
+            // setState(() {
+            //   navigatorHidden = false;
+            // });
           }
         },
         child: SingleChildScrollView(
@@ -69,7 +71,7 @@ class _LichenNotifState extends State<LichenNotif> {
               children: [
                 StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
-                      .collection('use rs')
+                      .collection('users')
                       .doc(user.uid)
                       .collection('LichenHub_posts')
                       .snapshots(),
@@ -82,7 +84,6 @@ class _LichenNotifState extends State<LichenNotif> {
                       return const Text('Error loading posts');
                     } else {
                       List<Widget> postWidgets = [];
-
                       for (var postDoc in postsSnapshot.data!.docs) {
                         var post = postDoc.data() as Map<String, dynamic>;
                         postWidgets.add(
@@ -267,81 +268,83 @@ class _LichenNotifState extends State<LichenNotif> {
                                   } else if (likesSnapshot.hasError) {
                                     return const Text('Error loading likes');
                                   } else {
-                                    List<String> likedUserIds = [];
-                                    for (var likeDoc
-                                        in likesSnapshot.data!.docs) {
-                                      likedUserIds.add(likeDoc.id);
-                                    }
-
-                                    return Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 5, right: 5),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          // Handle onTap for each like
-                                        },
-                                        child: Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              vertical: 8),
-                                          padding: const EdgeInsets.all(16),
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey[100],
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              const Icon(
-                                                Icons.thumb_up,
-                                                size: 30,
-                                                color: Colors.green,
-                                              ),
-                                              const SizedBox(width: 16),
-                                              Expanded(
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    RichText(
-                                                      text: TextSpan(
-                                                        style: const TextStyle(
-                                                            fontFamily:
-                                                                'ABeeZee'),
-                                                        children: [
-                                                          const TextSpan(
-                                                            text:
-                                                                "A user liked your post",
-                                                            style: TextStyle(
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal,
-                                                                color: Colors
-                                                                    .black),
-                                                          ),
-                                                          TextSpan(
-                                                            text:
-                                                                " ${post['title']}",
-                                                            style: const TextStyle(
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w700,
-                                                                color: Colors
-                                                                    .black),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
+                                    List<Widget> likedUserIds = [];
+                                    for (var usersLiked
+                                        in post['likedByUserIds'] ?? []) {
+                                      likedUserIds.add(Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 5, right: 5),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            // Handle onTap for each like
+                                          },
+                                          child: Container(
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical: 8),
+                                            padding: const EdgeInsets.all(16),
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey[100],
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                const Icon(
+                                                  Icons.thumb_up,
+                                                  size: 30,
+                                                  color: Colors.green,
                                                 ),
-                                              ),
-                                            ],
+                                                const SizedBox(width: 16),
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      RichText(
+                                                        text: TextSpan(
+                                                          style: const TextStyle(
+                                                              fontFamily:
+                                                                  'ABeeZee'),
+                                                          children: [
+                                                            TextSpan(
+                                                              text:
+                                                                  "A user liked your post",
+                                                              style: const TextStyle(
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal,
+                                                                  color: Colors
+                                                                      .black),
+                                                            ),
+                                                            TextSpan(
+                                                              text:
+                                                                  " ${post['title']}",
+                                                              style: const TextStyle(
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  color: Colors
+                                                                      .black),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
+                                      ));
+                                    }
+                                    return Column(
+                                      children: likedUserIds,
                                     );
                                   }
                                 },
@@ -369,7 +372,10 @@ class _LichenNotifState extends State<LichenNotif> {
                                     for (var reportDoc
                                         in reportsSnapshot.data!.docs) {
                                       var report = reportDoc.data()
-                                          as Map<String, dynamic>;
+                                          as Map<String, dynamic>?;
+                                      if (report == null) {
+                                        continue;
+                                      }
                                       reportWidgets.add(
                                         Padding(
                                           padding: const EdgeInsets.only(
@@ -410,10 +416,10 @@ class _LichenNotifState extends State<LichenNotif> {
                                                                 fontFamily:
                                                                     'ABeeZee'),
                                                             children: [
-                                                              const TextSpan(
+                                                              TextSpan(
                                                                 text:
                                                                     "Your post",
-                                                                style: TextStyle(
+                                                                style: const TextStyle(
                                                                     fontSize:
                                                                         14,
                                                                     fontWeight:
@@ -424,7 +430,7 @@ class _LichenNotifState extends State<LichenNotif> {
                                                               ),
                                                               TextSpan(
                                                                 text:
-                                                                    " ${post['title']}",
+                                                                    " ${post['title']} ",
                                                                 style: const TextStyle(
                                                                     fontSize:
                                                                         14,
@@ -434,10 +440,10 @@ class _LichenNotifState extends State<LichenNotif> {
                                                                     color: Colors
                                                                         .black),
                                                               ),
-                                                              const TextSpan(
+                                                              TextSpan(
                                                                 text:
                                                                     "was reported by 1 user for the following concerns: \n",
-                                                                style: TextStyle(
+                                                                style: const TextStyle(
                                                                     fontSize:
                                                                         14,
                                                                     fontWeight:
@@ -560,8 +566,6 @@ class _LichenNotifState extends State<LichenNotif> {
         ),
       ),
       child: FloatingActionButton(
-        backgroundColor: const Color(0xFFFFF4E9),
-        onPressed: () {},
         child: IconButton(
           onPressed: () {
             Navigator.of(context).pushNamed('/lichenCheck');
@@ -572,6 +576,8 @@ class _LichenNotifState extends State<LichenNotif> {
             height: 32, // Set the height to adjust the size of the icon
           ),
         ),
+        backgroundColor: const Color(0xFFFFF4E9),
+        onPressed: () {},
       ),
     );
   }
