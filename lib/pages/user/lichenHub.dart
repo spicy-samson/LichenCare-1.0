@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -37,7 +38,7 @@ class Post {
   QuillController content;
   String? embeddedImage;
   int likes;
-  List<String> likedByUserIds;
+  List<dynamic> likedByUserIds;
   bool isLiked;
   List<Comment> comments;
 
@@ -90,6 +91,7 @@ class _LichenHubState extends State<LichenHub> {
   TextEditingController reportFieldController = TextEditingController();
   TextEditingController titleController = TextEditingController();
   TextEditingController replyController = TextEditingController();
+  StreamSubscription? fireStoreListener;
   bool titleOnFocus = false;
   Color currentColor = Colors.black87;
   List<int> reportFlags = [];
@@ -104,6 +106,9 @@ class _LichenHubState extends State<LichenHub> {
   bool postLoaded = false;
   bool isPosting = false;
   bool navigatorHidden = false;
+
+  int notifBadge = 0;
+  int overallNotif = 0;
 
   final FirebaseAuth auth = FirebaseAuth.instance;
   final storage = FirebaseStorage.instance;
@@ -144,9 +149,9 @@ class _LichenHubState extends State<LichenHub> {
             datetime: postDoc['date_uploaded']?.toDate(),
             title: postDoc['title'] ?? '',
             content: content,
-            isLiked: false,
-            likes: postDoc['likes'] ?? 0,
-            likedByUserIds: [],
+            isLiked:  (  ( postDoc['likedByUserIds'] != null) ? (postDoc['likedByUserIds'] ?? []).contains(postDoc['userID']) : false),
+            likes: ( postDoc['likedByUserIds'] != null) ?  postDoc['likedByUserIds'].length : 0,
+            likedByUserIds: postDoc['likedByUserIds'] ?? [],
             comments: [],
             embeddedImage: postDoc['file_image'],
           );
@@ -319,7 +324,6 @@ class _LichenHubState extends State<LichenHub> {
         final postsCollection = postOwnerDocRef.collection('LichenHub_posts');
 
         final postDocRef = postsCollection.doc(post.id);
-
         final newCommentDocRef = await postDocRef.collection('comments').add({
           'sender': makeAnonymous(firstName),
           'senderID': user.uid,
@@ -340,6 +344,10 @@ class _LichenHubState extends State<LichenHub> {
         setState(() {
           post.comments = [newComment, ...post.comments];
         });
+        await postDocRef.update({
+          'lastTouch':time.microsecondsSinceEpoch.toString(),
+        });
+
       } else {
         debugPrint('User document does not exist in Firestore');
       }
@@ -468,42 +476,20 @@ class _LichenHubState extends State<LichenHub> {
           .collection('LichenHub_posts')
           .doc(post.id);
 
-      // Check if the post is liked by the current user locally
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      List<String> userLikedPosts =
-          prefs.getStringList('userLikedPosts_${user.uid}') ?? [];
-
-      bool isLiked = userLikedPosts.contains(post.id);
-
-      // Use FieldValue.arrayUnion and FieldValue.arrayRemove to append/remove user ID
-      final likeUpdate = isLiked
-          ? FieldValue.arrayRemove([user.uid])
-          : FieldValue.arrayUnion([user.uid]);
+      if(post.likedByUserIds.contains(user.uid)){
+        post.likedByUserIds.remove(user.uid);
+      }else{
+        post.likedByUserIds.add(user.uid);
+      }
 
       // Firebase update
       await postRef.update({
-        'likes': isLiked ? post.likes - 1 : post.likes + 1,
-        'likedByUserIds': likeUpdate,
+        'likes': post.likedByUserIds.length,
+        'likedByUserIds':  post.likedByUserIds ,
       });
-
-      // Update local liked posts
-      if (isLiked) {
-        userLikedPosts.remove(post.id);
-      } else {
-        userLikedPosts.add(post.id);
-      }
-
-      // Save updated liked post IDs locally
-      await prefs.setStringList('userLikedPosts_${user.uid}', userLikedPosts);
-
       setState(() {
-        post.likes = isLiked ? post.likes - 1 : post.likes + 1;
-        post.isLiked = !isLiked;
-        post.likedByUserIds = List.from(
-            likeUpdate == FieldValue.arrayUnion([user.uid])
-                ? [...post.likedByUserIds, user.uid]
-                : post.likedByUserIds
-              ..remove(user.uid));
+        post.likes = post.likedByUserIds .length;
+        post.isLiked = post.likedByUserIds.contains(user.uid);
       });
     } catch (e) {
       debugPrint('Error liking the post: $e');
@@ -541,6 +527,9 @@ class _LichenHubState extends State<LichenHub> {
 
       // Update the post document with the report
       await postRef.collection('reports').add(reportData);
+      await postRef.update({
+        'lastTouch':DateTime.now().microsecondsSinceEpoch.toString(),
+      });
     } catch (e) {
       debugPrint('Error reporting the post: $e');
     }
@@ -1115,7 +1104,7 @@ class _LichenHubState extends State<LichenHub> {
                                         // Call the reportPost function
                                         await reportPost(
                                             post, reportFlags, details);
-                                        AwesomeDialog(
+                                        var result = await AwesomeDialog(
                                           context: context,
                                           dialogType: DialogType.warning,
                                           animType: AnimType.topSlide,
@@ -1128,10 +1117,12 @@ class _LichenHubState extends State<LichenHub> {
                                           padding: EdgeInsets.all(16.0),
                                           btnCancelText: "Close",
                                           btnCancelOnPress: () {
-                                            Navigator.of(context).pop();
+                                            Navigator.of(context).pop('closed');
                                           },
                                         ).show();
-                                        // Navigator.of(context).pop();
+                                        if(result == null){
+                                          Navigator.of(context).pop();
+                                        }
                                       },
                                       child: Transform.rotate(
                                           angle: -3.14 / 5,
@@ -1253,6 +1244,59 @@ class _LichenHubState extends State<LichenHub> {
     loadPosts().then((value) => {
           if (mounted) {postLoaded = true}
         });
+    final user = FirebaseAuth.instance.currentUser!;
+    fireStoreListener =  FirebaseFirestore.instance
+      .collection('users')
+      .doc(user.uid)
+      .collection('LichenHub_posts')
+      .snapshots().listen((postsSnapshots) async {
+        int notifCount = 0;
+        if(mounted){
+          for(var postSnap in postsSnapshots.docs){
+            final postData = postSnap.data();
+            // track update of number of likes
+            if(postData['likedByUserIds'] != null){
+              if(postData['likedByUserIds'].contains(user.uid)){
+                notifCount += int.parse(postData['likedByUserIds'].length.toString())-1; 
+              }else{
+                notifCount += int.parse((postData['likedByUserIds']??[]).length.toString());
+              }
+            }else{
+              notifCount += int.parse((postData['likedByUserIds'] ?? []).length.toString());
+            }
+            // track number of comments
+            final comments = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .collection('LichenHub_posts')
+            .doc(postSnap.id)
+            .collection('comments').get();
+            notifCount += (comments.docs.length<0) ? 0 : comments.docs.length;
+
+            // track number of reports
+            final reports = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .collection('LichenHub_posts')
+            .doc(postSnap.id)
+            .collection('reports').get();
+            notifCount += (reports.docs.length<0)? 0 : reports.docs.length;
+          }
+          final prefs = await SharedPreferences.getInstance();
+          final previousBadgeCount = prefs.getInt('previousBadgeCount');
+          if(previousBadgeCount != null){
+            overallNotif = previousBadgeCount;
+          }
+          if(notifCount - overallNotif > notifBadge){
+            setState(() {
+              notifBadge = notifCount - overallNotif;
+            });
+          }else{
+            notifBadge = notifCount - overallNotif;
+          }          
+          overallNotif = notifCount;
+        }
+      });
   }
 
   @override
@@ -1261,6 +1305,7 @@ class _LichenHubState extends State<LichenHub> {
     titleController.dispose();
     contentController.dispose();
     reportFieldController.dispose();
+    fireStoreListener?.cancel();
   }
 
   @override
@@ -1297,10 +1342,15 @@ class _LichenHubState extends State<LichenHub> {
                 child: InkWell(
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
-                  onTap: () {
+                  onTap: () async{
+                    final prefs = await SharedPreferences.getInstance();
+                    prefs.setInt('previousBadgeCount', overallNotif);
                     Navigator.pushNamed(context, "/lichenNotif");
                   },
-                  child: badges.Badge(
+                  child: (notifBadge<=0)? Icon(
+                      Icons.notifications,
+                      color: primaryforegroundColor,
+                    ): badges.Badge(
                     position: badges.BadgePosition.topEnd(top: -10, end: -5),
                     badgeStyle: badges.BadgeStyle(
                       padding: EdgeInsets.all(5),
@@ -1309,7 +1359,7 @@ class _LichenHubState extends State<LichenHub> {
                     ),
                     badgeAnimation: badges.BadgeAnimation.fade(),
                     badgeContent: Text(
-                      '0',
+                      notifBadge.toString(),
                       style: TextStyle(color: Colors.white),
                     ),
                     child: Icon(
@@ -1383,8 +1433,8 @@ class _LichenHubState extends State<LichenHub> {
                                     post: posts[index],
                                     fromUser: (isPostFromUser(posts[index])),
                                     onCopy: () => copyPostContent(posts[index]),
-                                    onLike: () {
-                                      likePost(posts[index]);
+                                    onLike: () async {
+                                      await likePost(posts[index]);
                                     },
                                     onDelete: () {
                                       deletePost(posts[index]);
@@ -1394,6 +1444,7 @@ class _LichenHubState extends State<LichenHub> {
                                     onEdit: () => composePost(scaleFactor,
                                         post: posts[index]),
                                     onReply: () {
+                                      replyController.clear();
                                       isPosting = false;
                                       showModalBottomSheet(
                                           context: context,
@@ -1589,6 +1640,7 @@ class _LichenHubState extends State<LichenHub> {
                                                                         5.0),
                                                                 child:
                                                                     TextFormField(
+                                                                      onChanged: (value)=>setState((){}),
                                                                   controller:
                                                                       replyController,
                                                                   textInputAction:
@@ -1621,6 +1673,9 @@ class _LichenHubState extends State<LichenHub> {
                                                               : InkWell(
                                                                   onTap:
                                                                       () async {
+                                                                    if(replyController.text==''){
+                                                                      return;
+                                                                    }
                                                                     if (isPosting) {
                                                                       return;
                                                                     }
@@ -1661,7 +1716,7 @@ class _LichenHubState extends State<LichenHub> {
                                                                       Icons
                                                                           .send,
                                                                       color:
-                                                                          primaryforegroundColor,
+                                                                          (replyController.text == '')? Colors.grey: primaryforegroundColor,
                                                                       size: 32,
                                                                     )),
                                                                   ),
