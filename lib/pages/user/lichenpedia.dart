@@ -400,15 +400,15 @@ class _LichenPediaState extends State<LichenPedia> {
                             'assets/imgs/lichenpedia_image2.png'
                           ],
                           [
-                            'assets/imgs/lichenpedia_image2.png',
-                            'assets/imgs/lichenpedia_image1.png'
+                            'assets/imgs/mucosal1.png',
+                            'assets/imgs/mucosal2.png'
                           ],
-                          // Add nalang -- by TWO ang pag add example:
-
-                          //  uncomment nalang this [
-                          //   'assets/imgs/lichenpedia_image2.png',
-                          //   'assets/imgs/lichenpedia_image1.png'
-                          // ],
+                          ['assets/imgs/plano1.png', 'assets/imgs/plano2.png'],
+                          [
+                            'assets/imgs/pigmen1.png',
+                            'assets/imgs/pigmen2.png'
+                          ],
+                          ['assets/imgs/nails1.png', 'assets/imgs/nails2.png'],
                         ].map((itemList) {
                           return Builder(
                             builder: (BuildContext context) {

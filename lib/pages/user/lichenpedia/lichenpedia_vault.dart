@@ -23,11 +23,11 @@ class _LichenPediaVaultState extends State<LichenPediaVault> {
         automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFFFFF4E9),
         title: Padding(
-          padding: EdgeInsets.only(top: h * 0.05, right: w * 0.5),
+          padding: EdgeInsets.only(top: h * 0.02, right: w * 0.42),
           child: SvgPicture.asset(
             'assets/svgs/#2 - lichenpedia.svg',
             width: w * 0.1,
-            height: h * 0.047,
+            height: h * 0.6,
           ),
         ),
         elevation: 0,
@@ -40,10 +40,13 @@ class _LichenPediaVaultState extends State<LichenPediaVault> {
         child: Center(
           child: Column(
             children: [
-              const SizedBox(height: 20),
               const Text(
                 'Video Vault',
-                style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
+                style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w900,
+                    fontFamily: 'ABeeZee',
+                    fontStyle: FontStyle.italic),
               ),
               const SizedBox(height: 25),
               GestureDetector(

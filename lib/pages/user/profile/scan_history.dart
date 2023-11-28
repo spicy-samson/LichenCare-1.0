@@ -36,7 +36,6 @@ class _ScanHistory extends State<ScanHistory> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _lichenEntryData = getLichenCheckEntries();
   }

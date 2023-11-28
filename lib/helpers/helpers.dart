@@ -10,26 +10,25 @@ Widget richText(String text,
     textAlign: (textAlign == null) ? TextAlign.justify : textAlign,
     text: TextSpan(
       style: TextStyle(
-        color: (color == null) ? Colors.black87 : color,
-        fontStyle: fontStyle,
-        fontWeight: fontWeight,
-        fontSize: fontSize*1.02,
-      ),
+          color: (color == null) ? Colors.black87 : color,
+          fontStyle: fontStyle,
+          fontWeight: fontWeight,
+          fontSize: fontSize * 1.02,
+          fontFamily: 'ABeeZee'),
       children: [TextSpan(text: text)],
     ),
   );
 }
 
-
-String makeAnonymous(String name){
-    String anonymous = "";
-    String firstName = name.split(" ")[0];
-    for (int i = 0; i < firstName.length; i++){
-      if(i==0){
-        anonymous+=firstName[i];
-      }else{
-        anonymous+="*";
-      }
+String makeAnonymous(String name) {
+  String anonymous = "";
+  String firstName = name.split(" ")[0];
+  for (int i = 0; i < firstName.length; i++) {
+    if (i == 0) {
+      anonymous += firstName[i];
+    } else {
+      anonymous += "*";
     }
-    return anonymous;
   }
+  return anonymous;
+}

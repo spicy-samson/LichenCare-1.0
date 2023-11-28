@@ -23,11 +23,11 @@ class _LichenPediaArchiveState extends State<LichenPediaArchive> {
         automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFFFFF4E9),
         title: Padding(
-          padding: EdgeInsets.only(top: h * 0.05, right: w * 0.5),
+          padding: EdgeInsets.only(top: h * 0.02, right: w * 0.42),
           child: SvgPicture.asset(
             'assets/svgs/#2 - lichenpedia.svg',
             width: w * 0.1,
-            height: h * 0.047,
+            height: h * 0.6,
           ),
         ),
         elevation: 0,
@@ -39,10 +39,13 @@ class _LichenPediaArchiveState extends State<LichenPediaArchive> {
         child: Center(
           child: Column(
             children: [
-              const SizedBox(height: 5),
               const Text(
                 'Research Archive',
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.w900),
+                style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w900,
+                    fontFamily: 'ABeeZee',
+                    fontStyle: FontStyle.italic),
               ),
               const SizedBox(height: 15),
               GestureDetector(
@@ -311,7 +314,7 @@ class _LichenPediaArchiveState extends State<LichenPediaArchive> {
                 style: ButtonStyle(
                   padding: MaterialStateProperty.all<EdgeInsets>(
                     EdgeInsets.symmetric(
-                        horizontal: 5, vertical: 22 * scaleFactor),
+                        horizontal: 20, vertical: 22 * scaleFactor),
                   ),
                   backgroundColor:
                       MaterialStateProperty.all<Color>(const Color(0xFFFF7F50)),

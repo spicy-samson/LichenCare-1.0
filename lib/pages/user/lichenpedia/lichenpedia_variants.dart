@@ -40,11 +40,11 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
         automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFFFFF4E9),
         title: Padding(
-          padding: EdgeInsets.only(top: h * 0.05, right: w * 0.5),
+          padding: EdgeInsets.only(top: h * 0.02, right: w * 0.42),
           child: SvgPicture.asset(
             'assets/svgs/#2 - lichenpedia.svg',
             width: w * 0.1,
-            height: h * 0.047,
+            height: h * 0.6,
           ),
         ),
         elevation: 0,
@@ -53,23 +53,23 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
 
       // Body
       body: Listener(
-         onPointerMove: (pointer){
-        // print(pointer.delta);
-        if(pointer.delta.dy == 0){
-          return;
-        }
-        if(pointer.delta.dy < 0){
-          // scrolls down
-          setState(() {
-            navigatorHidden = true;
-          });
-        }else{
-          // scrolls up
-          setState(() {
-            navigatorHidden = false;
-          });
-        }
-      },
+        onPointerMove: (pointer) {
+          // print(pointer.delta);
+          if (pointer.delta.dy == 0) {
+            return;
+          }
+          if (pointer.delta.dy < 0) {
+            // scrolls down
+            setState(() {
+              navigatorHidden = true;
+            });
+          } else {
+            // scrolls up
+            setState(() {
+              navigatorHidden = false;
+            });
+          }
+        },
         child: SingleChildScrollView(
           child: Center(
             child: Column(
@@ -92,7 +92,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                                 child: Text(
                                   'Variants of Lichen Planus',
                                   style: TextStyle(
-                                      fontSize: 40, fontWeight: FontWeight.w900),
+                                      fontSize: 40,
+                                      fontWeight: FontWeight.w900),
                                   textAlign: TextAlign
                                       .center, // Center align the text within the Text widget
                                 ),
@@ -106,7 +107,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                             _onArrowDownPressed(scrollKeys["Cutaneous"]!);
                           },
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 45, right: 45.0),
+                            padding:
+                                const EdgeInsets.only(left: 45, right: 45.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -133,7 +135,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                             _onArrowDownPressed(scrollKeys["Planopilaris"]!);
                           },
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 45, right: 45.0),
+                            padding:
+                                const EdgeInsets.only(left: 45, right: 45.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -160,7 +163,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                             _onArrowDownPressed(scrollKeys["Nails"]!);
                           },
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 45, right: 45.0),
+                            padding:
+                                const EdgeInsets.only(left: 45, right: 45.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -185,7 +189,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                             _onArrowDownPressed(scrollKeys["Pigmentosus"]!);
                           },
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 45, right: 45.0),
+                            padding:
+                                const EdgeInsets.only(left: 45, right: 45.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -210,7 +215,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                             _onArrowDownPressed(scrollKeys["Eruption"]!);
                           },
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 45, right: 45.0),
+                            padding:
+                                const EdgeInsets.only(left: 45, right: 45.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -235,7 +241,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                             _onArrowDownPressed(scrollKeys["Mucosal"]!);
                           },
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 45, right: 45.0),
+                            padding:
+                                const EdgeInsets.only(left: 45, right: 45.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -274,17 +281,20 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                               style: ButtonStyle(
                                 padding: MaterialStateProperty.all<EdgeInsets>(
                                   EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 22 * scaleFactor),
+                                      horizontal: 20,
+                                      vertical: 22 * scaleFactor),
                                 ),
-                                backgroundColor: MaterialStateProperty.all<Color>(
-                                    const Color(0xFFFF7F50)),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        const Color(0xFFFF7F50)),
                                 shape: MaterialStateProperty.all<
                                     RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                     side: BorderSide(
                                         color: Colors.white,
-                                        width: 2.0), // Add the white border here
+                                        width:
+                                            2.0), // Add the white border here
                                   ),
                                 ),
                               ),
@@ -322,8 +332,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     children: [
                       Text(
                         'The hallmarks of cutaneous LP are purple or violet, polygonal, shiny, flat-topped, firm, papules, and plaques with white streaks (Wickham striae) (40). Wickham striae are best visualized by dermscopy. The cutaneous lesions may vary in size from several millimeters to more than one centimeter.',
-                        style:
-                            TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w300),
                       ),
                     ],
                   ),
@@ -380,7 +390,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     padding: EdgeInsets.only(left: 35.0),
                     child: Text(
                       'Sub-Types of Cutaneous Lichen Planus',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
                     ),
                   ),
                 ),
@@ -391,7 +402,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     padding: EdgeInsets.only(left: 55.0),
                     child: Text(
                       '1. Annular Lichen Planus',
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                     ),
                   ),
                 ),
@@ -402,7 +414,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     padding: EdgeInsets.only(left: 55.0, right: 35),
                     child: Text(
                       'Characterized by a ring-shaped or annular plaques on the skin',
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
                     ),
                   ),
                 ),
@@ -422,8 +435,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     ),
                     items: [
                       ['assets/imgs/annular1.png', 'assets/imgs/annular2.png'],
-                      ['assets/imgs/annular2.png', 'assets/imgs/annular1.png'],
-                      // Add more items for additional slides
+                      ['assets/imgs/annular3.jpg', 'assets/imgs/annular4.jpg'],
                     ].map((itemList) {
                       return Builder(
                         builder: (BuildContext context) {
@@ -451,7 +463,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     padding: EdgeInsets.only(left: 55.0),
                     child: Text(
                       '2. Hypertrophic Lichen Planus',
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                     ),
                   ),
                 ),
@@ -462,7 +475,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     padding: EdgeInsets.only(left: 55.0, right: 35),
                     child: Text(
                       'Lesions are thick and more raised compared to the usual form.',
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
                     ),
                   ),
                 ),
@@ -482,8 +496,68 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     ),
                     items: [
                       ['assets/imgs/hyper1.png', 'assets/imgs/hyper2.png'],
-                      ['assets/imgs/hyper2.png', 'assets/imgs/hyper1.png'],
-                      // Add more items for additional slides
+                      ['assets/imgs/hyper3.png', 'assets/imgs/hyper4.jpg'],
+                    ].map((itemList) {
+                      return Builder(
+                        builder: (BuildContext context) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: itemList.map((item) {
+                              return SizedBox(
+                                width: 190 * scaleFactor,
+                                child: Image.asset(
+                                  item,
+                                  fit: BoxFit.cover,
+                                ),
+                              );
+                            }).toList(),
+                          );
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),
+                const SizedBox(height: 45),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 55.0),
+                    child: Text(
+                      '3. Linear Lichen Planus',
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 55.0, right: 35),
+                    child: Text(
+                      'Lesions develop in a linear or band-like pattern, following the lines of skin tension.',
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                      height: 200 * scaleFactor,
+                      enlargeCenterPage: true,
+                      enableInfiniteScroll: true,
+                      autoPlay: true,
+                      autoPlayInterval: Duration(seconds: 3),
+                      autoPlayAnimationDuration: Duration(milliseconds: 800),
+                      autoPlayCurve: Curves.fastOutSlowIn,
+                      scrollDirection: Axis.horizontal,
+                    ),
+                    items: [
+                      ['assets/imgs/linear1.png', 'assets/imgs/linear2.png'],
+                      ['assets/imgs/linear3.png', 'assets/imgs/linear4.jpg'],
                     ].map((itemList) {
                       return Builder(
                         builder: (BuildContext context) {
@@ -533,8 +607,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     children: [
                       Text(
                         'Lichen Planopilaris (LPP) presents as tiny red spiny follicular papules and extending smooth areas on the scalp or less often, elsewhere on the hair-bearing regions body areas. ',
-                        style:
-                            TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w300),
                       ),
                     ],
                   ),
@@ -546,7 +620,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     padding: EdgeInsets.only(left: 35.0),
                     child: Text(
                       'Sub-Types of Lichen Planopilaris',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
                     ),
                   ),
                 ),
@@ -557,7 +632,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     padding: EdgeInsets.only(left: 55.0),
                     child: Text(
                       '1.	Frontal Fibrosing Alopecia (FFA)',
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                     ),
                   ),
                 ),
@@ -568,7 +644,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     padding: EdgeInsets.only(left: 55.0, right: 35),
                     child: Text(
                       'Affects the front hairline and forehead, causing hairline recession.',
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
                     ),
                   ),
                 ),
@@ -588,8 +665,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     ),
                     items: [
                       ['assets/imgs/plano1.png', 'assets/imgs/plano2.png'],
-                      ['assets/imgs/plano2.png', 'assets/imgs/plano1.png'],
-                      // Add more items for additional slides
+                      ['assets/imgs/plano3.jpg', 'assets/imgs/plano4.jpg'],
                     ].map((itemList) {
                       return Builder(
                         builder: (BuildContext context) {
@@ -617,7 +693,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     padding: EdgeInsets.only(left: 55.0),
                     child: Text(
                       '2.	Graham-Little Syndrome',
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                     ),
                   ),
                 ),
@@ -628,7 +705,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     padding: EdgeInsets.only(left: 55.0, right: 35),
                     child: Text(
                       'Involves small, follicular papules and scarring hair loss, often on the scalp, face, and trunk.',
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
                     ),
                   ),
                 ),
@@ -648,8 +726,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     ),
                     items: [
                       ['assets/imgs/graham1.png', 'assets/imgs/graham2.png'],
-                      ['assets/imgs/graham2.png', 'assets/imgs/graham1.png'],
-                      // Add more items for additional slides
+                      ['assets/imgs/graham3.png'],
                     ].map((itemList) {
                       return Builder(
                         builder: (BuildContext context) {
@@ -680,7 +757,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     padding: EdgeInsets.only(left: 35.0, right: 35),
                     child: Text(
                       'Lichen Planus of the Nails',
-                      style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
+                      style:
+                          TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -693,8 +771,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     children: [
                       Text(
                         'Lichen Planus may affect one or more nails, sometimes in the absence of skin involvement. Lichen Planus thins the nail plate, which may become grooved and ridged. The nail may darken, thicken or lift off the nail bed (onycholysis). Sometimes, the cuticle is destroyed and forms a scar (pterygium). The nails may shed or stop growing altogether, and they may rarely, completely disappear (anonychia). An important clinical feature of nail LP is the occurrence of a dorsal pterygium.',
-                        style:
-                            TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w300),
                       ),
                     ],
                   ),
@@ -715,8 +793,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     ),
                     items: [
                       ['assets/imgs/nails1.png', 'assets/imgs/nails2.png'],
-                      ['assets/imgs/nails2.png', 'assets/imgs/nails1.png'],
-                      // Add more items for additional slides
+                      ['assets/imgs/nails3.jpg', 'assets/imgs/nails4.jpg'],
                     ].map((itemList) {
                       return Builder(
                         builder: (BuildContext context) {
@@ -747,7 +824,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     padding: EdgeInsets.only(left: 35.0, right: 35),
                     child: Text(
                       'Lichen Planus Pigmentosus',
-                      style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
+                      style:
+                          TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -760,8 +838,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     children: [
                       Text(
                         'Often referred to as "Lichen planus pigmentosus inversus," is a rare variant of lichen planus that primarily affects the skin and is characterized by the development of hyperpigmented (dark) patches or lesions. Unlike the classic lichen planus, which presents with red or violaceous papules, lichen planus pigmentosus leads to brown or gray-brown macules, usually on sun-exposed areas of the body. These macules do not have the typical itching seen in classic lichen planus.',
-                        style:
-                            TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w300),
                       ),
                     ],
                   ),
@@ -782,7 +860,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     ),
                     items: [
                       ['assets/imgs/pigmen1.png', 'assets/imgs/pigmen2.png'],
-                      ['assets/imgs/pigmen2.png', 'assets/imgs/pigmen1.png'],
+                      ['assets/imgs/pigmen3.jpg', 'assets/imgs/pigmen4.jpg'],
                       // Add more items for additional slides
                     ].map((itemList) {
                       return Builder(
@@ -814,7 +892,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     padding: EdgeInsets.only(left: 35.0, right: 35),
                     child: Text(
                       'Lichenoid Drug Eruptions',
-                      style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
+                      style:
+                          TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -827,8 +906,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     children: [
                       Text(
                         'Often mimic idiopathic lichen planus although there can be features that may help to distinguish them, which may include: symmetrical rash on the trunk and limbs, predominantly in sun-exposed areas. Asymptomatic or itchy; pink, brown, or purple; flat, slightly scaly patches most often arise on the trunk. The oral mucosa (oral lichenoid reaction) and other sites are also sometimes affected. Many drugs can rarely cause lichenoid eruptions such as gold, hydroxychloroquine, and captopril.',
-                        style:
-                            TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w300),
                       ),
                     ],
                   ),
@@ -849,7 +928,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     ),
                     items: [
                       ['assets/imgs/drugs1.png', 'assets/imgs/drugs2.png'],
-                      ['assets/imgs/drugs2.png', 'assets/imgs/drugs1.png'],
+                      ['assets/imgs/drugs3.jpg', 'assets/imgs/drugs4.png'],
                       // Add more items for additional slides
                     ].map((itemList) {
                       return Builder(
@@ -881,7 +960,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     padding: EdgeInsets.only(left: 35.0, right: 35),
                     child: Text(
                       'Mucosal Lichen Planus',
-                      style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
+                      style:
+                          TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
                       textAlign: TextAlign
                           .center, // Center align the text within the Text widget
                     ),
@@ -916,7 +996,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     ),
                     items: [
                       ['assets/imgs/mucosal1.png', 'assets/imgs/mucosal2.png'],
-                      ['assets/imgs/mucosal2.png', 'assets/imgs/mucosal1.png'],
+                      ['assets/imgs/mucosal3.jpg', 'assets/imgs/mucosal4.jpg'],
                       // Add more items for additional slides
                     ].map((itemList) {
                       return Builder(
@@ -961,7 +1041,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                         ),
                         backgroundColor: MaterialStateProperty.all<Color>(
                             const Color(0xFFFF7F50)),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                             side: BorderSide(
@@ -973,7 +1054,9 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     ),
                   ),
                 ),
-                 (navigatorHidden)? const SizedBox(height: 40) :const SizedBox(height: 100)
+                (navigatorHidden)
+                    ? const SizedBox(height: 40)
+                    : const SizedBox(height: 100)
               ],
             ),
           ),
@@ -982,10 +1065,10 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
 
       // Floating action button
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton:  (navigatorHidden)? null :_lichenCheckBtn(context),
+      floatingActionButton: (navigatorHidden) ? null : _lichenCheckBtn(context),
 
       // Bottom navigation ba()
-      bottomNavigationBar:  (navigatorHidden)? null: _bottomNavBar(context),
+      bottomNavigationBar: (navigatorHidden) ? null : _bottomNavBar(context),
     );
   }
 
