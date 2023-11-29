@@ -952,10 +952,10 @@ class _LichenCheckState extends State<LichenCheck> {
                     padding: const EdgeInsets.all(10.0),
                     child: Icon(
                       Icons.male,
-                      size: 80,
+                      size: 65,
                       color: (patientInformation.gender == 1)
                           ? Colors.white
-                          : Colors.black87,
+                          : Colors.blue,
                     ),
                   ),
                 ),
@@ -976,11 +976,11 @@ class _LichenCheckState extends State<LichenCheck> {
                     padding: const EdgeInsets.all(10.0),
                     child: Icon(
                       Icons.female,
-                      size: 80,
+                      size: 65,
                       color: (patientInformation.gender == 2)
                           ? Colors.white
-                          : Colors.black87,
-                    ),
+                          : Colors.pink,
+                    ), 
                   ),
                 ),
               ],
@@ -1002,7 +1002,9 @@ class _LichenCheckState extends State<LichenCheck> {
             ],
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
-                hintText: "Enter your age", border: InputBorder.none),
+                hintText: "Enter your age",
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)))),
           ),
           Padding(
             padding: EdgeInsets.only(top: 10.0 * scaleFactor, bottom: 0),
@@ -1012,9 +1014,16 @@ class _LichenCheckState extends State<LichenCheck> {
             ),
           ),
           SizedBox(
+              height: 40,
               width: double.infinity,
               child: TextButton(
-                  style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.only(left: 10),
+                    side: BorderSide(
+                      color: Colors.grey,
+                      width: 1.0,
+                    ),
+                  ),
                   onPressed: () {
                     showCountryPicker(
                         context: context,
@@ -1052,9 +1061,16 @@ class _LichenCheckState extends State<LichenCheck> {
             ),
           ),
           SizedBox(
+              height: 40,
               width: double.infinity,
               child: TextButton(
-                  style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.only(left: 10),
+                    side: BorderSide(
+                      color: Colors.grey,
+                      width: 1.0,
+                    ),
+                  ),
                   onPressed: () {
                     showModalBottomSheet(
                         context: context,
