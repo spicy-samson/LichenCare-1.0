@@ -107,7 +107,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                             _onArrowDownPressed(scrollKeys["Cutaneous"]!);
                           },
                           child: const Padding(
-                            padding: EdgeInsets.only(left: 45, right: 45.0),
+                            padding: EdgeInsets.only(left: 25.0, right: 25),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -134,8 +134,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                             _onArrowDownPressed(scrollKeys["Planopilaris"]!);
                           },
                           child: Padding(
-                            padding:
-                                const EdgeInsets.only(left: 45, right: 45.0),
+                            padding: EdgeInsets.only(left: 25.0, right: 25),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -162,8 +161,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                             _onArrowDownPressed(scrollKeys["Nails"]!);
                           },
                           child: Padding(
-                            padding:
-                                const EdgeInsets.only(left: 45, right: 45.0),
+                            padding: EdgeInsets.only(left: 25.0, right: 25),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -188,8 +186,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                             _onArrowDownPressed(scrollKeys["Pigmentosus"]!);
                           },
                           child: Padding(
-                            padding:
-                                const EdgeInsets.only(left: 45, right: 45.0),
+                            padding: EdgeInsets.only(left: 25.0, right: 25),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -214,8 +211,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                             _onArrowDownPressed(scrollKeys["Eruption"]!);
                           },
                           child: Padding(
-                            padding:
-                                const EdgeInsets.only(left: 45, right: 45.0),
+                            padding: EdgeInsets.only(left: 25.0, right: 25),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -240,8 +236,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                             _onArrowDownPressed(scrollKeys["Mucosal"]!);
                           },
                           child: Padding(
-                            padding:
-                                const EdgeInsets.only(left: 45, right: 45.0),
+                            padding: EdgeInsets.only(left: 25.0, right: 25),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -262,7 +257,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                         ),
                         const Spacer(),
                         Padding(
-                          padding: const EdgeInsets.only(left: 45.0, right: 45),
+                          padding: EdgeInsets.only(left: 25.0, right: 25),
                           child: Container(
                             // Adjust the padding
                             child: ElevatedButton(
@@ -311,10 +306,10 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                   width: double.infinity,
                   child: Center(
                     child: Padding(
-                      padding: EdgeInsets.only(left: 35.0, right: 35),
+                      padding: EdgeInsets.only(left: 25.0, right: 25),
                       child: FittedBox(
                         child: Text(
-                          'Cutaneous Lichen Planus',
+                          'Cutaneous \nLichen Planus',
                           style: TextStyle(
                               fontSize: 40, fontWeight: FontWeight.w900),
                           textAlign: TextAlign.center,
@@ -325,7 +320,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 ),
                 SizedBox(height: 50 * scaleFactor),
                 const Padding(
-                  padding: EdgeInsets.only(left: 45, right: 45.0),
+                  padding: EdgeInsets.only(left: 25.0, right: 25),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -341,7 +336,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 55.0, right: 35),
+                    padding: EdgeInsets.only(left: 35.0, right: 25),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -416,7 +411,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 35.0),
+                    padding: EdgeInsets.only(left: 25.0,),
                     child: Text(
                       'Sub-Types of Cutaneous Lichen Planus',
                       style:
@@ -428,7 +423,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 55.0),
+                    padding: EdgeInsets.only(left: 35.0,),
                     child: Text(
                       '1. Annular Lichen Planus',
                       style:
@@ -440,7 +435,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 55.0, right: 35),
+                    padding: EdgeInsets.only(left: 35.0, right: 25),
                     child: Text(
                       'Characterized by a ring-shaped or annular plaques on the skin',
                       style:
@@ -489,7 +484,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 55.0),
+                    padding: EdgeInsets.only(left: 35.0,),
                     child: Text(
                       '2. Hypertrophic Lichen Planus',
                       style:
@@ -501,7 +496,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 55.0, right: 35),
+                    padding: EdgeInsets.only(left: 35.0, right: 25),
                     child: Text(
                       'Lesions are thick and more raised compared to the usual form.',
                       style:
@@ -550,7 +545,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 55.0),
+                    padding: EdgeInsets.only(left: 35.0,),
                     child: Text(
                       '4. Bullous Lichen Planus',
                       style:
@@ -562,7 +557,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 55.0, right: 35),
+                    padding: EdgeInsets.only(left: 35.0, right: 25),
                     child: Text(
                       'Presents with blisters or vesicles on the skin.',
                       style:
@@ -611,7 +606,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 55.0),
+                    padding: EdgeInsets.only(left: 35.0,),
                     child: Text(
                       '5. Actinic Lichen Planus',
                       style:
@@ -623,7 +618,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 55.0, right: 35),
+                    padding: EdgeInsets.only(left: 35.0, right: 25),
                     child: Text(
                       'Occurs in sun-exposed areas and is aggravated by sunlight',
                       style:
@@ -691,7 +686,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 ),
                 const SizedBox(height: 25),
                 const Padding(
-                  padding: EdgeInsets.only(left: 45, right: 45.0),
+                  padding: EdgeInsets.only(left: 25.0, right: 25),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -707,7 +702,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 35.0),
+                    padding: EdgeInsets.only(left: 25.0,),
                     child: Text(
                       'Sub-Types of Lichen Planopilaris',
                       style:
@@ -719,7 +714,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 55.0),
+                    padding: EdgeInsets.only(left: 35.0,),
                     child: Text(
                       '1.	Frontal Fibrosing Alopecia (FFA)',
                       style:
@@ -731,7 +726,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 55.0, right: 35),
+                    padding: EdgeInsets.only(left: 35.0, right: 25),
                     child: Text(
                       'Affects the front hairline and forehead, causing hairline recession.',
                       style:
@@ -780,7 +775,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 55.0),
+                    padding: EdgeInsets.only(left: 35.0,),
                     child: Text(
                       '2.	Graham-Little Syndrome',
                       style:
@@ -792,7 +787,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 55.0, right: 35),
+                    padding: EdgeInsets.only(left: 35.0, right: 25),
                     child: Text(
                       'Involves small, follicular papules and scarring hair loss, often on the scalp, face, and trunk.',
                       style:
@@ -841,7 +836,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 55.0),
+                    padding: EdgeInsets.only(left: 35.0,),
                     child: Text(
                       '3.	Fibrosing Alopecia in a Pattern Distribution (FAPD)',
                       style:
@@ -853,7 +848,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 55.0, right: 35),
+                    padding: EdgeInsets.only(left: 35.0, right: 25),
                     child: Text(
                       'Similar to FFA but may occur in a more generalized, non-frontal pattern.',
                       style:
@@ -902,7 +897,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 55.0),
+                    padding: EdgeInsets.only(left: 35.0,),
                     child: Text(
                       '4.	Perifollicular Erythema',
                       style:
@@ -914,7 +909,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 55.0, right: 35),
+                    padding: EdgeInsets.only(left: 35.0, right: 25),
                     child: Text(
                       'Presents with redness around hair follicles and may progress to scarring.',
                       style:
@@ -977,7 +972,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 ),
                 const SizedBox(height: 25),
                 const Padding(
-                  padding: EdgeInsets.only(left: 45, right: 45.0),
+                  padding: EdgeInsets.only(left: 25.0, right: 25),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -1044,7 +1039,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 ),
                 const SizedBox(height: 25),
                 const Padding(
-                  padding: EdgeInsets.only(left: 45, right: 45.0),
+                  padding: EdgeInsets.only(left: 25.0, right: 25),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -1112,7 +1107,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 ),
                 const SizedBox(height: 25),
                 const Padding(
-                  padding: EdgeInsets.only(left: 45, right: 45.0),
+                  padding: EdgeInsets.only(left: 25.0, right: 25),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -1181,7 +1176,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 ),
                 const SizedBox(height: 25),
                 const Padding(
-                  padding: EdgeInsets.only(left: 45, right: 45.0),
+                  padding: EdgeInsets.only(left: 25.0, right: 25),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -1232,7 +1227,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 ),
                 const SizedBox(height: 40),
                 Padding(
-                  padding: const EdgeInsets.only(left: 45.0, right: 45),
+                  padding: EdgeInsets.only(left: 25.0, right: 25),
                   child: Container(
                     // Adjust the padding
                     child: ElevatedButton(

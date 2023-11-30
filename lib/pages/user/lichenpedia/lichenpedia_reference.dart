@@ -162,7 +162,7 @@ class _LichenPediaReferencesState extends State<LichenPediaReferences> {
               ),
             ),
             const SizedBox(
-              height: 20,
+              height: 40,
             ),
           ],
         ),

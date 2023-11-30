@@ -1463,7 +1463,7 @@ class _LichenPediaState extends State<LichenPedia> {
                             IconButton(
                               onPressed: () {
                                 currentSection = 1;
-                                _onArrowDownPressed(scrollKeys["Overview of Lichen Planus"]!);
+                                _onArrowDownPressed(scrollKeys["Overview of Lichen Planus I"]!);
                               },
                               icon: const Icon(
                                   Icons.keyboard_double_arrow_up_outlined,
