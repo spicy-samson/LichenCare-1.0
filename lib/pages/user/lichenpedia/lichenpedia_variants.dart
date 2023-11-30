@@ -411,7 +411,9 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 25.0,),
+                    padding: EdgeInsets.only(
+                      left: 25.0,
+                    ),
                     child: Text(
                       'Sub-Types of Cutaneous Lichen Planus',
                       style:
@@ -423,7 +425,9 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 35.0,),
+                    padding: EdgeInsets.only(
+                      left: 35.0,
+                    ),
                     child: Text(
                       '1. Annular Lichen Planus',
                       style:
@@ -484,7 +488,9 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 35.0,),
+                    padding: EdgeInsets.only(
+                      left: 35.0,
+                    ),
                     child: Text(
                       '2. Hypertrophic Lichen Planus',
                       style:
@@ -541,13 +547,15 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     }).toList(),
                   ),
                 ),
-                const SizedBox(height: 45),
+                const SizedBox(height: 25),
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 35.0,),
+                    padding: EdgeInsets.only(
+                      left: 35.0,
+                    ),
                     child: Text(
-                      '4. Bullous Lichen Planus',
+                      '3. Linear Lichen Planus',
                       style:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                     ),
@@ -559,7 +567,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                   child: Padding(
                     padding: EdgeInsets.only(left: 35.0, right: 25),
                     child: Text(
-                      'Presents with blisters or vesicles on the skin.',
+                      'Lesions develop in a linear or band-like pattern, following the lines of skin tension.',
                       style:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
                     ),
@@ -606,7 +614,72 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 35.0,),
+                    padding: EdgeInsets.only(
+                      left: 35.0,
+                    ),
+                    child: Text(
+                      '4. Bullous Lichen Planus',
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 35.0, right: 25),
+                    child: Text(
+                      'Presents with blisters or vesicles on the skin.',
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                      height: 200 * scaleFactor,
+                      enlargeCenterPage: true,
+                      enableInfiniteScroll: true,
+                      autoPlay: true,
+                      autoPlayInterval: Duration(seconds: 3),
+                      autoPlayAnimationDuration: Duration(milliseconds: 800),
+                      autoPlayCurve: Curves.fastOutSlowIn,
+                      scrollDirection: Axis.horizontal,
+                    ),
+                    items: [
+                      ['assets/imgs/bullous1.png'],
+                      ['assets/imgs/bullous3.png', 'assets/imgs/bullous4.jpg'],
+                    ].map((itemList) {
+                      return Builder(
+                        builder: (BuildContext context) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: itemList.map((item) {
+                              return SizedBox(
+                                width: 190 * scaleFactor,
+                                child: Image.asset(
+                                  item,
+                                  fit: BoxFit.cover,
+                                ),
+                              );
+                            }).toList(),
+                          );
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),
+                const SizedBox(height: 45),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      left: 35.0,
+                    ),
                     child: Text(
                       '5. Actinic Lichen Planus',
                       style:
@@ -641,8 +714,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                       scrollDirection: Axis.horizontal,
                     ),
                     items: [
-                      ['assets/imgs/linear1.png', 'assets/imgs/linear2.png'],
-                      ['assets/imgs/linear3.png', 'assets/imgs/linear4.jpg'],
+                      ['assets/imgs/actinic1.png', 'assets/imgs/actinic2.png'],
+                      ['assets/imgs/actinic4.jpg'],
                     ].map((itemList) {
                       return Builder(
                         builder: (BuildContext context) {
@@ -702,7 +775,9 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 25.0,),
+                    padding: EdgeInsets.only(
+                      left: 25.0,
+                    ),
                     child: Text(
                       'Sub-Types of Lichen Planopilaris',
                       style:
@@ -714,7 +789,9 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 35.0,),
+                    padding: EdgeInsets.only(
+                      left: 35.0,
+                    ),
                     child: Text(
                       '1.	Frontal Fibrosing Alopecia (FFA)',
                       style:
@@ -749,8 +826,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                       scrollDirection: Axis.horizontal,
                     ),
                     items: [
-                      ['assets/imgs/plano1.png', 'assets/imgs/plano2.png'],
-                      ['assets/imgs/plano3.jpg', 'assets/imgs/plano4.jpg'],
+                      ['assets/imgs/ffa1.jpg', 'assets/imgs/ffa2.jpg'],
+                      ['assets/imgs/ffa3.jpg'],
                     ].map((itemList) {
                       return Builder(
                         builder: (BuildContext context) {
@@ -775,7 +852,9 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 35.0,),
+                    padding: EdgeInsets.only(
+                      left: 35.0,
+                    ),
                     child: Text(
                       '2.	Graham-Little Syndrome',
                       style:
@@ -836,7 +915,9 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 35.0,),
+                    padding: EdgeInsets.only(
+                      left: 35.0,
+                    ),
                     child: Text(
                       '3.	Fibrosing Alopecia in a Pattern Distribution (FAPD)',
                       style:
@@ -871,8 +952,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                       scrollDirection: Axis.horizontal,
                     ),
                     items: [
-                      ['assets/imgs/graham1.png', 'assets/imgs/graham2.png'],
-                      ['assets/imgs/graham3.png'],
+                      ['assets/imgs/fapd1.png', 'assets/imgs/fapd2.png'],
+                      ['assets/imgs/fapd3.png'],
                     ].map((itemList) {
                       return Builder(
                         builder: (BuildContext context) {
@@ -897,7 +978,9 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 35.0,),
+                    padding: EdgeInsets.only(
+                      left: 35.0,
+                    ),
                     child: Text(
                       '4.	Perifollicular Erythema',
                       style:
@@ -932,8 +1015,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                       scrollDirection: Axis.horizontal,
                     ),
                     items: [
-                      ['assets/imgs/graham1.png', 'assets/imgs/graham2.png'],
-                      ['assets/imgs/graham3.png'],
+                      ['assets/imgs/perifo1.png', 'assets/imgs/perifo2.jpg'],
+                      ['assets/imgs/perifo3.jpg'],
                     ].map((itemList) {
                       return Builder(
                         builder: (BuildContext context) {
