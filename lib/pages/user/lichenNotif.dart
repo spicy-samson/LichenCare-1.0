@@ -27,7 +27,6 @@ class _LichenNotifState extends State<LichenNotif> {
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
-    int newNotificationsCount = 0;
 
     return Scaffold(
       backgroundColor: const Color(0xFFFFF4E9),

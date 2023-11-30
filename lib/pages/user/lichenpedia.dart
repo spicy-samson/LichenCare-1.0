@@ -13,14 +13,21 @@ class _LichenPediaState extends State<LichenPedia> {
   int currentSection = 0;
 
   Map<String, GlobalKey> scrollKeys = {
-    "Table": GlobalKey(),
-    "Overview": GlobalKey(),
-    "Photos": GlobalKey(),
-    "Causes": GlobalKey(),
-    "Symptoms": GlobalKey(),
-    "Treatments": GlobalKey(),
-    "Diagnosis": GlobalKey(),
-    "Oral": GlobalKey(),
+    "Table of Contents": GlobalKey(),
+    "Overview of Lichen Planus I": GlobalKey(),
+    "Overview of Lichen Planus II": GlobalKey(),
+    "Overview of Lichen Planus III": GlobalKey(),
+    "Photos of Lichen Planus": GlobalKey(),
+    "Causes of Lichen Planus I": GlobalKey(),
+    "Causes of Lichen Planus II": GlobalKey(),
+    "Symptoms of Lichen Planus I": GlobalKey(),
+    "Symptoms of Lichen Planus II": GlobalKey(),
+    "Treatments of Lichen Planus I": GlobalKey(),
+    "Treatments of Lichen Planus II": GlobalKey(),
+    "Treatments of Lichen Planus III": GlobalKey(),
+    "Diagnosis of Lichen Planus I": GlobalKey(),
+    "Diagnosis of Lichen Planus II": GlobalKey(),
+    "": GlobalKey(),
   };
 
   @override
@@ -77,7 +84,7 @@ class _LichenPediaState extends State<LichenPedia> {
                 SizedBox(
                   height: h - (140),
                   child: Column(children: [
-                    SizedBox(key: scrollKeys["Table"], height: 15),
+                    SizedBox(key: scrollKeys["Table of Contents"], height: 15),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
@@ -117,22 +124,22 @@ class _LichenPediaState extends State<LichenPedia> {
                           child: Column(
                             children: [
                               Flexible(
-                                child: listViewCategory("Overview"),
+                                child: listViewCategory("Overview of Lichen Planus I"),
                               ),
                               Flexible(
-                                child: listViewCategory("Photos"),
+                                child: listViewCategory("Photos of Lichen Planus"),
                               ),
                               Flexible(
-                                child: listViewCategory("Causes"),
+                                child: listViewCategory("Causes of Lichen Planus I"),
                               ),
                               Flexible(
-                                child: listViewCategory("Symptoms"),
+                                child: listViewCategory("Symptoms of Lichen Planus I"),
                               ),
                               Flexible(
-                                child: listViewCategory("Treatments"),
+                                child: listViewCategory("Treatments of Lichen Planus I"),
                               ),
                               Flexible(
-                                child: listViewCategory("Diagnosis"),
+                                child: listViewCategory("Diagnosis of Lichen Planus I"),
                               )
                             ],
                           ),
@@ -185,7 +192,7 @@ class _LichenPediaState extends State<LichenPedia> {
                           IconButton(
                             onPressed: () {
                               currentSection += 1;
-                              _onArrowDownPressed(scrollKeys["Overview"]!);
+                              _onArrowDownPressed(scrollKeys["Overview of Lichen Planus I"]!);
                             },
                             icon: const Icon(Icons.keyboard_arrow_down,
                                 color: Color(0xFFFF7F50)),
@@ -198,45 +205,9 @@ class _LichenPediaState extends State<LichenPedia> {
                     ),
                   ]),
                 ),
-                SizedBox(
-                  height: h - (140),
-                  child: Column(
+                snappingSlider(key: 'Overview of Lichen Planus I', previousKey: 'Table of Contents', nextKey: 'Overview of Lichen Planus II', scaleFactor: scaleFactor,  
+                  bodyWidget: Column(
                     children: [
-                      Padding(
-                        key: scrollKeys["Overview"],
-                        padding: const EdgeInsets.symmetric(horizontal: 25),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                currentSection -= 1;
-                                _onArrowDownPressed(scrollKeys["Table"]!);
-                              },
-                              icon: const Icon(Icons.keyboard_arrow_up,
-                                  color: Color(0xFFFF7F50)),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Center(
-                        child: GestureDetector(
-                          onTap: () {
-                            currentSection -= 1;
-                            _onArrowDownPressed(scrollKeys["Table"]!);
-                          },
-                          child: const Text(
-                            'Table of Contents',
-                            style: TextStyle(
-                              color: Color(0xFFFF7F50),
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15 * scaleFactor,
-                      ),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
@@ -256,7 +227,38 @@ class _LichenPediaState extends State<LichenPedia> {
                               left: 35.0 * scaleFactor,
                               right: 35 * scaleFactor),
                           child: richText(
-                            'The term Lichen Planus (LP) or pronounced as (like-en play-nes) stems from the Greek word “leichen”, which means “tree moss”, and the Latin word “planus”, which means “flat”, which aptly describes the surface of the cutaneous lesion. Lichen Planus is an uncommon skin disorder that presents as an itchy rash that appears as flat-topped, itchy, purple-colored bumps of the skin. While LP is a non-contagious skin disease, it can affect any part of the body of the person with it and is most commonly found on the wrists, ankles, lower back, and mouth. LP belongs to a group of chronic inflammatory skin conditions with characteristic clinical and histopathologic findings, ranging from common to rare called lichenoid dermatoses. Commonly, the LP presents many variants in morphology and location also exist. Other lichenoid dermatoses share similar clinical presentations and histopathologic findings. These include lichenoid drug eruption, lichen planus-like keratosis, lichen striatus, lichen nitidus, and keratosis lichenoides chronica. Epidemiologic characteristics vary among each lichenoid disorder. While classic lichen planus is considered a disease of adults, other lichenoid dermatoses may be more common in younger populations. ',
+                            'The term Lichen Planus (LP) or pronounced as (like-en play-nes) stems from the Greek word “leichen”, which means “tree moss”, and the Latin word “planus”, which means “flat”, which aptly describes the surface of the cutaneous lesion. Lichen Planus is an uncommon skin disorder that presents as an itchy rash that appears as flat-topped, itchy, purple-colored bumps of the skin. While LP is a non-contagious skin disease, it can affect any part of the body of the person with it and is most commonly found on the wrists, ankles, lower back, and mouth. LP belongs to a group of chronic inflammatory skin conditions with characteristic clinical and histopathologic findings, ranging from common to rare called lichenoid dermatoses. Commonly, the LP presents many variants in morphology and location also exist.',
+                            fontSize: 20 * scaleFactor,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20 * scaleFactor),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              left: 35.0 * scaleFactor,
+                              right: 35 * scaleFactor),
+                          child: richText(
+                            'Other lichenoid dermatoses share similar clinical presentations and histopathologic findings. These include lichenoid drug eruption, lichen planus-like keratosis, lichen striatus, lichen nitidus, and keratosis lichenoides chronica. ',
+                            fontSize: 20 * scaleFactor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ),
+                snappingSlider(key: 'Overview of Lichen Planus II', previousKey: 'Overview of Lichen Planus I', nextKey: 'Overview of Lichen Planus III', scaleFactor: scaleFactor,  
+                  bodyWidget: Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              left: 35.0 * scaleFactor,
+                              right: 35 * scaleFactor),
+                          child: richText(
+                            'Epidemiologic characteristics vary among each lichenoid disorder. While classic lichen planus is considered a disease of adults, other lichenoid dermatoses may be more common in younger populations. ',
                             fontSize: 20 * scaleFactor,
                           ),
                         ),
@@ -287,7 +289,12 @@ class _LichenPediaState extends State<LichenPedia> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20 * scaleFactor),
+                    ],
+                  )
+                ),
+                snappingSlider(key: 'Overview of Lichen Planus III', previousKey: 'Overview of Lichen Planus II', nextKey: 'Photos of Lichen Planus', scaleFactor: scaleFactor,  
+                  bodyWidget: Column(
+                    children: [
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
@@ -313,254 +320,115 @@ class _LichenPediaState extends State<LichenPedia> {
                           ),
                         ),
                       ),
-                      const Spacer(),
-                      Center(
-                        child: GestureDetector(
-                          onTap: () {
-                            currentSection += 1;
-                            _onArrowDownPressed(scrollKeys["Photos"]!);
-                          },
-                          child: const Text(
-                            'Photos of Lichen Planus',
-                            style: TextStyle(
-                              color: Color(0xFFFF7F50),
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                currentSection += 1;
-                                _onArrowDownPressed(scrollKeys["Photos"]!);
-                              },
-                              icon: const Icon(Icons.keyboard_arrow_down,
-                                  color: Color(0xFFFF7F50)),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
                     ],
-                  ),
+                  )
                 ),
-                SizedBox(
-                  height: h - 140,
-                  child: Column(children: [
-                    Padding(
-                      key: scrollKeys["Photos"],
-                      padding: const EdgeInsets.symmetric(horizontal: 25),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              currentSection -= 1;
-                              _onArrowDownPressed(scrollKeys["Overview"]!);
-                            },
-                            icon: const Icon(Icons.keyboard_arrow_up,
-                                color: Color(0xFFFF7F50)),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Center(
-                      child: GestureDetector(
-                        onTap: () {
-                          currentSection -= 1;
-                          _onArrowDownPressed(scrollKeys["Overview"]!);
-                        },
-                        child: const Text(
-                          'Overview of Lichen Planus',
-                          style: TextStyle(
-                            color: Color(0xFFFF7F50),
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 15 * scaleFactor),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                            left: 35.0 * scaleFactor, right: 35 * scaleFactor),
-                        child: Text(
-                          'How does Lichen Planus affect my body?',
-                          style: TextStyle(
-                              fontSize: 22 * scaleFactor,
-                              fontWeight: FontWeight.w900,
-                              fontStyle: FontStyle.italic),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 15 * scaleFactor),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                            left: 35.0 * scaleFactor, right: 35 * scaleFactor),
-                        child: Column(
-                          children: [
-                            richText(
-                              'Lichen Planus commonly affects the skin around a person’s wrists and elbows (flexor surfaces), the back of your hands (dorsal surfaces), and the fronts of your lower legs. About half of all people who have lichen planus develop oral lichen planus, which affects the skin inside of your mouth and your tongue. The lesions on the body of a person with lichen planus usually start as tiny, raised dots (papules) that are about the size of the tip of a pin (0.4 millimeters [mm]). They may grow up to the width of a pencil (1 centimeter [cm]).',
-                              fontSize: 20 * scaleFactor,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10 * scaleFactor),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 35.0),
-                        child: Text(
-                          'Photos',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 5 * scaleFactor),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: CarouselSlider(
-                        options: CarouselOptions(
-                          height: 200 * scaleFactor,
-                          enlargeCenterPage: true,
-                          enableInfiniteScroll: true,
-                          autoPlay: true,
-                          autoPlayInterval: Duration(seconds: 3),
-                          autoPlayAnimationDuration:
-                              Duration(milliseconds: 800),
-                          autoPlayCurve: Curves.fastOutSlowIn,
-                          scrollDirection: Axis.horizontal,
-                        ),
-                        items: [
-                          [
-                            'assets/imgs/lichenpedia_image1.png',
-                            'assets/imgs/lichenpedia_image2.png'
-                          ],
-                          [
-                            'assets/imgs/mucosal1.png',
-                            'assets/imgs/mucosal2.png'
-                          ],
-                          ['assets/imgs/plano1.png', 'assets/imgs/plano2.png'],
-                          [
-                            'assets/imgs/pigmen1.png',
-                            'assets/imgs/pigmen2.png'
-                          ],
-                          ['assets/imgs/nails1.png', 'assets/imgs/nails2.png'],
-                        ].map((itemList) {
-                          return Builder(
-                            builder: (BuildContext context) {
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: itemList.map((item) {
-                                  return SizedBox(
-                                    width: 190 * scaleFactor,
-                                    child: Image.asset(
-                                      item,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  );
-                                }).toList(),
-                              );
-                            },
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    SizedBox(height: 5 * scaleFactor),
-                    const Spacer(),
-                    Center(
-                      child: GestureDetector(
-                        onTap: () {
-                          currentSection += 1;
-                          _onArrowDownPressed(scrollKeys["Causes"]!);
-                        },
-                        child: const Text(
-                          'Causes of Lichen Planus',
-                          style: TextStyle(
-                            color: Color(0xFFFF7F50),
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              currentSection += 1;
-                              _onArrowDownPressed(scrollKeys["Causes"]!);
-                            },
-                            icon: const Icon(Icons.keyboard_arrow_down,
-                                color: Color(0xFFFF7F50)),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    )
-                  ]),
-                ),
-                SizedBox(
-                  height: h - 140,
-                  child: Column(
+                snappingSlider(key: 'Photos of Lichen Planus', previousKey: 'Overview of Lichen Planus III', nextKey: 'Causes of Lichen Planus I', scaleFactor: scaleFactor, 
+                  bodyWidget: Column(
                     children: [
-                      SizedBox(
-                        height: 5,
-                        key: scrollKeys["Causes"],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                currentSection -= 1;
-                                _onArrowDownPressed(scrollKeys["Photos"]!);
-                              },
-                              icon: const Icon(Icons.keyboard_arrow_up,
-                                  color: Color(0xFFFF7F50)),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Center(
-                        child: GestureDetector(
-                          onTap: () {
-                            currentSection -= 1;
-                            _onArrowDownPressed(scrollKeys["Photos"]!);
-                          },
-                          child: const Text(
-                            'Photos of Lichen Planus',
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              left: 35.0 * scaleFactor, right: 35 * scaleFactor),
+                          child: Text(
+                            'How does Lichen Planus affect my body?',
                             style: TextStyle(
-                              color: Color(0xFFFF7F50),
-                              fontSize: 15,
-                            ),
+                                fontSize: 22 * scaleFactor,
+                                fontWeight: FontWeight.w900,
+                                fontStyle: FontStyle.italic),
                           ),
                         ),
                       ),
                       SizedBox(height: 15 * scaleFactor),
                       Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              left: 35.0 * scaleFactor, right: 35 * scaleFactor),
+                          child: Column(
+                            children: [
+                              richText(
+                                'Lichen Planus commonly affects the skin around a person’s wrists and elbows (flexor surfaces), the back of your hands (dorsal surfaces), and the fronts of your lower legs. About half of all people who have lichen planus develop oral lichen planus, which affects the skin inside of your mouth and your tongue. The lesions on the body of a person with lichen planus usually start as tiny, raised dots (papules) that are about the size of the tip of a pin (0.4 millimeters [mm]). They may grow up to the width of a pencil (1 centimeter [cm]).',
+                                fontSize: 20 * scaleFactor,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10 * scaleFactor),
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 35.0),
+                          child: Text(
+                            'Photos',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 5 * scaleFactor),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: CarouselSlider(
+                          options: CarouselOptions(
+                            height: 200 * scaleFactor,
+                            enlargeCenterPage: true,
+                            enableInfiniteScroll: true,
+                            autoPlay: true,
+                            autoPlayInterval: Duration(seconds: 3),
+                            autoPlayAnimationDuration:
+                                Duration(milliseconds: 800),
+                            autoPlayCurve: Curves.fastOutSlowIn,
+                            scrollDirection: Axis.horizontal,
+                          ),
+                          items: [
+                            [
+                              'assets/imgs/lichenpedia_image1.png',
+                              'assets/imgs/lichenpedia_image2.png'
+                            ],
+                            [
+                              'assets/imgs/mucosal1.png',
+                              'assets/imgs/mucosal2.png'
+                            ],
+                            ['assets/imgs/plano1.png', 'assets/imgs/plano2.png'],
+                            [
+                              'assets/imgs/pigmen1.png',
+                              'assets/imgs/pigmen2.png'
+                            ],
+                            ['assets/imgs/nails1.png', 'assets/imgs/nails2.png'],
+                          ].map((itemList) {
+                            return Builder(
+                              builder: (BuildContext context) {
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: itemList.map((item) {
+                                    return SizedBox(
+                                      width: 190 * scaleFactor,
+                                      child: Image.asset(
+                                        item,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    );
+                                  }).toList(),
+                                );
+                              },
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      SizedBox(height: 5 * scaleFactor),
+                    ],
+                  )
+                ),
+                snappingSlider(key: 'Causes of Lichen Planus I', previousKey: 'Photos of Lichen Planus', nextKey: 'Causes of Lichen Planus II', scaleFactor: scaleFactor, 
+                  bodyWidget: Column(
+                    children: [
+                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
                           padding: EdgeInsets.only(
@@ -637,8 +505,13 @@ class _LichenPediaState extends State<LichenPedia> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 15 * scaleFactor),
-                      Align(
+                    ],
+                  )
+                ),
+                snappingSlider(key: 'Causes of Lichen Planus II', previousKey: 'Causes of Lichen Planus I', nextKey: 'Symptoms of Lichen Planus I', scaleFactor: scaleFactor, 
+                  bodyWidget: Column(
+                    children: [
+                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
                             padding: EdgeInsets.only(
@@ -737,83 +610,12 @@ class _LichenPediaState extends State<LichenPedia> {
                           ),
                         ),
                       ),
-                      const Spacer(),
-                      Center(
-                        child: GestureDetector(
-                          onTap: () {
-                            currentSection += 1;
-                            _onArrowDownPressed(scrollKeys["Symptoms"]!);
-                          },
-                          child: const Text(
-                            'Symptoms of Lichen Planus',
-                            style: TextStyle(
-                              color: Color(0xFFFF7F50),
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                currentSection += 1;
-                                _onArrowDownPressed(scrollKeys["Symptoms"]!);
-                              },
-                              icon: const Icon(Icons.keyboard_arrow_down,
-                                  color: Color(0xFFFF7F50)),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 20),
                     ],
-                  ),
+                  )
                 ),
-                SizedBox(
-                    height: h - 140,
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 5,
-                          key: scrollKeys["Symptoms"],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  currentSection -= 1;
-                                  _onArrowDownPressed(scrollKeys["Causes"]!);
-                                },
-                                icon: const Icon(Icons.keyboard_arrow_up,
-                                    color: Color(0xFFFF7F50)),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Center(
-                          child: GestureDetector(
-                            onTap: () {
-                              currentSection -= 1;
-                              _onArrowDownPressed(scrollKeys["Causes"]!);
-                            },
-                            child: const Text(
-                              'Causes of Lichen Planus',
-                              style: TextStyle(
-                                color: Color(0xFFFF7F50),
-                                fontSize: 15,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 15),
-                        Align(
+                snappingSlider(key: 'Symptoms of Lichen Planus I', previousKey: 'Causes of Lichen Planus II', nextKey: 'Symptoms of Lichen Planus II', scaleFactor: scaleFactor, 
+                  bodyWidget: Column(children: [
+                      Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
                             padding: EdgeInsets.only(
@@ -921,7 +723,23 @@ class _LichenPediaState extends State<LichenPedia> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: 15 * scaleFactor),
+                              ],
+                            ),
+                          ),
+                        ),
+                  ],)
+                ),
+                snappingSlider(key: 'Symptoms of Lichen Planus II', previousKey: 'Symptoms of Lichen Planus I', nextKey: 'Treatments of Lichen Planus I', scaleFactor: scaleFactor, 
+                  bodyWidget: Column(children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                left: 35.0 * scaleFactor,
+                                right: 35 * scaleFactor),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
                                 richText("Nails",
                                     fontSize: 21 * scaleFactor,
                                     fontWeight: FontWeight.w600,
@@ -1036,79 +854,11 @@ class _LichenPediaState extends State<LichenPedia> {
                             ),
                           ),
                         ),
-                        const Spacer(),
-                        Center(
-                          child: GestureDetector(
-                            onTap: () {
-                              currentSection += 1;
-                              _onArrowDownPressed(scrollKeys["Treatments"]!);
-                            },
-                            child: const Text(
-                              'Treatments of Lichen Planus',
-                              style: TextStyle(
-                                color: Color(0xFFFF7F50),
-                                fontSize: 15,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  currentSection += 1;
-                                  _onArrowDownPressed(
-                                      scrollKeys["Treatments"]!);
-                                },
-                                icon: const Icon(Icons.keyboard_arrow_down,
-                                    color: Color(0xFFFF7F50)),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                      ],
-                    )),
-                SizedBox(
-                  height: h - 140,
-                  child: Column(children: [
-                    Padding(
-                      key: scrollKeys["Treatments"],
-                      padding: const EdgeInsets.symmetric(horizontal: 25),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              currentSection -= 1;
-                              _onArrowDownPressed(scrollKeys["Symptoms"]!);
-                            },
-                            icon: const Icon(Icons.keyboard_arrow_up,
-                                color: Color(0xFFFF7F50)),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Center(
-                      child: GestureDetector(
-                        onTap: () {
-                          currentSection -= 1;
-                          _onArrowDownPressed(scrollKeys["Symptoms"]!);
-                        },
-                        child: const Text(
-                          'Symptoms of Lichen Planus',
-                          style: TextStyle(
-                            color: Color(0xFFFF7F50),
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-                    Align(
+                  ],)
+                ),
+                snappingSlider(key: 'Treatments of Lichen Planus I', previousKey: 'Symptoms of Lichen Planus II', nextKey: 'Treatments of Lichen Planus II', scaleFactor: scaleFactor, 
+                  bodyWidget: Column(children: [
+                        Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
                         padding: EdgeInsets.only(
@@ -1138,12 +888,27 @@ class _LichenPediaState extends State<LichenPedia> {
                         padding: EdgeInsets.only(
                             left: 35.0 * scaleFactor, right: 35 * scaleFactor),
                         child: richText(
-                          'Lichen Planus in general does not have a specific cure, the rashes are often observed to go away on their own. While the symptoms for every Lichen Planus can be annoying and bothersome, there are still some treatments to alleviate and improve the healing recovery. The following are some clinical treatments suggested by dermatologists and researchers to bring relief to Lichen Planus:',
+                          'Lichen Planus in general does not have a specific cure, the rashes are often observed to go away on their own. While the symptoms for every Lichen Planus can be annoying and bothersome, there are still some treatments to alleviate and improve the healing recovery.',
                           fontSize: 20 * scaleFactor,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 15),
+                  ],)
+                ),
+                snappingSlider(key: 'Treatments of Lichen Planus II', previousKey: 'Treatments of Lichen Planus I', nextKey: 'Treatments of Lichen Planus III', scaleFactor: scaleFactor, 
+                  bodyWidget: Column(children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            left: 35.0 * scaleFactor, right: 35 * scaleFactor),
+                        child: richText(
+                          'The following are some clinical treatments suggested by dermatologists and researchers to bring relief to Lichen Planus:',
+                          fontSize: 20 * scaleFactor,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 15 * scaleFactor),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
@@ -1263,6 +1028,21 @@ class _LichenPediaState extends State<LichenPedia> {
                                 fontSize: 20 * scaleFactor,
                               ),
                             ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],)
+                ),
+                snappingSlider(key: 'Treatments of Lichen Planus III', previousKey: 'Treatments of Lichen Planus II', nextKey: 'Diagnosis of Lichen Planus I', scaleFactor: scaleFactor, 
+                  bodyWidget: Column(children: [
+                     Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 35.0, right: 35),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
                             Text(
                               '· Oral tacrolimus, an immune system suppressant to prevent rejection in individuals who have received organ transplants.',
                               style: TextStyle(
@@ -1273,7 +1053,7 @@ class _LichenPediaState extends State<LichenPedia> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 15 * scaleFactor),
+                    SizedBox(height: 15*scaleFactor),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
@@ -1327,81 +1107,11 @@ class _LichenPediaState extends State<LichenPedia> {
                         ),
                       ),
                     ),
-                    const Spacer(),
-                    Center(
-                      child: GestureDetector(
-                        onTap: () {
-                          currentSection += 1;
-                          _onArrowDownPressed(scrollKeys["Diagnosis"]!);
-                        },
-                        child: const Text(
-                          'Diagnosis of Lichen Planus',
-                          style: TextStyle(
-                            color: Color(0xFFFF7F50),
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              currentSection += 1;
-                              _onArrowDownPressed(scrollKeys["Diagnosis"]!);
-                            },
-                            icon: const Icon(Icons.keyboard_arrow_down,
-                                color: Color(0xFFFF7F50)),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 20)
-                  ]),
+                  ],)
                 ),
-                SizedBox(
-                  height: h - 140,
-                  child: Column(children: [
-                    SizedBox(
-                      height: 5,
-                      key: scrollKeys["Diagnosis"],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              currentSection -= 1;
-                              _onArrowDownPressed(scrollKeys["Treatments"]!);
-                            },
-                            icon: const Icon(Icons.keyboard_arrow_up,
-                                color: Color(0xFFFF7F50)),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Center(
-                      child: GestureDetector(
-                        onTap: () {
-                          currentSection -= 1;
-                          _onArrowDownPressed(scrollKeys["Treatments"]!);
-                        },
-                        child: const Text(
-                          'Treatments of Lichen Planus',
-                          style: TextStyle(
-                            color: Color(0xFFFF7F50),
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-                    Align(
+                snappingSlider(key: 'Diagnosis of Lichen Planus I', previousKey: 'Treatments of Lichen Planus III', nextKey: 'Diagnosis of Lichen Planus II', scaleFactor: scaleFactor, 
+                  bodyWidget: Column(children: [
+                      Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
                         padding: EdgeInsets.only(
@@ -1511,7 +1221,10 @@ class _LichenPediaState extends State<LichenPedia> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 15 * scaleFactor),
+                  ],)
+                ),
+                snappingSlider(key: 'Diagnosis of Lichen Planus II', previousKey: 'Diagnosis of Lichen Planus I', nextKey: '', scaleFactor: scaleFactor, 
+                  bodyWidget: Column(children: [
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
@@ -1608,209 +1321,175 @@ class _LichenPediaState extends State<LichenPedia> {
                         ),
                       ),
                     ),
-                    const Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
+                  ],)
+                ),
+                snappingSlider(key: '', previousKey: 'Diagnosis of Lichen Planus II', scaleFactor: scaleFactor, 
+                  bodyWidget: Column(
+                    children: [
+                      const SizedBox(height: 15),
+                      Center(
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 35.0, right: 35),
+                          child: Text(
+                            'Discover more about Lichen Planus',
+                            style: TextStyle(
+                                fontSize: 26 * scaleFactor,
+                                fontWeight: FontWeight.w900),
+                            textAlign: TextAlign
+                                .center, // Center align the text within the Text widget
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 45.0, right: 45),
+                        child: Container(
+                          // Adjust the padding
+                          child: ElevatedButton(
                             onPressed: () {
-                              currentSection += 1;
-                              _onArrowDownPressed(scrollKeys["Oral"]!);
+                              Navigator.of(context)
+                                  .pushNamed('/lichenpedia/lichenpedia_vault');
                             },
-                            icon: const Icon(Icons.keyboard_arrow_down,
-                                color: Color(0xFFFF7F50)),
+                            child: Text(
+                              'Explore Lichen Planus through Online Videos',
+                              style: TextStyle(
+                                fontSize: 15.0,
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 20 * scaleFactor),
+                              ),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  const Color(0xFFFF7F50)),
+                              shape:
+                                  MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  side: BorderSide(
+                                      color: Colors.white,
+                                      width: 2.0), // Add the white border here
+                                ),
+                              ),
+                            ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                  ]),
-                ),
-                SizedBox(
-                  height: 5,
-                  key: scrollKeys["Oral"],
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          currentSection -= 1;
-                          _onArrowDownPressed(scrollKeys["Diagnosis"]!);
-                        },
-                        icon: const Icon(Icons.keyboard_arrow_up,
-                            color: Color(0xFFFF7F50)),
+                      SizedBox(height: 25 * scaleFactor),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 45.0, right: 45),
+                        child: Container(
+                          // Adjust the padding
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .pushNamed('/lichenpedia/lichenpedia_archive');
+                            },
+                            child: Text(
+                              'Discover Lichen Planus through Academic Publications',
+                              style: TextStyle(
+                                fontSize: 15.0,
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 20 * scaleFactor),
+                              ),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  const Color(0xFFFF7F50)),
+                              shape:
+                                  MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  side: BorderSide(
+                                      color: Colors.white,
+                                      width: 2.0), // Add the white border here
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
+                      SizedBox(height: 25 * scaleFactor),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 45.0, right: 45),
+                        child: Container(
+                          // Adjust the padding
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .pushNamed('/lichenpedia/lichenpedia_reference');
+                            },
+                            child: Text(
+                              ' See References and Sources                ',
+                              style: TextStyle(
+                                fontSize: 15.0,
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 20 * scaleFactor),
+                              ),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  const Color(0xFFFF7F50)),
+                              shape:
+                                  MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  side: BorderSide(
+                                      color: Colors.white,
+                                      width: 2.0), // Add the white border here
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 15*scaleFactor),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 25),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                currentSection = 1;
+                                _onArrowDownPressed(scrollKeys["Overview of Lichen Planus"]!);
+                              },
+                              icon: const Icon(
+                                  Icons.keyboard_double_arrow_up_outlined,
+                                  color: Color(0xFFFF7F50)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            currentSection = 1;
+                            _onArrowDownPressed(scrollKeys["Overview of Lichen Planus I"]!);
+                          },
+                          child: const Center(
+                            child: Text(
+                              'Jump to Overview',
+                              style: TextStyle(
+                                color: Color(0xFFFF7F50),
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        ),
                     ],
-                  ),
+                  ) 
                 ),
-                const SizedBox(height: 15),
-                GestureDetector(
-                  onTap: () {
-                    currentSection = 1;
-                    _onArrowDownPressed(scrollKeys["Overview"]!);
-                  },
-                  child: const Center(
-                    child: Text(
-                      'Jump to Overview',
-                      style: TextStyle(
-                        color: Color(0xFFFF7F50),
-                        fontSize: 15,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          currentSection = 1;
-                          _onArrowDownPressed(scrollKeys["Overview"]!);
-                        },
-                        icon: const Icon(
-                            Icons.keyboard_double_arrow_up_outlined,
-                            color: Color(0xFFFF7F50)),
-                      ),
-                    ],
-                  ),
-                ),
-                Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 35.0, right: 35),
-                    child: Text(
-                      'Discover more about Lichen Planus',
-                      style: TextStyle(
-                          fontSize: 26 * scaleFactor,
-                          fontWeight: FontWeight.w900),
-                      textAlign: TextAlign
-                          .center, // Center align the text within the Text widget
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 15),
-                Padding(
-                  padding: const EdgeInsets.only(left: 45.0, right: 45),
-                  child: Container(
-                    // Adjust the padding
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context)
-                            .pushNamed('/lichenpedia/lichenpedia_vault');
-                      },
-                      child: Text(
-                        'Explore Lichen Planus through Online Videos',
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          color: Colors.white,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 20 * scaleFactor),
-                        ),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            const Color(0xFFFF7F50)),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            side: BorderSide(
-                                color: Colors.white,
-                                width: 2.0), // Add the white border here
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 25 * scaleFactor),
-                Padding(
-                  padding: const EdgeInsets.only(left: 45.0, right: 45),
-                  child: Container(
-                    // Adjust the padding
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context)
-                            .pushNamed('/lichenpedia/lichenpedia_archive');
-                      },
-                      child: Text(
-                        'Discover Lichen Planus through Academic Publications',
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          color: Colors.white,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 20 * scaleFactor),
-                        ),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            const Color(0xFFFF7F50)),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            side: BorderSide(
-                                color: Colors.white,
-                                width: 2.0), // Add the white border here
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 25 * scaleFactor),
-                Padding(
-                  padding: const EdgeInsets.only(left: 45.0, right: 45),
-                  child: Container(
-                    // Adjust the padding
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context)
-                            .pushNamed('/lichenpedia/lichenpedia_reference');
-                      },
-                      child: Text(
-                        ' See References and Sources                ',
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          color: Colors.white,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 20 * scaleFactor),
-                        ),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            const Color(0xFFFF7F50)),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            side: BorderSide(
-                                color: Colors.white,
-                                width: 2.0), // Add the white border here
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 105),
               ],
             ),
           ),
@@ -1905,7 +1584,7 @@ class _LichenPediaState extends State<LichenPedia> {
             Navigator.pushReplacementNamed(context, '/home');
             break;
           case 1:
-            Navigator.pushReplacementNamed(context, '/lichenpedia');
+            // Navigator.pushReplacementNamed(context, '/lichenpedia');
             break;
           case 2:
             Navigator.pushReplacementNamed(context, '/lichenCheck');
@@ -1945,7 +1624,7 @@ class _LichenPediaState extends State<LichenPedia> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                category,
+                category.replaceAll("of Lichen Planus", '').replaceAll(" I", ''),
                 style: const TextStyle(
                   fontSize: 18,
                   color: Colors.white,
@@ -1957,4 +1636,89 @@ class _LichenPediaState extends State<LichenPedia> {
       ),
     );
   }
+  Widget snappingSlider({required String key , required String previousKey, String? nextKey , required double scaleFactor, required Widget bodyWidget}){
+    return SizedBox(
+                  height: (scaleFactor*1080)- (140),
+                  child: Column(
+                    children: [
+                      Padding(
+                        key: scrollKeys[key],
+                        padding: const EdgeInsets.symmetric(horizontal: 25),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                currentSection -= 1;
+                                _onArrowDownPressed(scrollKeys[previousKey]!);
+                              },
+                              icon: const Icon(Icons.keyboard_arrow_up,
+                                  color: Color(0xFFFF7F50)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Center(
+                        child: GestureDetector(
+                          onTap: () {
+                            currentSection -= 1;
+                            _onArrowDownPressed(scrollKeys[previousKey]!);
+                          },
+                          child: Text(
+                            previousKey,
+                            style: const TextStyle(
+                              color: Color(0xFFFF7F50),
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15 * scaleFactor,
+                      ),
+                      bodyWidget,
+                      const Spacer(),
+                      (nextKey == null) ? const SizedBox() : Column(
+                        children: [
+                          Center(
+                            child: GestureDetector(
+                              onTap: () {
+                                currentSection += 1;
+                                _onArrowDownPressed(scrollKeys[nextKey]!);
+                              },
+                              child: Text(
+                                nextKey!,
+                                style: const TextStyle(
+                                  color: Color(0xFFFF7F50),
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 25),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    currentSection += 1;
+                                    _onArrowDownPressed(scrollKeys[nextKey]!);
+                                  },
+                                  icon: const Icon(Icons.keyboard_arrow_down,
+                                      color: Color(0xFFFF7F50)),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                );
+  }
 }
+
