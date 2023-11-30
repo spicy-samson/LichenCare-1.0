@@ -106,9 +106,8 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                           onTap: () {
                             _onArrowDownPressed(scrollKeys["Cutaneous"]!);
                           },
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.only(left: 45, right: 45.0),
+                          child: const Padding(
+                            padding: EdgeInsets.only(left: 45, right: 45.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -121,7 +120,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                                     ),
                                   ),
                                 ),
-                                const Icon(Icons.arrow_forward_ios,
+                                Icon(Icons.arrow_forward_ios,
                                     color: Colors.orange),
                               ],
                             ),
@@ -376,6 +375,36 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                             fontSize: 15,
                           ),
                         ),
+                        Text(
+                          '· Size ranges from pinpoint to larger than a centimetre.',
+                          style: TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                        Text(
+                          '· Distribution may be scattered, clustered, linear, annular, or actinic (sun-exposed sites such as the face, neck, and backs of the hands).',
+                          style: TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                        Text(
+                          '· Location can be anywhere, but most often front of the wrists, lower back, and ankles.',
+                          style: TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                        Text(
+                          '· Colour depends on the patient’s skin type. New papules and plaques often have a purple or violet hue, except on palms and soles where they are yellowish-brown.',
+                          style: TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                        Text(
+                          '· Plaques resolve after some months to leave greyish-brown post-inflammatory macules that can take a year or longer to fade.',
+                          style: TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -523,7 +552,7 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                   child: Padding(
                     padding: EdgeInsets.only(left: 55.0),
                     child: Text(
-                      '3. Linear Lichen Planus',
+                      '4. Bullous Lichen Planus',
                       style:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                     ),
@@ -535,7 +564,68 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                   child: Padding(
                     padding: EdgeInsets.only(left: 55.0, right: 35),
                     child: Text(
-                      'Lesions develop in a linear or band-like pattern, following the lines of skin tension.',
+                      'Presents with blisters or vesicles on the skin.',
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                      height: 200 * scaleFactor,
+                      enlargeCenterPage: true,
+                      enableInfiniteScroll: true,
+                      autoPlay: true,
+                      autoPlayInterval: Duration(seconds: 3),
+                      autoPlayAnimationDuration: Duration(milliseconds: 800),
+                      autoPlayCurve: Curves.fastOutSlowIn,
+                      scrollDirection: Axis.horizontal,
+                    ),
+                    items: [
+                      ['assets/imgs/linear1.png', 'assets/imgs/linear2.png'],
+                      ['assets/imgs/linear3.png', 'assets/imgs/linear4.jpg'],
+                    ].map((itemList) {
+                      return Builder(
+                        builder: (BuildContext context) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: itemList.map((item) {
+                              return SizedBox(
+                                width: 190 * scaleFactor,
+                                child: Image.asset(
+                                  item,
+                                  fit: BoxFit.cover,
+                                ),
+                              );
+                            }).toList(),
+                          );
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),
+                const SizedBox(height: 45),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 55.0),
+                    child: Text(
+                      '5. Actinic Lichen Planus',
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 55.0, right: 35),
+                    child: Text(
+                      'Occurs in sun-exposed areas and is aggravated by sunlight',
                       style:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
                     ),
@@ -705,6 +795,128 @@ class _LichenPediaVariantState extends State<LichenPediaVariant> {
                     padding: EdgeInsets.only(left: 55.0, right: 35),
                     child: Text(
                       'Involves small, follicular papules and scarring hair loss, often on the scalp, face, and trunk.',
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                      height: 200 * scaleFactor,
+                      enlargeCenterPage: true,
+                      enableInfiniteScroll: true,
+                      autoPlay: true,
+                      autoPlayInterval: Duration(seconds: 3),
+                      autoPlayAnimationDuration: Duration(milliseconds: 800),
+                      autoPlayCurve: Curves.fastOutSlowIn,
+                      scrollDirection: Axis.horizontal,
+                    ),
+                    items: [
+                      ['assets/imgs/graham1.png', 'assets/imgs/graham2.png'],
+                      ['assets/imgs/graham3.png'],
+                    ].map((itemList) {
+                      return Builder(
+                        builder: (BuildContext context) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: itemList.map((item) {
+                              return SizedBox(
+                                width: 190 * scaleFactor,
+                                child: Image.asset(
+                                  item,
+                                  fit: BoxFit.cover,
+                                ),
+                              );
+                            }).toList(),
+                          );
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),
+                const SizedBox(height: 25),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 55.0),
+                    child: Text(
+                      '3.	Fibrosing Alopecia in a Pattern Distribution (FAPD)',
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 55.0, right: 35),
+                    child: Text(
+                      'Similar to FFA but may occur in a more generalized, non-frontal pattern.',
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                      height: 200 * scaleFactor,
+                      enlargeCenterPage: true,
+                      enableInfiniteScroll: true,
+                      autoPlay: true,
+                      autoPlayInterval: Duration(seconds: 3),
+                      autoPlayAnimationDuration: Duration(milliseconds: 800),
+                      autoPlayCurve: Curves.fastOutSlowIn,
+                      scrollDirection: Axis.horizontal,
+                    ),
+                    items: [
+                      ['assets/imgs/graham1.png', 'assets/imgs/graham2.png'],
+                      ['assets/imgs/graham3.png'],
+                    ].map((itemList) {
+                      return Builder(
+                        builder: (BuildContext context) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: itemList.map((item) {
+                              return SizedBox(
+                                width: 190 * scaleFactor,
+                                child: Image.asset(
+                                  item,
+                                  fit: BoxFit.cover,
+                                ),
+                              );
+                            }).toList(),
+                          );
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),
+                const SizedBox(height: 25),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 55.0),
+                    child: Text(
+                      '4.	Perifollicular Erythema',
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 55.0, right: 35),
+                    child: Text(
+                      'Presents with redness around hair follicles and may progress to scarring.',
                       style:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
                     ),
