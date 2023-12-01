@@ -60,81 +60,112 @@ class _LichenPediaReferencesState extends State<LichenPediaReferences> {
       ),
 
       // Body
-      body: Column(
-        children: [
-          const Text(
-            'References',
-            style: TextStyle(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const Text(
+              'References',
+              style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w900,
                 fontFamily: 'ABeeZee',
-                fontStyle: FontStyle.italic),
-          ),
-          const SizedBox(height: 20),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: EdgeInsets.only(left: 35.0, right: 35),
-              child: RichText(
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: EdgeInsets.only(left: 35.0, right: 35),
+                child: RichText(
                   textAlign: TextAlign.justify,
                   text: TextSpan(
-                      style: TextStyle(
-                        color: Colors.black87,
-                        fontSize: 20 * scaleFactor,
-                        fontFamily: 'ABeeZee',
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 20 * scaleFactor,
+                      fontFamily: 'ABeeZee',
+                    ),
+                    children: [
+                      TextSpan(
+                        text:
+                            'Chen J., Oakley A., Liu J. (2023). Lichen Planus. DermNet. https://dermnetnz.org/topics/lichen-planus\n\n',
                       ),
-                      children: [
-                        TextSpan(
-                            text: 'Chen J., Oakley A., Liu J. (2023).\n\n'),
-                        TextSpan(
-                            text:
-                                'Lichen Planus. DermNet. https://dermnetnz.org/topics/lichen-planus Singh A., Jarrett P., Mitchell G. (2022).\n\n'),
-                        TextSpan(
-                            text:
-                                ' Graft Versus Host Disease. DermNet. https://dermnetnz.org/topics/graft-versus-host-disease Bridges KH. Lichen Planus and Lichen Nitidus. In: Kelly A, Taylor SC, Lim HW, et al., eds. Taylor and Kelly\'s Dermatology for Skin of Color, 2nd Edition. McGraw Hill; 2016. \n\n'),
-                        TextSpan(
-                            text:
-                                'Mangold AR, Pittelkow MR. Lichen Planus. In: Kang S, Amagai M, Bruckner AL, et al., eds. Fitzpatrick\'s Dermatology, 9th Edition. McGraw Hill; 2019. \n\n'),
-                        TextSpan(
-                            text:
-                                ' Payette M., Weston G., Humphrey S., Yu J., Holland K. (2016). Lichen planus and other lichenoid dermatoses: Kids are not just little people. Clinics in Dermatology. https://pubmed.ncbi.nlm.nih.gov/26686015/ \n\n'),
-                      ])),
-            ),
-          ),
-          const Spacer(),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            style: ButtonStyle(
-              padding: MaterialStateProperty.all<EdgeInsets>(
-                EdgeInsets.symmetric(
-                    horizontal: 20, vertical: 22 * scaleFactor),
-              ),
-              backgroundColor:
-                  MaterialStateProperty.all<Color>(const Color(0xFFFF7F50)),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  side: const BorderSide(
-                      color: Colors.white,
-                      width: 2.0), // Add the white border here
+                      TextSpan(
+                        text:
+                            'Singh A., Jarrett P., Mitchell G. (2022). Graft Versus Host Disease. DermNet. https://dermnetnz.org/topics/graft-versus-host-disease\n\n',
+                      ),
+                      TextSpan(
+                        text:
+                            'Bridges KH. Lichen Planus and Lichen Nitidus. In: Kelly A, Taylor SC, Lim HW, et al., eds. Taylor and Kelly\'s Dermatology for Skin of Color, 2nd Edition. McGraw Hill; 2016. \n\n',
+                      ),
+                      TextSpan(
+                        text:
+                            'Mangold AR, Pittelkow MR. Lichen Planus. In: Kang S, Amagai M, Bruckner AL, et al., eds. Fitzpatrick\'s Dermatology, 9th Edition. McGraw Hill; 2019.  \n\n',
+                      ),
+                      TextSpan(
+                        text:
+                            'Payette M., Weston G., Humphrey S., Yu J., Holland K. (2016). Lichen planus and other lichenoid dermatoses: Kids are not just little people. Clinics in Dermatology. https://pubmed.ncbi.nlm.nih.gov/26686015/ \n\n',
+                      ),
+                      TextSpan(
+                        text:
+                            'Boch K., Langan E., Kridin K., Zillikens D., Ludwig R., Bieber K. (2021). Lichen Planus. Insights in Dermatology. https://www.frontiersin.org/articles/10.3389/fmed.2021.737813/full?fbclid=IwAR1fXTaobmiSYrVeiQLW3IYjrrqd1Q9d_67ndXqRTt881cPlW54GW-B_Ipk \n\n',
+                      ),
+                      TextSpan(
+                        text:
+                            'Lichen Planus. (2018). John Hopkins Medicine. https://www.hopkinsmedicine.org/health/conditions-and-diseases/lichen-planus#:~:text=Lichen%20planus%20is%20a%20common,may%20cause%20burning%20or%20soreness. \n\n',
+                      ),
+                      TextSpan(
+                        text:
+                            'Lichen Planus (2022). Cleveland Clinic. https://my.clevelandclinic.org/health/diseases/17723-lichen-planus \n\n',
+                      ),
+                      TextSpan(
+                        text:
+                            'Oral Lichen Planus (2022). Cleveland Clinic. https://my.clevelandclinic.org/health/diseases/17875-oral-lichen-planus  \n\n',
+                      ),
+                      TextSpan(
+                        text:
+                            'American Academy of Oral Medicine. Oral Lichen Planus (https://www.aaom.com/oral-lichen-planus).  \n\n',
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-            child: const Text(
-              'Go back',
-              style: TextStyle(
-                fontSize: 15.0,
-                color: Colors.white,
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all<EdgeInsets>(
+                  EdgeInsets.symmetric(
+                      horizontal: 20, vertical: 22 * scaleFactor),
+                ),
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(const Color(0xFFFF7F50)),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    side: const BorderSide(
+                      color: Colors.white,
+                      width: 2.0,
+                    ),
+                  ),
+                ),
               ),
-              textAlign: TextAlign.center,
+              child: const Text(
+                'Go back',
+                style: TextStyle(
+                  fontSize: 15.0,
+                  color: Colors.white,
+                ),
+                textAlign: TextAlign.center,
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-        ],
+            const SizedBox(
+              height: 40,
+            ),
+          ],
+        ),
       ),
 
       // Floating action button
