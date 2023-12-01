@@ -370,9 +370,9 @@ class _LichenNotifState extends State<LichenNotif> {
                                     List<Widget> reportWidgets = [];
                                     for (var reportDoc
                                         in reportsSnapshot.data!.docs) {
-                                      var report = reportDoc.data()
-                                          as Map<String, dynamic>?;
-                                      if (report == null) {
+                                      var report = reportDoc.data()  
+                                        as Map<String, dynamic>?;
+                                      if (report == null || report['timestamp'] == null) {
                                         continue;
                                       }
                                       reportWidgets.add(

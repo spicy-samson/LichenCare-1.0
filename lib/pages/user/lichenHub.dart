@@ -104,7 +104,7 @@ class _LichenHubState extends State<LichenHub> {
   List<Post> posts = [];
   // UI booleans
   bool postLoaded = false;
-  bool isPosting = false;
+  bool isLoading = false;
   bool navigatorHidden = false;
 
   int notifBadge = 0;
@@ -561,7 +561,7 @@ class _LichenHubState extends State<LichenHub> {
     toolbar["italic"] = false;
     toolbar["underline"] = false;
     postImage = null;
-    isPosting = false;
+    isLoading = false;
     setState(() {});
     if (post != null) {
       titleController.text = post.title;
@@ -623,14 +623,14 @@ class _LichenHubState extends State<LichenHub> {
                             (post == null) ? "New post" : "Edit post",
                             style: TextStyle(fontSize: 22),
                           ))),
-                          (isPosting)
+                          (isLoading)
                               ? SpinKitRing(
                                   color: Color(0XFFF0784C),
                                   size: 40.0,
                                 )
                               : InkWell(
                                   onTap: () async {
-                                    if (isPosting) {
+                                    if (isLoading) {
                                       return;
                                     }
                                     if (contentController.document
@@ -640,7 +640,7 @@ class _LichenHubState extends State<LichenHub> {
                                       return;
                                     }
                                     setState(() {
-                                      isPosting = true;
+                                      isLoading = true;
                                     });
                                     if (post == null) {
                                       await newPost();
@@ -648,7 +648,7 @@ class _LichenHubState extends State<LichenHub> {
                                       await editPost(post);
                                     }
                                     setState(() {
-                                      isPosting = false;
+                                      isLoading = false;
                                     });
                                     Navigator.of(context).pop();
                                   },
@@ -1044,6 +1044,7 @@ class _LichenHubState extends State<LichenHub> {
     setState(() {
       reportFlags = [];
       reportFieldController.text = "";
+      isLoading = false;
     });
     showModalBottomSheet(
         context: context,
@@ -1103,20 +1104,30 @@ class _LichenHubState extends State<LichenHub> {
                                   width: 40,
                                   child: Align(
                                     alignment: Alignment.centerRight,
-                                    child: InkWell(
+                                    child: (isLoading) 
+                                     ? const SpinKitRing(
+                                        color: Color(
+                                            0XFFF0784C),
+                                        size: 45.0,
+                                      ): InkWell(
                                       onTap: () async {
-                                        if (reportFlags.isEmpty) {
+                                        if (reportFlags.isEmpty||isLoading) {
                                           return;
                                         }
-                                        
+                            
                                         // Get details from the text field
                                         String details =
                                             reportFieldController.text.trim();
-
+                                        setState((){
+                                          isLoading = true;
+                                        });
                                         // Call the reportPost function
                                         await reportPost(
                                             post, reportFlags, details);
-                                        var result = await AwesomeDialog(
+                                        setState((){
+                                          isLoading = false;
+                                        });
+                                        await AwesomeDialog(
                                           context: context,
                                           dialogType: DialogType.warning,
                                           animType: AnimType.topSlide,
@@ -1128,13 +1139,11 @@ class _LichenHubState extends State<LichenHub> {
                                           ),
                                           padding: const EdgeInsets.all(16.0),
                                           btnCancelText: "Close",
-                                          btnCancelOnPress: () {
-                                            Navigator.of(context).pop('closed');
-                                          },
+                                          btnCancelOnPress: (){}
                                         ).show();
-                                        if (result == null) {
-                                          Navigator.of(context).pop();
-                                        }
+                                      
+                                        Navigator.of(context).pop();
+                                        
                                       },
                                       child: Transform.rotate(
                                           angle: -3.14 / 5,
@@ -1362,8 +1371,13 @@ class _LichenHubState extends State<LichenHub> {
                   highlightColor: Colors.transparent,
                   onTap: () async {
                     final prefs = await SharedPreferences.getInstance();
-                    prefs.setInt('previousBadgeCount', overallNotif);
-                    Navigator.pushNamed(context, "/lichenNotif");
+                    await prefs.setInt('previousBadgeCount', overallNotif);
+                    await Navigator.pushNamed(context, "/lichenNotif");
+                    if(mounted){
+                      setState((){
+                        notifBadge = 0;
+                      });
+                    }
                   },
                   child: (notifBadge <= 0)
                       ? Icon(
@@ -1467,7 +1481,7 @@ class _LichenHubState extends State<LichenHub> {
                                         post: posts[index]),
                                     onReply: () {
                                       replyController.clear();
-                                      isPosting = false;
+                                      isLoading = false;
                                       showModalBottomSheet(
                                           context: context,
                                           isScrollControlled: true,
@@ -1688,7 +1702,7 @@ class _LichenHubState extends State<LichenHub> {
                                                               ),
                                                             ),
                                                           ),
-                                                          (isPosting)
+                                                          (isLoading)
                                                               ? const SpinKitRing(
                                                                   color: Color(
                                                                       0XFFF0784C),
@@ -1702,12 +1716,12 @@ class _LichenHubState extends State<LichenHub> {
                                                                         '') {
                                                                       return;
                                                                     }
-                                                                    if (isPosting) {
+                                                                    if (isLoading) {
                                                                       return;
                                                                     }
                                                                     setState(
                                                                         () {
-                                                                      isPosting =
+                                                                      isLoading =
                                                                           true;
                                                                     });
                                                                     await commentOnPost(
@@ -1719,7 +1733,7 @@ class _LichenHubState extends State<LichenHub> {
                                                                             .now());
                                                                     setState(
                                                                         () {
-                                                                      isPosting =
+                                                                      isLoading =
                                                                           false;
                                                                     });
                                                                     replyController
@@ -2139,7 +2153,7 @@ class PostBox extends StatelessWidget {
                                             )
                                           ],
                                         )),
-                                    TextButton(
+                                    (fromUser) ? const SizedBox() :TextButton(
                                         style: TextButton.styleFrom(
                                             shape: const RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.all(
