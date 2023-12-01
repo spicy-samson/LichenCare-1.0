@@ -120,7 +120,7 @@ class _LichenPediaState extends State<LichenPedia> {
                           borderRadius: BorderRadius.circular(14),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 0.0),
+                          padding: EdgeInsets.only(top: 0.0, left: 15*scaleFactor, right:15*scaleFactor,),
                           child: Column(
                             children: [
                               Flexible(
@@ -232,8 +232,15 @@ class _LichenPediaState extends State<LichenPedia> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20 * scaleFactor),
-                      Align(
+                     
+                     
+                    ],
+                  )
+                ),
+                snappingSlider(key: 'Overview of Lichen Planus II', previousKey: 'Overview of Lichen Planus I', nextKey: 'Overview of Lichen Planus III', scaleFactor: scaleFactor,  
+                  bodyWidget: Column(
+                    children: [
+                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
                           padding: EdgeInsets.only(
@@ -245,12 +252,6 @@ class _LichenPediaState extends State<LichenPedia> {
                           ),
                         ),
                       ),
-                    ],
-                  )
-                ),
-                snappingSlider(key: 'Overview of Lichen Planus II', previousKey: 'Overview of Lichen Planus I', nextKey: 'Overview of Lichen Planus III', scaleFactor: scaleFactor,  
-                  bodyWidget: Column(
-                    children: [
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
@@ -284,7 +285,7 @@ class _LichenPediaState extends State<LichenPedia> {
                               left: 35.0 * scaleFactor,
                               right: 35 * scaleFactor),
                           child: richText(
-                            'According to an article published by Dr. Jacqueline Chen (2023), a doctor from Kaiser Sunnyside Medical Center, she stated that LP affects approximately 0.22% to 1% of the adult population worldwide, mostly affecting adults aged between 30 to 60 years. Thus, it has no strong racial predilection. Approximately 10% of those affected have lichen planus of the nails while half of those affected have oral lichen planus, which is more common in women than in men. Some studies suggest women might get lichen planus twice as often as men, and they’re more likely to develop it in their 60s. Men are more likely to develop it in their 40s.',
+                            'According to an article published by Dr. Jacqueline Chen (2023), a doctor from Kaiser Sunnyside Medical Center, she stated that LP affects approximately 0.22% to 1% of the adult population worldwide, mostly affecting adults aged between 30 to 60 years. Thus, it has no strong racial predilection. Approximately 10% of those affected have lichen planus of the nails while half of those affected have oral lichen planus, which is more common in women than in men.',
                             fontSize: 20 * scaleFactor,
                           ),
                         ),
@@ -295,6 +296,19 @@ class _LichenPediaState extends State<LichenPedia> {
                 snappingSlider(key: 'Overview of Lichen Planus III', previousKey: 'Overview of Lichen Planus II', nextKey: 'Photos of Lichen Planus', scaleFactor: scaleFactor,  
                   bodyWidget: Column(
                     children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              left: 35.0 * scaleFactor,
+                              right: 35 * scaleFactor),
+                          child: richText(
+                            'Some studies suggest women might get lichen planus twice as often as men, and they’re more likely to develop it in their 60s. Men are more likely to develop it in their 40s.',
+                            fontSize: 20 * scaleFactor,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20 * scaleFactor),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
@@ -455,7 +469,7 @@ class _LichenPediaState extends State<LichenPedia> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 15 * scaleFactor),
+                      SizedBox(height: 10 * scaleFactor),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
@@ -467,7 +481,7 @@ class _LichenPediaState extends State<LichenPedia> {
                                 fontWeight: FontWeight.w600,
                                 fontStyle: FontStyle.italic)),
                       ),
-                      SizedBox(height: 15 * scaleFactor),
+                      SizedBox(height: 10 * scaleFactor),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
@@ -480,7 +494,7 @@ class _LichenPediaState extends State<LichenPedia> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 15 * scaleFactor),
+                      SizedBox(height: 10 * scaleFactor),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
@@ -492,7 +506,7 @@ class _LichenPediaState extends State<LichenPedia> {
                                 fontWeight: FontWeight.w600,
                                 fontStyle: FontStyle.italic)),
                       ),
-                      SizedBox(height: 15 * scaleFactor),
+                      SizedBox(height: 10 * scaleFactor),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
@@ -522,7 +536,7 @@ class _LichenPediaState extends State<LichenPedia> {
                                 fontWeight: FontWeight.w600,
                                 fontStyle: FontStyle.italic)),
                       ),
-                      SizedBox(height: 15 * scaleFactor),
+                      SizedBox(height: 10 * scaleFactor),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
@@ -535,7 +549,7 @@ class _LichenPediaState extends State<LichenPedia> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 15 * scaleFactor),
+                      SizedBox(height: 10 * scaleFactor),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
@@ -547,7 +561,7 @@ class _LichenPediaState extends State<LichenPedia> {
                                 fontWeight: FontWeight.w600,
                                 fontStyle: FontStyle.italic)),
                       ),
-                      SizedBox(height: 15 * scaleFactor),
+                      SizedBox(height: 10 * scaleFactor),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
@@ -560,7 +574,7 @@ class _LichenPediaState extends State<LichenPedia> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 15 * scaleFactor),
+                      SizedBox(height: 10 * scaleFactor),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
@@ -572,7 +586,7 @@ class _LichenPediaState extends State<LichenPedia> {
                                 fontWeight: FontWeight.w600,
                                 fontStyle: FontStyle.italic)),
                       ),
-                      SizedBox(height: 15 * scaleFactor),
+                      SizedBox(height: 10 * scaleFactor),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
@@ -585,7 +599,7 @@ class _LichenPediaState extends State<LichenPedia> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 15 * scaleFactor),
+                      SizedBox(height: 10 * scaleFactor),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
@@ -597,7 +611,7 @@ class _LichenPediaState extends State<LichenPedia> {
                                 fontWeight: FontWeight.w600,
                                 fontStyle: FontStyle.italic)),
                       ),
-                      SizedBox(height: 15 * scaleFactor),
+                      SizedBox(height: 10 * scaleFactor),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
@@ -643,17 +657,17 @@ class _LichenPediaState extends State<LichenPedia> {
                                   'A variety of symptoms of lichen planus can be seen depending on the parts of an individual\'s body affected and its specificity. The following are the common symptoms of Lichen Planus from different parts of the body:',
                                   fontSize: 20 * scaleFactor,
                                 ),
-                                SizedBox(height: 15 * scaleFactor),
+                                SizedBox(height: 10 * scaleFactor),
                                 richText("Skin",
                                     fontSize: 21 * scaleFactor,
                                     fontWeight: FontWeight.w600,
                                     fontStyle: FontStyle.italic),
-                                SizedBox(height: 10 * scaleFactor),
+                                SizedBox(height: 5 * scaleFactor),
                                 const Align(
                                   alignment: Alignment.centerLeft,
                                   child: Padding(
                                     padding:
-                                        EdgeInsets.only(left: 7.0, right: 35),
+                                        EdgeInsets.only(left: 7.0, right: 0),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -686,17 +700,17 @@ class _LichenPediaState extends State<LichenPedia> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: 15 * scaleFactor),
+                                SizedBox(height: 10 * scaleFactor),
                                 richText("Mouth",
                                     fontSize: 21 * scaleFactor,
                                     fontWeight: FontWeight.w600,
                                     fontStyle: FontStyle.italic),
-                                SizedBox(height: 10 * scaleFactor),
+                                SizedBox(height: 5 * scaleFactor),
                                 const Align(
                                   alignment: Alignment.centerLeft,
                                   child: Padding(
                                     padding:
-                                        EdgeInsets.only(left: 7.0, right: 35),
+                                        EdgeInsets.only(left: 7.0, right: 0),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -744,12 +758,12 @@ class _LichenPediaState extends State<LichenPedia> {
                                     fontSize: 21 * scaleFactor,
                                     fontWeight: FontWeight.w600,
                                     fontStyle: FontStyle.italic),
-                                SizedBox(height: 10 * scaleFactor),
+                                SizedBox(height: 5 * scaleFactor),
                                 const Align(
                                   alignment: Alignment.centerLeft,
                                   child: Padding(
                                     padding:
-                                        EdgeInsets.only(left: 7, right: 35),
+                                        EdgeInsets.only(left: 7, right: 0),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -788,12 +802,12 @@ class _LichenPediaState extends State<LichenPedia> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: 15 * scaleFactor),
+                                SizedBox(height: 10 * scaleFactor),
                                 richText("Genitals",
                                     fontSize: 21 * scaleFactor,
                                     fontWeight: FontWeight.w600,
                                     fontStyle: FontStyle.italic),
-                                SizedBox(height: 10 * scaleFactor),
+                                SizedBox(height: 5 * scaleFactor),
                                 const Align(
                                   alignment: Alignment.centerLeft,
                                   child: Padding(
@@ -813,12 +827,12 @@ class _LichenPediaState extends State<LichenPedia> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: 15 * scaleFactor),
+                                SizedBox(height: 10 * scaleFactor),
                                 richText("Scalp",
                                     fontSize: 21 * scaleFactor,
                                     fontWeight: FontWeight.w600,
                                     fontStyle: FontStyle.italic),
-                                SizedBox(height: 10 * scaleFactor),
+                                SizedBox(height: 5 * scaleFactor),
                                 const Align(
                                   alignment: Alignment.centerLeft,
                                   child: Padding(
@@ -1647,13 +1661,16 @@ class _LichenPediaState extends State<LichenPedia> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            IconButton(
-                              onPressed: () {
-                                currentSection -= 1;
-                                _onArrowDownPressed(scrollKeys[previousKey]!);
-                              },
-                              icon: const Icon(Icons.keyboard_arrow_up,
-                                  color: Color(0xFFFF7F50)),
+                            SizedBox(
+                              height: 50*scaleFactor,
+                              child: IconButton(
+                                onPressed: () {
+                                  currentSection -= 1;
+                                  _onArrowDownPressed(scrollKeys[previousKey]!);
+                                },
+                                icon: const Icon(Icons.keyboard_arrow_up,
+                                    color: Color(0xFFFF7F50)),
+                              ),
                             ),
                           ],
                         ),
@@ -1687,7 +1704,7 @@ class _LichenPediaState extends State<LichenPedia> {
                                 _onArrowDownPressed(scrollKeys[nextKey]!);
                               },
                               child: Text(
-                                nextKey!,
+                                nextKey,
                                 style: const TextStyle(
                                   color: Color(0xFFFF7F50),
                                   fontSize: 15,
@@ -1700,13 +1717,16 @@ class _LichenPediaState extends State<LichenPedia> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                IconButton(
-                                  onPressed: () {
-                                    currentSection += 1;
-                                    _onArrowDownPressed(scrollKeys[nextKey]!);
-                                  },
-                                  icon: const Icon(Icons.keyboard_arrow_down,
-                                      color: Color(0xFFFF7F50)),
+                                SizedBox(
+                                  height: 50*scaleFactor,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      currentSection += 1;
+                                      _onArrowDownPressed(scrollKeys[nextKey]!);
+                                    },
+                                    icon: Icon(Icons.keyboard_arrow_down,
+                                        color: Color(0xFFFF7F50)),
+                                  ),
                                 ),
                               ],
                             ),
