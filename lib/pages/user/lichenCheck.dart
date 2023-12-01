@@ -15,6 +15,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lichen_care/processes/classifier.dart';
 import 'package:lichen_care/processes/recognitions.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class LichenCheck extends StatefulWidget {
   LichenCheck({super.key});
@@ -22,6 +23,7 @@ class LichenCheck extends StatefulWidget {
   @override
   State<LichenCheck> createState() => _LichenCheckState();
 }
+
 class _LichenCheckState extends State<LichenCheck> {
   final _currentIndex = 2;
   bool navigatorHidden = false;
@@ -169,6 +171,41 @@ class _LichenCheckState extends State<LichenCheck> {
     }
   }
 
+  // Function to handle permission before picking image
+  Future<void> handlePermissionBeforePick(ImageSource source) async {
+    // Camera permission
+    debugPrint("Hello handle permssion");
+    if (source == ImageSource.camera) {
+      var cameraStatus = await Permission.camera.status;
+      if (!cameraStatus.isGranted) {
+        // Request camera permission
+        cameraStatus = await Permission.camera.request();
+        if (!cameraStatus.isGranted) {
+          // Permission denied
+          return;
+        }
+      }
+    }
+    // Storage permission
+    if (source == ImageSource.gallery) {
+      var storageStatus = await Permission.storage.status;
+      if (!storageStatus.isGranted) {
+        // Request storage permission
+        storageStatus = await Permission.storage.request();
+        if (!storageStatus.isGranted) {
+          // Permission denied
+          return;
+        }
+      }
+    }
+
+    // If permissions are granted, proceed with picking the image
+    setState(() {
+      sourceSelected = true;
+    });
+    pickImage(source);
+  }
+
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -226,12 +263,8 @@ class _LichenCheckState extends State<LichenCheck> {
                                         color: primaryforegroundColor)),
                                 backgroundColor: primaryBackgroundColor,
                               ),
-                              onPressed: () {
-                                setState(() {
-                                  sourceSelected = true;
-                                });
-                                pickImage(ImageSource.camera);
-                              },
+                              onPressed: () => handlePermissionBeforePick(
+                                  ImageSource.camera),
                               child: Text(
                                 "Use Camera",
                                 style: TextStyle(
@@ -259,12 +292,8 @@ class _LichenCheckState extends State<LichenCheck> {
                                         color: primaryforegroundColor)),
                                 backgroundColor: primaryBackgroundColor,
                               ),
-                              onPressed: () {
-                                setState(() {
-                                  sourceSelected = true;
-                                });
-                                pickImage(ImageSource.gallery);
-                              },
+                              onPressed: () => handlePermissionBeforePick(
+                                  ImageSource.gallery),
                               child: Text(
                                 "Browse Gallery",
                                 style: TextStyle(
