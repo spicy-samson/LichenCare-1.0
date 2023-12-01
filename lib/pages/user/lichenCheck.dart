@@ -22,11 +22,9 @@ class LichenCheck extends StatefulWidget {
   @override
   State<LichenCheck> createState() => _LichenCheckState();
 }
-
 class _LichenCheckState extends State<LichenCheck> {
   final _currentIndex = 2;
   bool navigatorHidden = false;
-
   List<String> ethnicities = [
     "African",
     "Asian (Central)",
@@ -980,7 +978,7 @@ class _LichenCheckState extends State<LichenCheck> {
                       color: (patientInformation.gender == 2)
                           ? Colors.white
                           : Colors.pink,
-                    ), 
+                    ),
                   ),
                 ),
               ],
@@ -1514,8 +1512,8 @@ class _LichenCheckState extends State<LichenCheck> {
                         pushingData = true;
                       });
                       await pushPatientEntry();
-                      var data = await rootBundle.loadString(
-                          "assets/jsons/results.json"); //latest Dart
+                      var data = await rootBundle
+                          .loadString("assets/jsons/results.json");
                       setState(() {
                         if (patientInformation.detection != null) {
                           patientInformation.resultsDescription =

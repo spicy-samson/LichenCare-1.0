@@ -61,6 +61,7 @@ class Classifier {
     }
   }
 
+  /// Loads RPN interpreter from asset
   void loadRPNModel() async {
     try {
       var options = InterpreterOptions();
@@ -160,7 +161,7 @@ class Classifier {
   }
 
   /// Runs obect detection on the input image
-  Future predict() async {
+  Future predict() async { 
     loadRPNModel();
     if (_rpnInterpreter == null) {
       print("RPN interpreter not initialized");
@@ -441,7 +442,7 @@ class Classifier {
       }
     }
     _clsInterpreter!.close();
-    // Detections
+    // Detections 
     bboxes.forEach((key, boxes) {
       result = nonMaxSuppressionFast(boxes, probs[key]!, 0.2, MAX_RPN_BOXES);
       for (int i = 0; i < result[2]; i++) {
